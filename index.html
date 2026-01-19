@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StuHustle | Student Hustle Marketplace</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>StuHustle</h1>
+    <p>By students. For students.</p>
+</header>
+
+<main>
+    <!-- Post a Hustle -->
+    <section id="post-hustle">
+        <h2>Post a Hustle</h2>
+        <form id="hustleForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="text" id="service" placeholder="Service Offered" required>
+            <input type="text" id="price" placeholder="Price (optional)">
+            <input type="text" id="whatsapp" placeholder="WhatsApp Number" required>
+            <button type="submit">Post Hustle</button>
+        </form>
+    </section>
+
+    <!-- Available Hustles -->
+    <section id="hustles">
+        <h2>Available Hustles</h2>
+        <div id="hustleList"></div>
+    </section>
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>
