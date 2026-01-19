@@ -8,29 +8,38 @@
 </head>
 <body>
 
+<!-- LIVE STATUS BANNER -->
+<div style="background:#000;color:#0f0;padding:10px;text-align:center;font-weight:bold;">
+    StuHustle is LIVE 🚀
+</div>
+
 <header>
     <h1>StuHustle</h1>
     <p>By students. For students.</p>
 </header>
 
 <main>
-    <!-- Post a Hustle -->
+
     <section id="post-hustle">
         <h2>Post a Hustle</h2>
+        <p style="font-size:14px;color:#555;">
+            Share your skills with fellow students. Enter correct details so clients can reach you easily.
+        </p>
+
         <form id="hustleForm">
             <input type="text" id="name" placeholder="Your Name" required>
-            <input type="text" id="service" placeholder="Service Offered" required>
+            <input type="text" id="service" placeholder="Service Offered (e.g. Tutoring, Design)" required>
             <input type="text" id="price" placeholder="Price (optional)">
-            <input type="text" id="whatsapp" placeholder="WhatsApp Number" required>
+            <input type="text" id="whatsapp" placeholder="WhatsApp Number (e.g. 2547XXXXXXXX)" required>
             <button type="submit">Post Hustle</button>
         </form>
     </section>
 
-    <!-- Available Hustles -->
     <section id="hustles">
         <h2>Available Hustles</h2>
         <div id="hustleList"></div>
     </section>
+
 </main>
 
 <script src="js/app.js"></script>
