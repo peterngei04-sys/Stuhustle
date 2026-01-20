@@ -2,60 +2,92 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StuHustle | Turn Skills Into Income</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StuHustle — Turn Skills Into Income</title>
 
   <link rel="stylesheet" href="css/style.css" />
   <script defer src="js/app.js"></script>
 </head>
-
 <body>
 
   <!-- NAVBAR -->
-  <nav class="navbar">
+  <header class="navbar">
     <div class="logo">Stu<span>Hustle</span></div>
 
-    <button class="hamburger" onclick="toggleMenu()">☰</button>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="login.html" class="btn-outline">Login</a>
+      <a href="signup.html" class="btn-primary">Register</a>
+    </nav>
 
-    <ul class="nav-links" id="navLinks">
-      <li><a href="login.html">Login</a></li>
-      <li><a href="signup.html" class="btn-nav">Get Started</a></li>
-    </ul>
-  </nav>
+    <div class="hamburger" id="hamburger">
+      ☰
+    </div>
+  </header>
 
-  <!-- HERO -->
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html" class="highlight">Register</a>
+  </div>
+
+  <!-- HERO SECTION -->
   <section class="hero">
-    <h1>Turn Your Skills<br><span>Into Real Income</span></h1>
+    <h1>Turn Your <span>Skills</span> Into Real Income</h1>
     <p>
-      StuHustle connects students worldwide to opportunities.
-      Post your hustle. Get clients. Get paid.
+      StuHustle connects students with real opportunities —
+      post hustles, sell skills, earn, and grow.
     </p>
 
     <div class="hero-buttons">
-      <a href="signup.html" class="btn-primary">Create Account</a>
-      <a href="login.html" class="btn-secondary">Login</a>
+      <a href="signup.html" class="btn-primary big">Get Started</a>
+      <a href="login.html" class="btn-outline big">Login</a>
     </div>
   </section>
 
   <!-- FEATURES -->
-  <section class="features">
-    <div class="feature-card">
-      💼
-      <h3>Post Your Hustle</h3>
-      <p>Advertise skills like tutoring, design, delivery & more.</p>
-    </div>
+  <section id="features" class="features">
+    <h2>Why StuHustle?</h2>
 
-    <div class="feature-card">
-      🌍
-      <h3>Global Reach</h3>
-      <p>Connect with clients beyond your campus or country.</p>
-    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        🚀
+        <h3>Post Hustles</h3>
+        <p>Find or post opportunities within minutes.</p>
+      </div>
 
-    <div class="feature-card">
-      💰
-      <h3>Earn Securely</h3>
-      <p>Payments via M-Pesa, PayPal & more coming soon.</p>
+      <div class="feature-card">
+        💰
+        <h3>Earn Securely</h3>
+        <p>Track earnings and withdraw safely.</p>
+      </div>
+
+      <div class="feature-card">
+        🌍
+        <h3>Global Ready</h3>
+        <p>Built to scale beyond universities.</p>
+      </div>
     </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="how">
+    <h2>How It Works</h2>
+
+    <div class="steps">
+      <div class="step">1️⃣ Create an account</div>
+      <div class="step">2️⃣ Post or find a hustle</div>
+      <div class="step">3️⃣ Earn & grow</div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Ready to Hustle Smarter?</h2>
+    <a href="signup.html" class="btn-primary big">Join StuHustle</a>
   </section>
 
   <!-- FOOTER -->
