@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard | StuHustle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-box">
+    <h1>Welcome to your Dashboard 🚀</h1>
+    <p class="auth-subtitle">Post hustles, manage profile, view earnings</p>
+
+    <button class="auth-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA4MGAOgctHWO9suB5xCTJ3U4ASktJQa8c",
+      authDomain: "stuhustle-c8d4d.firebaseapp.com",
+      projectId: "stuhustle-c8d4d",
+      storageBucket: "stuhustle-c8d4d.firebasestorage.app",
+      messagingSenderId: "285691240314",
+      appId: "1:285691240314:web:6eb01eec2d44dacd7000c3",
+      measurementId: "G-28WNND45QX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth();
+
+    function logout() {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+
+</body>
+</html>
