@@ -1,20 +1,51 @@
-<!-- Firebase CDN -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="js/firebaseConfig.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | StuHustle</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
 
-<script>
-  const signupForm = document.querySelector(".auth-form");
-  signupForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const email = document.getElementById("signupEmail").value;
-    const password = document.getElementById("signupPassword").value;
+  <div class="auth-container">
+    <h1>Create Account</h1>
 
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        alert("Account created successfully!");
-        window.location.href = "dashboard.html";
-      })
-      .catch(err => alert(err.message));
-  });
-</script>
+    <form class="auth-form">
+      <input type="text" id="signupName" placeholder="Full Name" required />
+      <input type="email" id="signupEmail" placeholder="Email" required />
+      <input type="password" id="signupPassword" placeholder="Password" required />
+      <button type="submit" class="btn-primary big">Sign Up</button>
+    </form>
+
+    <p>Already have an account? <a href="login.html">Login</a></p>
+  </div>
+
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="js/firebaseConfig.js"></script>
+
+  <script>
+    const signupForm = document.querySelector(".auth-form");
+    signupForm.addEventListener("submit", e => {
+      e.preventDefault();
+
+      const name = document.getElementById("signupName").value;
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          // Optional: Add display name
+          userCredential.user.updateProfile({ displayName: name });
+
+          alert("Account created successfully!");
+          window.location.href = "dashboard.html"; // Redirect to dashboard
+        })
+        .catch(error => alert(error.message));
+    });
+  </script>
+
+</body>
+</html>
