@@ -3,43 +3,65 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StuHustle Global</title>
-  <link rel="stylesheet" href="css/style.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <title>StuHustle | Turn Skills Into Income</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/app.js"></script>
 </head>
+
 <body>
 
-<header>
-  <h1>StuHustle Global</h1>
-  <p>Students Worldwide. For Students Worldwide.</p>
-  <button id="darkModeToggle"><i class="fas fa-moon"></i> Dark Mode</button>
-</header>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">Stu<span>Hustle</span></div>
 
-<main>
-  <section class="card">
-    <h2>Post a Hustle</h2>
-    <input type="text" id="name" placeholder="Your Name" />
-    <input type="text" id="service" placeholder="Service Offered" />
-    <input type="text" id="price" placeholder="Price (optional)" />
-    <input type="text" id="whatsapp" placeholder="WhatsApp Number" />
-    <label><input type="checkbox" id="featured" /> Featured Hustle</label>
-    <button id="postBtn">Post Hustle</button>
-  </section>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
 
-  <section class="card">
-    <h2>Available Hustles</h2>
-    <div class="hustle-counters">
-      <span id="totalHustles">Total Hustles: 0</span> |
-      <span id="featuredHustles">Featured: 0</span>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="login.html">Login</a></li>
+      <li><a href="signup.html" class="btn-nav">Get Started</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Turn Your Skills<br><span>Into Real Income</span></h1>
+    <p>
+      StuHustle connects students worldwide to opportunities.
+      Post your hustle. Get clients. Get paid.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="signup.html" class="btn-primary">Create Account</a>
+      <a href="login.html" class="btn-secondary">Login</a>
     </div>
-    <input type="text" id="searchInput" placeholder="Search hustles..." />
-    <select id="sortSelect">
-      <option value="newest">Newest First</option>
-      <option value="oldest">Oldest First</option>
-    </select>
-    <div id="hustleList"></div>
   </section>
-</main>
 
-<script src="js/app.js"><script></body>
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="feature-card">
+      💼
+      <h3>Post Your Hustle</h3>
+      <p>Advertise skills like tutoring, design, delivery & more.</p>
+    </div>
+
+    <div class="feature-card">
+      🌍
+      <h3>Global Reach</h3>
+      <p>Connect with clients beyond your campus or country.</p>
+    </div>
+
+    <div class="feature-card">
+      💰
+      <h3>Earn Securely</h3>
+      <p>Payments via M-Pesa, PayPal & more coming soon.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 StuHustle. Built for students.</p>
+  </footer>
+
+</body>
 </html>
