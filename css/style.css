@@ -1,4 +1,4 @@
-/* General Styles */
+/* General styles */
 * {
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
@@ -17,6 +17,7 @@ header {
   color: white;
   text-align: center;
   padding: 20px 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 header h1 {
@@ -42,6 +43,12 @@ main {
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   margin-bottom: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
 /* Inputs */
@@ -52,6 +59,7 @@ input {
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 15px;
+  transition: border-color 0.2s;
 }
 
 input:focus {
@@ -69,10 +77,12 @@ input:focus {
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
 }
 
 #postBtn:hover {
   background: #0953c6;
+  transform: translateY(-2px);
 }
 
 /* Hustle item */
@@ -82,6 +92,12 @@ input:focus {
   border-radius: 8px;
   background: #fafafa;
   margin-bottom: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hustle-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .hustle-item h3 {
@@ -110,6 +126,12 @@ input:focus {
   cursor: pointer;
   text-align: center;
   text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.whatsapp-btn:hover {
+  background: #1ebe57;
+  transform: translateY(-2px);
 }
 
 /* Delete button */
@@ -121,4 +143,26 @@ input:focus {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.delete-btn:hover {
+  background: #c62828;
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  main {
+    padding: 0 10px;
+  }
+
+  input, #postBtn, .whatsapp-btn, .delete-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .card {
+    padding: 15px;
+  }
 }
