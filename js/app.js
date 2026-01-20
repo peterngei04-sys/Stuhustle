@@ -28,10 +28,10 @@ function renderHustles() {
       <p><strong>Price:</strong> ${hustle.price || 'Not specified'}</p>
       <div class="actions">
         <a class="whatsapp-btn" href="https://wa.me/${hustle.whatsapp}" target="_blank">
-          WhatsApp
+          <i class="fab fa-whatsapp"></i> WhatsApp
         </a>
         <button class="delete-btn" onclick="deleteHustle(${index})">
-          Delete
+          <i class="fas fa-trash-alt"></i> Delete
         </button>
       </div>
     `;
