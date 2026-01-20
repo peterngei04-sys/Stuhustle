@@ -1,46 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard | StuHustle</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
+
+  <link rel="stylesheet" href="css/style.css" />
 </head>
-<body class="auth-page">
+<body class="dashboard-body">
 
-  <div class="auth-box">
-    <h1>Welcome to your Dashboard 🚀</h1>
-    <p class="auth-subtitle">Post hustles, manage profile, view earnings</p>
+  <!-- Top Bar -->
+  <header class="topbar">
+    <button id="menuBtn" class="menu-btn">☰</button>
+    <h2 class="logo-text">StuHustle</h2>
+  </header>
 
-    <button class="auth-btn" onclick="logout()">Logout</button>
-  </div>
+  <!-- Sidebar -->
+  <nav id="sidebar" class="sidebar">
+    <a href="#" class="nav-item active">🏠 Dashboard</a>
+    <a href="#" class="nav-item">📝 Posts</a>
+    <a href="#" class="nav-item">💰 Wallet</a>
+    <a href="#" class="nav-item">🏧 Withdraw</a>
+    <a href="#" class="nav-item">👤 Profile</a>
+    <a href="#" class="nav-item">⚙️ Settings</a>
+    <button id="logoutBtn" class="nav-item logout">🚪 Logout</button>
+  </nav>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+  <!-- Overlay -->
+  <div id="overlay"></div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyA4MGAOgctHWO9suB5xCTJ3U4ASktJQa8c",
-      authDomain: "stuhustle-c8d4d.firebaseapp.com",
-      projectId: "stuhustle-c8d4d",
-      storageBucket: "stuhustle-c8d4d.firebasestorage.app",
-      messagingSenderId: "285691240314",
-      appId: "1:285691240314:web:6eb01eec2d44dacd7000c3",
-      measurementId: "G-28WNND45QX"
-    };
+  <!-- Main Content -->
+  <main class="dashboard-content">
+    <h1>Welcome 👋</h1>
+    <p class="sub-text">Turn your time into income</p>
 
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const auth = getAuth();
+    <div class="cards">
+      <div class="card">
+        <h3>Total Earnings</h3>
+        <p class="amount">KES 0.00</p>
+      </div>
 
-    function logout() {
-      signOut(auth).then(() => {
-        window.location.href = "login.html";
-      });
-    }
-  </script>
+      <div class="card">
+        <h3>Tasks Completed</h3>
+        <p class="amount">0</p>
+      </div>
 
+      <div class="card">
+        <h3>Available Balance</h3>
+        <p class="amount">KES 0.00</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="js/firebaseConfig.js"></script>
+
+  <script src="js/dashboard.js"></script>
 </body>
 </html>
+
