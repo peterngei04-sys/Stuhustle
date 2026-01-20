@@ -10,6 +10,7 @@ const sortSelect = document.getElementById("sortSelect");
 const featuredCheckbox = document.getElementById("featured");
 const totalHustlesSpan = document.getElementById("totalHustles");
 const featuredHustlesSpan = document.getElementById("featuredHustles");
+const darkModeToggle = document.getElementById("darkModeToggle");
 
 // Load hustles
 let hustles = JSON.parse(localStorage.getItem("hustles")) || [];
@@ -30,19 +31,16 @@ function updateCounters() {
 function renderHustles() {
   let filteredHustles = hustles;
 
-  // Search filter
   const searchTerm = searchInput.value.toLowerCase();
   if (searchTerm) {
-    filteredHustles = hustles.filter(hustle =>
-      hustle.name.toLowerCase().includes(searchTerm) ||
-      hustle.service.toLowerCase().includes(searchTerm)
+    filteredHustles = hustles.filter(h =>
+      h.name.toLowerCase().includes(searchTerm) ||
+      h.service.toLowerCase().includes(searchTerm)
     );
   }
 
-  // Sort
   if (sortSelect.value === "oldest") filteredHustles = filteredHustles.slice().reverse();
 
-  // Featured first
   filteredHustles.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
 
   hustleList.innerHTML = "";
@@ -76,7 +74,6 @@ function renderHustles() {
         </button>
       </div>
     `;
-
     hustleList.appendChild(div);
   });
 
@@ -119,7 +116,16 @@ function deleteHustle(index) {
 searchInput.addEventListener("input", renderHustles);
 sortSelect.addEventListener("change", renderHustles);
 
+// Dark mode toggle
+darkModeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  if (document.body.classList.contains("dark-mode")) {
+    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+  } else {
+    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+  }
+});
+
 // Initial render
 renderHustles();
-
 
