@@ -8,6 +8,8 @@ const hustleList = document.getElementById("hustleList");
 const searchInput = document.getElementById("searchInput");
 const sortSelect = document.getElementById("sortSelect");
 const featuredCheckbox = document.getElementById("featured");
+const totalHustlesSpan = document.getElementById("totalHustles");
+const featuredHustlesSpan = document.getElementById("featuredHustles");
 
 // Load hustles from localStorage
 let hustles = JSON.parse(localStorage.getItem("hustles")) || [];
@@ -15,6 +17,13 @@ let hustles = JSON.parse(localStorage.getItem("hustles")) || [];
 // Save to localStorage
 function saveHustles() {
   localStorage.setItem("hustles", JSON.stringify(hustles));
+}
+
+// Update counters
+function updateCounters() {
+  totalHustlesSpan.textContent = `Total Hustles: ${hustles.length}`;
+  const featuredCount = hustles.filter(h => h.featured).length;
+  featuredHustlesSpan.textContent = `Featured: ${featuredCount}`;
 }
 
 // Render hustles
@@ -45,7 +54,7 @@ function renderHustles() {
     div.className = "hustle-item";
     if (hustle.featured) div.classList.add("featured");
 
-    // Encode text for sharing
+    // Encode text for social sharing
     const text = encodeURIComponent(
       `Check out this hustle: ${hustle.name} - ${hustle.service}. Price: ${hustle.price || 'Not specified'}`
     );
@@ -73,6 +82,8 @@ function renderHustles() {
 
     hustleList.appendChild(div);
   });
+
+  updateCounters();
 }
 
 // Add hustle
