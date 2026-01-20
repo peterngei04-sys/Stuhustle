@@ -11,17 +11,25 @@
 
   <!-- Top Bar -->
   <header class="topbar">
-    <button id="menuBtn" class="menu-btn">☰</button>
-    <h2 class="logo-text">StuHustle</h2>
+    <div class="top-left">
+      <button id="menuBtn" class="menu-btn">☰</button>
+      <h2 class="logo-text">Stu<span>Hustle</span></h2>
+    </div>
+
+    <div class="top-right">
+      <a href="profile.html" class="profile-btn">
+        <img src="https://i.pravatar.cc/40" alt="Profile">
+      </a>
+    </div>
   </header>
 
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
-    <a href="#" class="nav-item active">🏠 Dashboard</a>
-    <a href="#" class="nav-item">📝 Posts</a>
+    <a href="dashboard.html" class="nav-item active">🏠 Dashboard</a>
+    <a href="#" class="nav-item">📝 Tasks</a>
     <a href="#" class="nav-item">💰 Wallet</a>
     <a href="#" class="nav-item">🏧 Withdraw</a>
-    <a href="#" class="nav-item">👤 Profile</a>
+    <a href="profile.html" class="nav-item">👤 Profile</a>
     <a href="#" class="nav-item">⚙️ Settings</a>
     <button id="logoutBtn" class="nav-item logout">🚪 Logout</button>
   </nav>
@@ -31,25 +39,38 @@
 
   <!-- Main Content -->
   <main class="dashboard-content">
-    <h1>Welcome 👋</h1>
-    <p class="sub-text">Turn your time into income</p>
 
-    <div class="cards">
-      <div class="card">
+    <section class="welcome">
+      <h1>Welcome back 👋</h1>
+      <p>Let’s grow your hustle today</p>
+    </section>
+
+    <section class="cards">
+      <div class="card gradient-purple">
         <h3>Total Earnings</h3>
         <p class="amount">KES 0.00</p>
       </div>
 
-      <div class="card">
+      <div class="card gradient-blue">
         <h3>Tasks Completed</h3>
         <p class="amount">0</p>
       </div>
 
-      <div class="card">
+      <div class="card gradient-green">
         <h3>Available Balance</h3>
         <p class="amount">KES 0.00</p>
       </div>
-    </div>
+    </section>
+
+    <section class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="action-grid">
+        <a href="#" class="action-card">📝 View Tasks</a>
+        <a href="#" class="action-card">💸 Withdraw</a>
+        <a href="profile.html" class="action-card">👤 Profile</a>
+      </div>
+    </section>
+
   </main>
 
   <!-- Firebase -->
@@ -60,4 +81,3 @@
   <script src="js/dashboard.js"></script>
 </body>
 </html>
-

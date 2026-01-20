@@ -3,7 +3,6 @@ const sidebar = document.getElementById("sidebar");
 const overlay = document.getElementById("overlay");
 const logoutBtn = document.getElementById("logoutBtn");
 
-/* Toggle sidebar */
 menuBtn.addEventListener("click", () => {
   sidebar.classList.toggle("open");
   overlay.classList.toggle("show");
@@ -14,7 +13,7 @@ overlay.addEventListener("click", () => {
   overlay.classList.remove("show");
 });
 
-/* Protect page */
+/* Protect dashboard */
 auth.onAuthStateChanged(user => {
   if (!user) {
     window.location.href = "login.html";
@@ -27,4 +26,3 @@ logoutBtn.addEventListener("click", () => {
     window.location.href = "login.html";
   });
 });
-

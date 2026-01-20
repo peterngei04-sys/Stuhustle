@@ -299,3 +299,166 @@ footer {
   font-weight: bold;
   margin-top: 10px;
 }
+/* ================= DASHBOARD UPGRADE ================= */
+
+.dashboard-body {
+  background: linear-gradient(135deg, #0f172a, #020617);
+  min-height: 100vh;
+  color: white;
+}
+
+/* Top Bar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: linear-gradient(90deg, #6a5cff, #00e0ff);
+}
+
+.top-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-text span {
+  color: #020617;
+}
+
+.menu-btn {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Profile */
+.profile-btn img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 250px;
+  height: 100%;
+  background: #020617;
+  padding-top: 70px;
+  transition: 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.nav-item {
+  display: block;
+  padding: 15px 20px;
+  color: white;
+  text-decoration: none;
+  border-bottom: 1px solid #1e293b;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background: linear-gradient(90deg, #6a5cff, #00e0ff);
+}
+
+.logout {
+  background: #b00020;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+/* Overlay */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  z-index: 900;
+}
+
+#overlay.show {
+  display: block;
+}
+
+/* Content */
+.dashboard-content {
+  padding: 20px;
+}
+
+.welcome h1 {
+  font-size: 1.8rem;
+}
+
+.welcome p {
+  opacity: 0.8;
+}
+
+/* Cards */
+.cards {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  padding: 20px;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.gradient-purple {
+  background: linear-gradient(135deg, #6a5cff, #a78bfa);
+}
+
+.gradient-blue {
+  background: linear-gradient(135deg, #00e0ff, #38bdf8);
+}
+
+.gradient-green {
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+}
+
+.amount {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Quick Actions */
+.quick-actions {
+  margin-top: 30px;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.action-card {
+  background: rgba(255,255,255,0.1);
+  padding: 14px;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.action-card:hover {
+  background: linear-gradient(90deg, #6a5cff, #00e0ff);
+}
