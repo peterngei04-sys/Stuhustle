@@ -45,6 +45,12 @@ function renderHustles() {
     div.className = "hustle-item";
     if (hustle.featured) div.classList.add("featured");
 
+    // Encode text for sharing
+    const text = encodeURIComponent(
+      `Check out this hustle: ${hustle.name} - ${hustle.service}. Price: ${hustle.price || 'Not specified'}`
+    );
+    const url = encodeURIComponent(window.location.href);
+
     div.innerHTML = `
       <h3>${hustle.name} ${hustle.featured ? '⭐' : ''}</h3>
       <p><strong>Service:</strong> ${hustle.service}</p>
@@ -52,6 +58,12 @@ function renderHustles() {
       <div class="actions">
         <a class="whatsapp-btn" href="https://wa.me/${hustle.whatsapp}" target="_blank">
           <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a class="whatsapp-btn" href="https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}" target="_blank">
+          <i class="fab fa-facebook-f"></i> Facebook
+        </a>
+        <a class="whatsapp-btn" href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank">
+          <i class="fab fa-twitter"></i> Twitter
         </a>
         <button class="delete-btn" onclick="deleteHustle(${index})">
           <i class="fas fa-trash-alt"></i> Delete
