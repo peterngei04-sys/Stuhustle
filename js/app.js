@@ -25,15 +25,15 @@ function renderHustles() {
     div.innerHTML = `
       <h3>${hustle.name}</h3>
       <p><strong>Service:</strong> ${hustle.service}</p>
-      <p><strong>Price:</strong> ${hustle.price || "Not specified"}</p>
-      <p>
-        <a href="https://wa.me/${hustle.whatsapp}" target="_blank">
-          Contact on WhatsApp
+      <p><strong>Price:</strong> ${hustle.price || 'Not specified'}</p>
+      <div class="actions">
+        <a class="whatsapp-btn" href="https://wa.me/${hustle.whatsapp}" target="_blank">
+          WhatsApp
         </a>
-      </p>
-      <button class="delete-btn" onclick="deleteHustle(${index})">
-        Delete
-      </button>
+        <button class="delete-btn" onclick="deleteHustle(${index})">
+          Delete
+        </button>
+      </div>
     `;
 
     hustleList.appendChild(div);
