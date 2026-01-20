@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StuHustle Global</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<header>
+  <h1>StuHustle Global</h1>
+  <p>Students Worldwide. For Students Worldwide.</p>
+  <button id="darkModeToggle"><i class="fas fa-moon"></i> Dark Mode</button>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Post a Hustle</h2>
+    <input type="text" id="name" placeholder="Your Name" />
+    <input type="text" id="service" placeholder="Service Offered" />
+    <input type="text" id="price" placeholder="Price (optional)" />
+    <input type="text" id="whatsapp" placeholder="WhatsApp Number" />
+    <label><input type="checkbox" id="featured" /> Featured Hustle</label>
+    <button id="postBtn">Post Hustle</button>
+  </section>
+
+  <section class="card">
+    <h2>Available Hustles</h2>
+    <div class="hustle-counters">
+      <span id="totalHustles">Total Hustles: 0</span> |
+      <span id="featuredHustles">Featured: 0</span>
+    </div>
+    <input type="text" id="searchInput" placeholder="Search hustles..." />
+    <select id="sortSelect">
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+    </select>
+    <div id="hustleList"></div>
+  </section>
+</main>
+
+<script src="../js/app.js"></script>
+</body>
+</html>
