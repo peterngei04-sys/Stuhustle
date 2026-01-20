@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StuHustle | Student Hustle Marketplace</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StuHustle</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
 
-<!-- LIVE STATUS BANNER -->
-<div style="background:#000;color:#0f0;padding:10px;text-align:center;font-weight:bold;">
-    StuHustle is LIVE 🚀
-</div>
-
-<header>
+  <header class="header">
     <h1>StuHustle</h1>
     <p>By students. For students.</p>
-</header>
+  </header>
 
-<main>
+  <main class="container">
 
-    <section id="post-hustle">
-        <h2>Post a Hustle</h2>
-        <p style="font-size:14px;color:#555;">
-            Share your skills with fellow students. Enter correct details so clients can reach you easily.
-        </p>
+    <!-- POST HUSTLE -->
+    <section class="card">
+      <h2>Post a Hustle</h2>
 
-        <form id="hustleForm">
-            <input type="text" id="name" placeholder="Your Name" required>
-            <input type="text" id="service" placeholder="Service Offered (e.g. Tutoring, Design)" required>
-            <input type="text" id="price" placeholder="Price (optional)">
-            <input type="text" id="whatsapp" placeholder="WhatsApp Number (e.g. 2547XXXXXXXX)" required>
-            <button type="submit">Post Hustle</button>
-        </form>
+      <input type="text" id="name" placeholder="Your Name" />
+      <input type="text" id="service" placeholder="Service Offered" />
+      <input type="text" id="price" placeholder="Price (optional)" />
+      <input type="text" id="whatsapp" placeholder="WhatsApp Number" />
+
+      <button id="postBtn">Post Hustle</button>
     </section>
 
-    <section id="hustles">
-        <h2>Available Hustles</h2>
-        <div id="hustleList"></div>
+    <!-- AVAILABLE HUSTLES -->
+    <section class="card">
+      <h2>Available Hustles</h2>
+
+      <!-- JS injects hustles here -->
+      <div id="hustleList"></div>
     </section>
 
-</main>
+  </main>
 
-<script src="js/app.js"></script>
+  <!-- JS -->
+  <script src="js/app.js"></script>
+
 </body>
 </html>
