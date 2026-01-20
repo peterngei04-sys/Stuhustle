@@ -5,6 +5,8 @@ const priceInput = document.getElementById("price");
 const whatsappInput = document.getElementById("whatsapp");
 const postBtn = document.getElementById("postBtn");
 const hustleList = document.getElementById("hustleList");
+const searchInput = document.getElementById("searchInput");
+const sortSelect = document.getElementById("sortSelect");
 
 // Load hustles from localStorage
 let hustles = JSON.parse(localStorage.getItem("hustles")) || [];
@@ -14,11 +16,27 @@ function saveHustles() {
   localStorage.setItem("hustles", JSON.stringify(hustles));
 }
 
-// Render hustles
+// Render hustles with optional filtering and sorting
 function renderHustles() {
+  let filteredHustles = hustles;
+
+  // Filter by search input
+  const searchTerm = searchInput.value.toLowerCase();
+  if (searchTerm) {
+    filteredHustles = hustles.filter(hustle =>
+      hustle.name.toLowerCase().includes(searchTerm) ||
+      hustle.service.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  // Sort
+  if (sortSelect.value === "oldest") {
+    filteredHustles = filteredHustles.slice().reverse();
+  }
+
   hustleList.innerHTML = "";
 
-  hustles.forEach((hustle, index) => {
+  filteredHustles.forEach((hustle, index) => {
     const div = document.createElement("div");
     div.className = "hustle-item";
 
@@ -70,6 +88,12 @@ function deleteHustle(index) {
   saveHustles();
   renderHustles();
 }
+
+// Search input listener
+searchInput.addEventListener("input", renderHustles);
+
+// Sort select listener
+sortSelect.addEventListener("change", renderHustles);
 
 // Initial render
 renderHustles();
