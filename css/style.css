@@ -166,3 +166,11 @@ input:focus {
     padding: 15px;
   }
 }
+/* Featured hustle */
+.hustle-item.featured {
+  border: 2px solid #ffd700;
+  background: #fffbe6;
+}
+.hustle-item.featured h3 {
+  color: #b37f00;
+}

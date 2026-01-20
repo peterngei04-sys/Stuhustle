@@ -7,6 +7,7 @@ const postBtn = document.getElementById("postBtn");
 const hustleList = document.getElementById("hustleList");
 const searchInput = document.getElementById("searchInput");
 const sortSelect = document.getElementById("sortSelect");
+const featuredCheckbox = document.getElementById("featured");
 
 // Load hustles from localStorage
 let hustles = JSON.parse(localStorage.getItem("hustles")) || [];
@@ -16,7 +17,7 @@ function saveHustles() {
   localStorage.setItem("hustles", JSON.stringify(hustles));
 }
 
-// Render hustles with optional filtering and sorting
+// Render hustles
 function renderHustles() {
   let filteredHustles = hustles;
 
@@ -34,14 +35,18 @@ function renderHustles() {
     filteredHustles = filteredHustles.slice().reverse();
   }
 
+  // Featured hustles first
+  filteredHustles.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+
   hustleList.innerHTML = "";
 
   filteredHustles.forEach((hustle, index) => {
     const div = document.createElement("div");
     div.className = "hustle-item";
+    if (hustle.featured) div.classList.add("featured");
 
     div.innerHTML = `
-      <h3>${hustle.name}</h3>
+      <h3>${hustle.name} ${hustle.featured ? '⭐' : ''}</h3>
       <p><strong>Service:</strong> ${hustle.service}</p>
       <p><strong>Price:</strong> ${hustle.price || 'Not specified'}</p>
       <div class="actions">
@@ -64,13 +69,14 @@ postBtn.addEventListener("click", () => {
   const service = serviceInput.value.trim();
   const price = priceInput.value.trim();
   const whatsapp = whatsappInput.value.trim();
+  const featured = featuredCheckbox.checked;
 
   if (!name || !service || !whatsapp) {
     alert("Please fill required fields");
     return;
   }
 
-  hustles.unshift({ name, service, price, whatsapp });
+  hustles.unshift({ name, service, price, whatsapp, featured });
   saveHustles();
   renderHustles();
 
@@ -78,6 +84,7 @@ postBtn.addEventListener("click", () => {
   serviceInput.value = "";
   priceInput.value = "";
   whatsappInput.value = "";
+  featuredCheckbox.checked = false;
 });
 
 // Delete hustle
@@ -89,10 +96,8 @@ function deleteHustle(index) {
   renderHustles();
 }
 
-// Search input listener
+// Search and sort listeners
 searchInput.addEventListener("input", renderHustles);
-
-// Sort select listener
 sortSelect.addEventListener("change", renderHustles);
 
 // Initial render
