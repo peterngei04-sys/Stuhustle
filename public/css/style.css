@@ -1,173 +1,123 @@
-
-
-
-
-:root {
-  --primary: #6a5cff;
-  --secondary: #00e0ff;
-  --dark: #0f172a;
-  --light: #f8fafc;
-}
-
+/* ---------- GLOBAL ---------- */
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
 body {
-  background: linear-gradient(135deg, var(--dark), #020617);
+  margin: 0;
+  background: #f4f6f8;
+  color: #333;
+}
+
+/* ---------- LANDING PAGE (SAFE) ---------- */
+header {
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
   color: white;
+  text-align: center;
+  padding: 60px 20px;
 }
 
-/* NAVBAR */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.2rem 2rem;
+header h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
 }
 
-.logo {
-  font-size: 1.6rem;
-  font-weight: bold;
+header p {
+  font-size: 16px;
+  opacity: 0.9;
 }
 
-.logo span {
-  color: var(--secondary);
+.landing-buttons {
+  margin-top: 25px;
 }
 
-.nav-links a {
-  margin-left: 1rem;
+.landing-buttons a {
+  display: inline-block;
+  margin: 10px;
+  padding: 14px 28px;
+  border-radius: 30px;
+  font-weight: 600;
   text-decoration: none;
-  color: white;
 }
 
-.hamburger {
-  display: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-}
-
-/* BUTTONS */
 .btn-primary {
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  padding: 0.6rem 1.2rem;
-  border-radius: 25px;
-  color: white;
-  text-decoration: none;
+  background: white;
+  color: #0d6efd;
 }
 
 .btn-outline {
-  border: 2px solid var(--secondary);
-  padding: 0.5rem 1.2rem;
-  border-radius: 25px;
+  border: 2px solid white;
   color: white;
-  text-decoration: none;
 }
 
-.big {
-  font-size: 1.1rem;
+/* ---------- AUTH PAGES ONLY ---------- */
+.auth-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 
-/* HERO */
-.hero {
-  padding: 4rem 2rem;
-  text-align: center;
-}
-
-.hero h1 {
-  font-size: 2.6rem;
-}
-
-.hero h1 span {
-  color: var(--secondary);
-}
-
-.hero p {
-  margin: 1rem 0 2rem;
-  color: #cbd5f5;
-}
-
-.hero-buttons a {
-  margin: 0.5rem;
-}
-
-/* FEATURES */
-.features {
-  padding: 3rem 2rem;
-  background: #020617;
-}
-
-.features h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-}
-
-.feature-card {
-  background: #020617;
-  padding: 2rem;
+.auth-box {
+  background: white;
+  width: 100%;
+  max-width: 420px;
+  padding: 35px 28px;
   border-radius: 16px;
   text-align: center;
-  border: 1px solid #1e293b;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
 }
 
-/* HOW */
-.how {
-  padding: 3rem 2rem;
-  text-align: center;
+.auth-box h1 {
+  margin-bottom: 8px;
 }
 
-.steps {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.auth-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 22px;
 }
 
-/* CTA */
-.cta {
-  padding: 3rem 2rem;
-  text-align: center;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
+.auth-form input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 15px;
 }
 
-footer {
-  text-align: center;
-  padding: 1rem;
-  font-size: 0.9rem;
+.auth-form input:focus {
+  outline: none;
+  border-color: #0d6efd;
 }
 
-/* MOBILE */
-@media (max-width: 768px) {
-  .nav-links {
-    display: none;
-  }
+.auth-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
 
-  .hamburger {
-    display: block;
-  }
+.auth-btn:hover {
+  transform: translateY(-2px);
+}
 
-  .mobile-menu {
-    display: none;
-    flex-direction: column;
-    background: #020617;
-    padding: 1rem;
-  }
+.auth-footer {
+  margin-top: 18px;
+  font-size: 14px;
+}
 
-  .mobile-menu a {
-    padding: 0.8rem 0;
-    color: white;
-    text-decoration: none;
-  }
-
-  .mobile-menu .highlight {
-    color: var(--secondary);
-  }
+.auth-footer a {
+  color: #0d6efd;
+  text-decoration: none;
+  font-weight: 600;
 }
