@@ -11,10 +11,10 @@ const featuredCheckbox = document.getElementById("featured");
 const totalHustlesSpan = document.getElementById("totalHustles");
 const featuredHustlesSpan = document.getElementById("featuredHustles");
 
-// Load hustles from localStorage
+// Load hustles
 let hustles = JSON.parse(localStorage.getItem("hustles")) || [];
 
-// Save to localStorage
+// Save hustles
 function saveHustles() {
   localStorage.setItem("hustles", JSON.stringify(hustles));
 }
@@ -30,7 +30,7 @@ function updateCounters() {
 function renderHustles() {
   let filteredHustles = hustles;
 
-  // Filter by search input
+  // Search filter
   const searchTerm = searchInput.value.toLowerCase();
   if (searchTerm) {
     filteredHustles = hustles.filter(hustle =>
@@ -40,11 +40,9 @@ function renderHustles() {
   }
 
   // Sort
-  if (sortSelect.value === "oldest") {
-    filteredHustles = filteredHustles.slice().reverse();
-  }
+  if (sortSelect.value === "oldest") filteredHustles = filteredHustles.slice().reverse();
 
-  // Featured hustles first
+  // Featured first
   filteredHustles.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
 
   hustleList.innerHTML = "";
@@ -54,7 +52,6 @@ function renderHustles() {
     div.className = "hustle-item";
     if (hustle.featured) div.classList.add("featured");
 
-    // Encode text for social sharing
     const text = encodeURIComponent(
       `Check out this hustle: ${hustle.name} - ${hustle.service}. Price: ${hustle.price || 'Not specified'}`
     );
@@ -65,13 +62,13 @@ function renderHustles() {
       <p><strong>Service:</strong> ${hustle.service}</p>
       <p><strong>Price:</strong> ${hustle.price || 'Not specified'}</p>
       <div class="actions">
-        <a class="whatsapp-btn" href="https://wa.me/${hustle.whatsapp}" target="_blank">
+        <a class="social-btn whatsapp-btn" href="https://wa.me/${hustle.whatsapp}" target="_blank">
           <i class="fab fa-whatsapp"></i> WhatsApp
         </a>
-        <a class="whatsapp-btn" href="https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}" target="_blank">
+        <a class="social-btn" href="https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}" target="_blank">
           <i class="fab fa-facebook-f"></i> Facebook
         </a>
-        <a class="whatsapp-btn" href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank">
+        <a class="social-btn" href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank">
           <i class="fab fa-twitter"></i> Twitter
         </a>
         <button class="delete-btn" onclick="deleteHustle(${index})">
@@ -113,15 +110,16 @@ postBtn.addEventListener("click", () => {
 // Delete hustle
 function deleteHustle(index) {
   if (!confirm("Delete this hustle?")) return;
-
   hustles.splice(index, 1);
   saveHustles();
   renderHustles();
 }
 
-// Search and sort listeners
+// Search & sort
 searchInput.addEventListener("input", renderHustles);
 sortSelect.addEventListener("change", renderHustles);
 
 // Initial render
 renderHustles();
+
+

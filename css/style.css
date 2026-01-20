@@ -54,7 +54,7 @@ input[type="text"] {
 }
 
 /* Buttons */
-button, .whatsapp-btn {
+button, .social-btn {
   padding: 8px 12px;
   margin: 5px 2px 0 0;
   border: none;
@@ -73,16 +73,19 @@ button, .whatsapp-btn {
 }
 
 /* Social buttons */
-.whatsapp-btn i {
+.social-btn i {
   margin-right: 6px;
   vertical-align: middle;
 }
-.whatsapp-btn[href*="whatsapp"] { background: #25d366; }
-.whatsapp-btn[href*="whatsapp"]:hover { background: #1ebc59; }
-.whatsapp-btn[href*="facebook.com"] { background: #3b5998; }
-.whatsapp-btn[href*="facebook.com"]:hover { background: #2d4373; transform: translateY(-2px);}
-.whatsapp-btn[href*="twitter.com"] { background: #1da1f2; }
-.whatsapp-btn[href*="twitter.com"]:hover { background: #0d95e8; transform: translateY(-2px);}
+
+.social-btn.whatsapp-btn { background: #25d366; }
+.social-btn.whatsapp-btn:hover { background: #1ebc59; }
+
+.social-btn[href*="facebook.com"] { background: #3b5998; }
+.social-btn[href*="facebook.com"]:hover { background: #2d4373; transform: translateY(-2px); }
+
+.social-btn[href*="twitter.com"] { background: #1da1f2; }
+.social-btn[href*="twitter.com"]:hover { background: #0d95e8; transform: translateY(-2px); }
 
 /* Hustle items */
 .hustle-item {
