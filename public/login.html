@@ -20,7 +20,7 @@
     <p>Don't have an account? <a href="signup.html">Sign up</a></p>
   </div>
 
-  <!-- Firebase CDN -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="js/firebaseConfig.js"></script>
@@ -33,12 +33,16 @@
       const password = document.getElementById("loginPassword").value;
 
       auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-          window.location.href = "dashboard.html";
-        })
+        .then(() => window.location.href = "dashboard.html")
         .catch(err => alert(err.message));
     });
   </script>
 
+  <footer>
+    <a href="contact.html">Contact</a> |
+    <a href="privacy.html">Privacy Policy</a> |
+    <a href="terms.html">Terms & Conditions</a>
+    <p>© 2026 StuHustle</p>
+  </footer>
 </body>
 </html>

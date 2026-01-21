@@ -12,9 +12,26 @@
     <h1>Create Account</h1>
 
     <form class="auth-form">
+      <input type="text" id="signupUsername" placeholder="Username" required />
       <input type="text" id="signupName" placeholder="Full Name" required />
       <input type="email" id="signupEmail" placeholder="Email" required />
       <input type="password" id="signupPassword" placeholder="Password" required />
+      <input type="text" id="signupCountry" placeholder="Country" required />
+      
+      <select id="signupGender" required>
+        <option value="" disabled selected>Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <input type="number" id="signupAge" placeholder="Age" required min="13" />
+
+      <label>
+        <input type="checkbox" id="signupAgree" required />
+        I agree to the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms & Conditions</a>
+      </label>
+
       <button type="submit" class="btn-primary big">Sign Up</button>
     </form>
 
@@ -31,21 +48,37 @@
     signupForm.addEventListener("submit", e => {
       e.preventDefault();
 
+      const username = document.getElementById("signupUsername").value;
       const name = document.getElementById("signupName").value;
       const email = document.getElementById("signupEmail").value;
       const password = document.getElementById("signupPassword").value;
+      const country = document.getElementById("signupCountry").value;
+      const gender = document.getElementById("signupGender").value;
+      const age = document.getElementById("signupAge").value;
+      const agree = document.getElementById("signupAgree").checked;
+
+      if (!agree) {
+        alert("You must agree to the Privacy Policy and Terms & Conditions.");
+        return;
+      }
 
       auth.createUserWithEmailAndPassword(email, password)
         .then(userCredential => {
-          // Optional: Add display name
           userCredential.user.updateProfile({ displayName: name });
 
+          // Optional: save additional data to Firestore later
           alert("Account created successfully!");
-          window.location.href = "dashboard.html"; // Redirect to dashboard
+          window.location.href = "dashboard.html";
         })
         .catch(error => alert(error.message));
     });
   </script>
 
+  <footer>
+    <a href="contact.html">Contact</a> |
+    <a href="privacy.html">Privacy Policy</a> |
+    <a href="terms.html">Terms & Conditions</a>
+    <p>© 2026 StuHustle</p>
+  </footer>
 </body>
 </html>

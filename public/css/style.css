@@ -462,3 +462,101 @@ footer {
 .action-card:hover {
   background: linear-gradient(90deg, #6a5cff, #00e0ff);
 }
+/* ===== New Auth Inputs & Privacy Checkbox ===== */
+.auth-container select,
+.auth-container input[type="number"],
+.auth-container label {
+  margin: 0.5rem 0;
+}
+
+.auth-container label {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.auth-container input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+.auth-container a {
+  color: white;
+  text-decoration: underline;
+}
+
+.auth-container .checkbox-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* ===== Legal Pages Styling (contact, privacy, terms) ===== */
+.legal-content {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  line-height: 1.6;
+}
+
+.legal-content h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--secondary);
+}
+
+.legal-content h2 {
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+}
+
+.legal-content p,
+.legal-content ul,
+.legal-content li {
+  font-size: 1rem;
+  color: #e0e0e0;
+}
+
+.legal-content ul {
+  padding-left: 1.5rem;
+  list-style: disc;
+  margin-bottom: 1rem;
+}
+
+footer a {
+  margin: 0 0.5rem;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  color: var(--secondary);
+}
+
+footer p {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+/* Mobile adjustments for legal pages */
+@media (max-width: 768px) {
+  .legal-content {
+    margin: 2rem 1rem;
+    padding: 1.5rem;
+  }
+
+  .legal-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .legal-content h2 {
+    font-size: 1.1rem;
+  }
+}
