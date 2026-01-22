@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,11 +27,21 @@
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
     <a href="dashboard.html" class="nav-item active">🏠 Dashboard</a>
-    <a href="#" class="nav-item">📝 Tasks</a>
-    <a href="#" class="nav-item">💰 Wallet</a>
-    <a href="#" class="nav-item">🏧 Withdraw</a>
+
+    <p class="sidebar-section">Earning Options</p>
+    <a href="ads.html" class="nav-item">📢 Post Ads</a>
+    <a href="dropshipping.html" class="nav-item">📦 Dropshipping</a>
+    <a href="digital-products.html" class="nav-item">💾 Digital Products</a>
+    <a href="freelancing.html" class="nav-item">💼 Freelancing</a>
+    <a href="affiliate.html" class="nav-item">🔗 Affiliate Marketing</a>
+    <a href="referrals.html" class="nav-item">🤝 Referrals</a>
+
+    <p class="sidebar-section">Account</p>
+    <a href="wallet.html" class="nav-item">💰 Wallet</a>
+    <a href="withdraw.html" class="nav-item">🏧 Withdraw</a>
     <a href="profile.html" class="nav-item">👤 Profile</a>
-    <a href="#" class="nav-item">⚙️ Settings</a>
+    <a href="settings.html" class="nav-item">⚙️ Settings</a>
+
     <button id="logoutBtn" class="nav-item logout">🚪 Logout</button>
   </nav>
 
@@ -42,7 +53,7 @@
 
     <section class="welcome">
       <h1>Welcome back 👋</h1>
-      <p>Let’s grow your hustle today</p>
+      <p>Your earning ecosystem starts here</p>
     </section>
 
     <section class="cards">
@@ -52,7 +63,7 @@
       </div>
 
       <div class="card gradient-blue">
-        <h3>Tasks Completed</h3>
+        <h3>Active Income Streams</h3>
         <p class="amount">0</p>
       </div>
 
@@ -65,8 +76,9 @@
     <section class="quick-actions">
       <h2>Quick Actions</h2>
       <div class="action-grid">
-        <a href="#" class="action-card">📝 View Tasks</a>
-        <a href="#" class="action-card">💸 Withdraw</a>
+        <a href="ads.html" class="action-card">📢 Post an Ad</a>
+        <a href="affiliate.html" class="action-card">🔗 Affiliate Links</a>
+        <a href="withdraw.html" class="action-card">💸 Withdraw</a>
         <a href="profile.html" class="action-card">👤 Profile</a>
       </div>
     </section>
@@ -77,17 +89,15 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="js/firebaseConfig.js"></script>
-
   <script src="js/dashboard.js"></script>
-<!-- Add this before </body> in dashboard.html -->
-<footer>
-  <a href="contact.html">Contact</a> |
-  <a href="privacy.html">Privacy Policy</a> |
-  <a href="terms.html">Terms & Conditions</a>
-  <p>© 2026 StuHustle</p>
-</footer>
 
-
+  <!-- Footer -->
+  <footer>
+    <a href="contact.html">Contact</a> |
+    <a href="privacy.html">Privacy Policy</a> |
+    <a href="terms.html">Terms & Conditions</a>
+    <p>© 2026 StuHustle</p>
+  </footer>
 
 </body>
 </html>

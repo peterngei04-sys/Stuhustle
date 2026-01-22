@@ -560,3 +560,49 @@ footer p {
     font-size: 1.1rem;
   }
 }
+/* ===== DASHBOARD SIDEBAR SECTIONS ===== */
+.sidebar-section {
+  padding: 10px 20px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #94a3b8;
+  margin-top: 15px;
+}
+
+/* Improve nav item spacing */
+.sidebar .nav-item {
+  font-size: 0.95rem;
+}
+
+/* Welcome section polish */
+.welcome {
+  margin-bottom: 20px;
+}
+
+.welcome h1 {
+  font-size: 1.9rem;
+}
+
+.welcome p {
+  color: #cbd5f5;
+}
+
+/* Cards enhancement */
+.card h3 {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+/* Footer inside dashboard */
+.dashboard-body footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.dashboard-body footer a {
+  color: var(--secondary);
+  margin: 0 6px;
+}
