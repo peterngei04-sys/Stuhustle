@@ -1,68 +1,110 @@
+/* SETTINGS CONTAINER */
 .settings-container {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  background: rgba(255,255,255,0.05);
-  border-radius: 16px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-  color: white;
+  max-width: 640px;
+  margin: 2.5rem auto;
+  padding: 2rem;
+  background: #111827; /* solid card background */
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.55);
+  color: #e5e7eb;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* TITLE */
 .settings-container h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  font-size: 2.1rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
   color: var(--secondary);
 }
 
+/* EACH SETTINGS SECTION = CARD */
 .settings-section {
   margin-top: 2rem;
+  padding: 1.4rem;
+  background: #1f2933;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
+/* SECTION HEADERS */
 .settings-section h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.8rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
   color: var(--primary);
 }
 
+/* CLICKABLE LINKS (NO UNDERLINES) */
 .settings-link {
   display: block;
-  padding: 0.8rem 0;
-  color: var(--secondary);
-  text-decoration: underline;
+  padding: 0.75rem 0;
+  color: #93c5fd;
+  text-decoration: none;
   cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
+.settings-link:hover {
+  color: #bfdbfe;
+  transform: translateX(4px);
+}
+
+/* TOGGLES & PREFERENCES */
 .toggle-group,
 .preference-group {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0.8rem 0;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
+.toggle-group:last-child,
+.preference-group:last-child {
+  border-bottom: none;
+}
+
+/* BUTTONS */
 .btn-danger {
-  background: #b00020;
+  background: linear-gradient(135deg, #dc2626, #991b1b);
   color: white;
   border: none;
-  padding: 0.7rem 1.2rem;
-  border-radius: 12px;
-  margin-right: 1rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+  font-weight: 600;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(220,38,38,0.4);
+}
+
+/* ACTIVE SESSIONS */
 .sessions-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .sessions-list li {
-  padding: 0.8rem;
-  margin: 0.5rem 0;
-  background: rgba(255,255,255,0.1);
-  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin: 0.6rem 0;
+  background: #111827;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
+/* DARK MODE ROOT */
 .dark-mode {
-  background: #0f172a !important;
-  color: white !important;
+  background: #020617 !important;
+  color: #e5e7eb !important;
+}
+
+/* SMOOTHER TRANSITIONS */
+* {
+  transition: background 0.25s ease, color 0.25s ease;
 }
