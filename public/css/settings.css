@@ -1,0 +1,75 @@
+/* ================= SETTINGS PAGE ================= */
+
+.settings-header {
+  margin-bottom: 20px;
+}
+
+.settings-card {
+  background: rgba(255,255,255,0.08);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.settings-card h2 {
+  margin-bottom: 15px;
+  color: var(--secondary);
+  font-size: 1.2rem;
+}
+
+.settings-card label {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.settings-card input,
+.settings-card select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 5px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.settings-card input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Toggles */
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.toggle-row span {
+  font-size: 0.95rem;
+}
+
+/* Danger Zone */
+.settings-card.danger {
+  border: 1px solid #b00020;
+}
+
+.danger-btn {
+  background: #b00020;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.danger-text {
+  font-size: 0.85rem;
+  margin-top: 8px;
+  opacity: 0.8;
+}
