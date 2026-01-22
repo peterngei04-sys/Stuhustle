@@ -73,3 +73,90 @@
   margin-top: 8px;
   opacity: 0.8;
 }
+/* ===== SETTINGS PAGE FIX ===== */
+
+.settings-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.settings-section h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+/* Settings items */
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  text-decoration: none;
+  color: white;
+}
+
+.settings-item:last-child {
+  border-bottom: none;
+}
+
+.settings-item span {
+  font-weight: 500;
+}
+
+.settings-item small {
+  display: block;
+  font-size: 0.75rem;
+  color: #cbd5f5;
+}
+
+/* Remove ugly link look */
+.settings-item:link,
+.settings-item:visited {
+  color: white;
+}
+
+/* Hover / tap feedback */
+.settings-item:hover {
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+}
+
+/* Toggle row */
+.settings-item.toggle {
+  cursor: default;
+}
+
+.settings-item.toggle input {
+  transform: scale(1.2);
+}
+
+/* ===== Danger Zone ===== */
+.settings-section.danger {
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  background: rgba(255, 0, 0, 0.05);
+}
+
+.danger-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.danger-btn {
+  background: #7f1d1d;
+  color: white;
+}
+
+.danger-btn.delete {
+  background: #b91c1c;
+}
