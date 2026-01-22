@@ -492,3 +492,66 @@ footer p {
   color: var(--secondary);
   margin: 0 6px;
 }
+
+
+
+/* ===== Sidebar Open State ===== */
+.sidebar.open {
+  left: 0;
+}
+
+/* ===== Overlay ===== */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 900;
+  display: none;
+}
+
+#overlay.show {
+  display: block;
+}
+
+/* ===== Sidebar Scroll Fix ===== */
+.sidebar {
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== Lock page scroll when menu is open ===== */
+body.menu-open {
+  overflow: hidden;
+  height: 100vh;
+}
+/* ===== Sidebar Open State ===== */
+.sidebar.open {
+  left: 0;
+}
+
+/* ===== Overlay ===== */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 900;
+  display: none;
+}
+
+#overlay.show {
+  display: block;
+}
+
+/* ===== Sidebar Scroll Fix ===== */
+.sidebar {
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== Lock page scroll when menu is open ===== */
+body.menu-open {
+  overflow: hidden;
+  height: 100vh;
+}

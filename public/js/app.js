@@ -1,11 +1,11 @@
-const hamburger = document.getElementById("menuBtn");
+const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
 const overlay = document.getElementById("overlay");
 
-hamburger.addEventListener("click", () => {
-  sidebar.classList.toggle("open");
-  overlay.classList.toggle("show");
-  document.body.classList.toggle("menu-open");
+menuBtn.addEventListener("click", () => {
+  sidebar.classList.add("open");
+  overlay.classList.add("show");
+  document.body.classList.add("menu-open");
 });
 
 overlay.addEventListener("click", () => {
