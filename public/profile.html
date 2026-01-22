@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profile | StuHustle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Main Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/profile.css">
+</head>
+
+<body class="dashboard-body">
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="top-left">
+      <button id="menuBtn" class="menu-btn">☰</button>
+      <h2 class="logo-text">Stu<span>Hustle</span></h2>
+    </div>
+
+    <div class="top-right">
+      <a href="profile.html" class="profile-btn">
+        <img id="topAvatar" src="https://i.pravatar.cc/40" alt="Profile">
+      </a>
+    </div>
+  </header>
+
+  <!-- Profile Content -->
+  <main class="profile-container">
+
+    <!-- Avatar -->
+    <div class="profile-card center">
+      <img id="profileAvatar" class="profile-avatar" src="https://i.pravatar.cc/120">
+      <h2 id="profileName">Loading...</h2>
+      <p id="profileEmail" class="muted-text">Loading...</p>
+    </div>
+
+    <!-- Account Info -->
+    <div class="profile-card">
+      <h3>Account Information</h3>
+
+      <div class="info-row">
+        <span>User ID</span>
+        <span id="profileUID">—</span>
+      </div>
+
+      <div class="info-row">
+        <span>Auth Provider</span>
+        <span id="profileProvider">—</span>
+      </div>
+    </div>
+
+    <!-- Edit Profile -->
+    <div class="profile-card">
+      <h3>Edit Profile</h3>
+
+      <input type="text" id="displayNameInput" placeholder="Display name">
+      <input type="url" id="photoURLInput" placeholder="Profile photo URL">
+
+      <button class="btn-primary" id="saveProfileBtn">
+        Save Changes
+      </button>
+
+      <p id="profileMsg" class="status-text"></p>
+    </div>
+
+  </main>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="js/firebaseConfig.js"></script>
+
+  <!-- Profile Logic -->
+  <script src="js/profile.js"></script>
+
+</body>
+</html>
