@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Settings | StuHustle</title>
-
-  <!-- Main Styles -->
-  <link rel="stylesheet" href="css/style.css" />
-  <!-- Settings Styles -->
-  <link rel="stylesheet" href="css/settings.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="dashboard-body">
@@ -19,111 +15,89 @@
       <button id="menuBtn" class="menu-btn">☰</button>
       <h2 class="logo-text">Stu<span>Hustle</span></h2>
     </div>
-
-    <div class="top-right">
-      <a href="profile.html" class="profile-btn">
-        <img src="https://i.pravatar.cc/40" alt="Profile">
-      </a>
-    </div>
   </header>
 
   <!-- Sidebar -->
-  <nav id="sidebar" class="sidebar">
-    <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
-    <a href="wallet.html" class="nav-item">💰 Wallet</a>
-    <a href="withdraw.html" class="nav-item">🏧 Withdraw</a>
-    <a href="settings.html" class="nav-item active">⚙️ Settings</a>
-    <button class="nav-item logout">🚪 Logout</button>
+  <nav class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="nav-item">Dashboard</a>
+    <a href="earn.html" class="nav-item">Earn</a>
+    <a href="wallet.html" class="nav-item">Wallet</a>
+    <a href="profile.html" class="nav-item">Profile</a>
+    <a href="settings.html" class="nav-item active">Settings</a>
+    <button class="nav-item logout">Logout</button>
   </nav>
 
   <div id="overlay"></div>
 
-  <!-- Main Content -->
+  <!-- Content -->
   <main class="dashboard-content">
 
-    <section class="settings-header">
-      <h1>Settings</h1>
-      <p class="sub-text">Manage your account, security, and preferences</p>
-    </section>
+    <h1>Settings</h1>
+    <p class="sub-text">Manage security, preferences, and app behavior</p>
 
-    <!-- Account Settings -->
-    <section class="settings-card">
-      <h2>Account Information</h2>
+    <!-- Account & Security -->
+    <section class="settings-section">
+      <h3>Account & Security</h3>
 
-      <label>Full Name</label>
-      <input type="text" placeholder="Your full name" />
+      <a href="security.html" class="settings-item">
+        <span>Security Settings</span>
+        <small>Change password, secure your account</small>
+      </a>
 
-      <label>Email Address</label>
-      <input type="email" placeholder="Email address" disabled />
-
-      <label>Phone Number</label>
-      <input type="tel" placeholder="+254..." />
-    </section>
-
-    <!-- Security -->
-    <section class="settings-card">
-      <h2>Security</h2>
-
-      <label>New Password</label>
-      <input type="password" placeholder="New password" />
-
-      <label>Confirm Password</label>
-      <input type="password" placeholder="Confirm password" />
-
-      <button class="btn-primary">Update Password</button>
-    </section>
-
-    <!-- Notifications -->
-    <section class="settings-card">
-      <h2>Notifications</h2>
-
-      <div class="toggle-row">
-        <span>Email Notifications</span>
-        <input type="checkbox" checked />
-      </div>
-
-      <div class="toggle-row">
-        <span>Earnings Alerts</span>
-        <input type="checkbox" checked />
-      </div>
-
-      <div class="toggle-row">
-        <span>Promotions & Offers</span>
-        <input type="checkbox" />
-      </div>
+      <a href="sessions.html" class="settings-item">
+        <span>Active Sessions</span>
+        <small>Devices currently logged in</small>
+      </a>
     </section>
 
     <!-- Earnings Preferences -->
-    <section class="settings-card">
-      <h2>Earnings Preferences</h2>
+    <section class="settings-section">
+      <h3>Earnings</h3>
 
-      <label>Default Withdrawal Method</label>
-      <select>
-        <option>M-Pesa</option>
-        <option>Bank Transfer</option>
-        <option>PayPal</option>
-      </select>
+      <a href="withdrawal-settings.html" class="settings-item">
+        <span>Withdrawal Preferences</span>
+        <small>Default method & thresholds</small>
+      </a>
 
-      <label>Preferred Currency</label>
-      <select>
-        <option>KES</option>
-        <option>USD</option>
-      </select>
+      <a href="notifications.html" class="settings-item">
+        <span>Earnings Notifications</span>
+        <small>Alerts for rewards & payouts</small>
+      </a>
+    </section>
+
+    <!-- App Preferences -->
+    <section class="settings-section">
+      <h3>App Preferences</h3>
+
+      <div class="settings-item toggle">
+        <span>Dark Mode</span>
+        <input type="checkbox" checked>
+      </div>
+
+      <div class="settings-item">
+        <span>Language</span>
+        <small>English</small>
+      </div>
+    </section>
+
+    <!-- Legal -->
+    <section class="settings-section">
+      <h3>Legal & Support</h3>
+
+      <a href="privacy.html" class="settings-item">Privacy Policy</a>
+      <a href="terms.html" class="settings-item">Terms & Conditions</a>
+      <a href="contact.html" class="settings-item">Contact Support</a>
     </section>
 
     <!-- Danger Zone -->
-    <section class="settings-card danger">
-      <h2>Danger Zone</h2>
-      <button class="danger-btn">Delete Account</button>
-      <p class="danger-text">
-        This action is permanent and cannot be undone.
-      </p>
+    <section class="settings-section danger">
+      <h3>Danger Zone</h3>
+
+      <button class="danger-btn">Log Out</button>
+      <button class="danger-btn delete">Delete Account</button>
     </section>
 
   </main>
-
-  <!-- Scripts -->
-  <script src="js/app.js"></script>
 
 </body>
 </html>
