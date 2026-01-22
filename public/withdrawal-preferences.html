@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Withdrawal Preferences | StuHustle</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/settings.css">
+</head>
+<body class="dashboard-body">
+
+<header class="topbar">
+<h2 class="logo-text">Stu<span>Hustle</span></h2>
+</header>
+
+<main class="settings-container">
+<h1>Withdrawal Preferences</h1>
+<div class="preference-group">
+  <label for="defaultMethod">Default Method:</label>
+  <select id="defaultMethod">
+    <option value="mpesa">M-Pesa</option>
+    <option value="paypal">PayPal</option>
+    <option value="bank">Bank Transfer</option>
+  </select>
+</div>
+<div class="preference-group">
+  <label for="minThreshold">Minimum Withdrawal Amount:</label>
+  <input type="number" id="minThreshold" min="10" placeholder="Enter amount">
+</div>
+<button id="saveWithdrawalPrefs" class="btn-primary">Save Preferences</button>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebaseConfig.js"></script>
+<script src="js/settings.js"></script>
+
+</body>
+</html>

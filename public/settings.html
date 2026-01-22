@@ -2,103 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Settings | StuHustle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | StuHustle</title>
   <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/settings.css">
+  <link rel="stylesheet" href="css/settings.css">
 </head>
-
 <body class="dashboard-body">
 
-  <!-- Top Bar -->
-  <header class="topbar">
-    <div class="top-left">
-      <button id="menuBtn" class="menu-btn">☰</button>
-      <h2 class="logo-text">Stu<span>Hustle</span></h2>
+<header class="topbar">
+  <h2 class="logo-text">Stu<span>Hustle</span></h2>
+</header>
+
+<main class="settings-container">
+  <h1>Settings</h1>
+  <p>Manage your account, security, and app preferences</p>
+
+  <section class="settings-section">
+    <h3>Account & Security</h3>
+    <a href="change-password.html" class="settings-link">Change Password</a>
+    <a href="sessions.html" class="settings-link">Active Sessions</a>
+  </section>
+
+  <section class="settings-section">
+    <h3>Earnings</h3>
+    <a href="withdrawal-preferences.html" class="settings-link">Withdrawal Preferences</a>
+    <a href="notifications.html" class="settings-link">Notifications</a>
+  </section>
+
+  <section class="settings-section">
+    <h3>App Preferences</h3>
+    <div class="toggle-group">
+      <label for="darkModeToggle">Dark Mode</label>
+      <input type="checkbox" id="darkModeToggle">
     </div>
-  </header>
+    <div class="toggle-group">
+      <label>Language</label>
+      <select id="languageSelect">
+        <option value="en" selected>English</option>
+        <option value="fr">French</option>
+        <option value="es">Spanish</option>
+      </select>
+    </div>
+  </section>
 
-  <!-- Sidebar -->
-  <nav class="sidebar" id="sidebar">
-    <a href="dashboard.html" class="nav-item">Dashboard</a>
-    <a href="earn.html" class="nav-item">Earn</a>
-    <a href="wallet.html" class="nav-item">Wallet</a>
-    <a href="profile.html" class="nav-item">Profile</a>
-    <a href="settings.html" class="nav-item active">Settings</a>
-    <button class="nav-item logout">Logout</button>
-  </nav>
+  <section class="settings-section">
+    <h3>Danger Zone</h3>
+    <button id="logoutBtn" class="btn-danger">Log Out</button>
+    <button id="deleteBtn" class="btn-danger">Delete Account</button>
+  </section>
+</main>
 
-  <div id="overlay"></div>
-
-  <!-- Content -->
-  <main class="dashboard-content">
-
-    <h1>Settings</h1>
-    <p class="sub-text">Manage security, preferences, and app behavior</p>
-
-    <!-- Account & Security -->
-    <section class="settings-section">
-      <h3>Account & Security</h3>
-
-      <a href="security.html" class="settings-item">
-        <span>Security Settings</span>
-        <small>Change password, secure your account</small>
-      </a>
-
-      <a href="sessions.html" class="settings-item">
-        <span>Active Sessions</span>
-        <small>Devices currently logged in</small>
-      </a>
-    </section>
-
-    <!-- Earnings Preferences -->
-    <section class="settings-section">
-      <h3>Earnings</h3>
-
-      <a href="withdrawal-settings.html" class="settings-item">
-        <span>Withdrawal Preferences</span>
-        <small>Default method & thresholds</small>
-      </a>
-
-      <a href="notifications.html" class="settings-item">
-        <span>Earnings Notifications</span>
-        <small>Alerts for rewards & payouts</small>
-      </a>
-    </section>
-
-    <!-- App Preferences -->
-    <section class="settings-section">
-      <h3>App Preferences</h3>
-
-      <div class="settings-item toggle">
-        <span>Dark Mode</span>
-        <input type="checkbox" checked>
-      </div>
-
-      <div class="settings-item">
-        <span>Language</span>
-        <small>English</small>
-      </div>
-    </section>
-
-    <!-- Legal -->
-    <section class="settings-section">
-      <h3>Legal & Support</h3>
-
-      <a href="privacy.html" class="settings-item">Privacy Policy</a>
-      <a href="terms.html" class="settings-item">Terms & Conditions</a>
-      <a href="contact.html" class="settings-item">Contact Support</a>
-    </section>
-
-    <!-- Danger Zone -->
-    <section class="settings-section danger">
-      <h3>Danger Zone</h3>
-
-      <button class="danger-btn">Log Out</button>
-      <button class="danger-btn delete">Delete Account</button>
-    </section>
-
-  </main>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebaseConfig.js"></script>
+<script src="js/settings.js"></script>
 
 </body>
 </html>

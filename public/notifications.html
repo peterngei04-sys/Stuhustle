@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications | StuHustle</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/settings.css">
+</head>
+<body class="dashboard-body">
+
+<header class="topbar">
+<h2 class="logo-text">Stu<span>Hustle</span></h2>
+</header>
+
+<main class="settings-container">
+<h1>Notifications</h1>
+<div class="preference-group">
+<label>
+  <input type="checkbox" id="rewardsToggle"> Alerts for Rewards
+</label>
+</div>
+<div class="preference-group">
+<label>
+  <input type="checkbox" id="payoutsToggle"> Alerts for Payouts
+</label>
+</div>
+<button id="saveNotifications" class="btn-primary">Save Notifications</button>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebaseConfig.js"></script>
+<script src="js/settings.js"></script>
+
+</body>
+</html>
