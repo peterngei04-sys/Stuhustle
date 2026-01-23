@@ -1,7 +1,6 @@
 // js/gig-detail.js
 
-const auth = firebase.auth();
-const db = firebase.firestore();
+// DO NOT redeclare auth or db here
 
 const params = new URLSearchParams(window.location.search);
 const gigId = params.get("id");
@@ -31,7 +30,7 @@ if (!gigId) {
       loadBids(gigId);
     })
     .catch(err => {
-      console.error("Error loading gig:", err);
+      console.error(err);
       gigContainer.innerHTML = "<p>Error loading gig.</p>";
     });
 }
@@ -53,7 +52,7 @@ function loadBids(gigId) {
         const bid = doc.data();
         bidsContainer.innerHTML += `
           <div class="bid-card">
-            <p><strong>Bid Amount:</strong> $${bid.amount}</p>
+            <p><strong>$${bid.amount}</strong></p>
             <p>${bid.message}</p>
           </div>
         `;
