@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Post an Ad | StuHustle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/post-ad.css">
+</head>
+
+<body class="dashboard-body">
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="top-left">
+      <button class="menu-btn">☰</button>
+      <h2 class="logo-text">Stu<span>Hustle</span></h2>
+    </div>
+  </header>
+
+  <main class="ad-container">
+
+    <div class="ad-card">
+      <h1>Advertise on StuHustle</h1>
+      <p class="sub-text">
+        Reach motivated earners and digital hustlers worldwide.
+      </p>
+
+      <form id="adForm">
+
+        <input type="text" id="advertiserName" placeholder="Your full name" required>
+        <input type="text" id="businessName" placeholder="Business / Brand name" required>
+        <input type="text" id="adTitle" placeholder="Ad title (short & clear)" required>
+
+        <textarea id="adDescription" placeholder="Describe your offer or service" required></textarea>
+
+        <input type="url" id="adLink" placeholder="Ad destination link (https://...)" required>
+
+        <div class="split">
+          <input type="number" id="budget" placeholder="Budget (USD)" min="5" required>
+          <input type="number" id="duration" placeholder="Duration (days)" min="1" required>
+        </div>
+
+        <button type="submit" class="btn-primary big">
+          Submit Advertisement
+        </button>
+
+        <p id="adMsg" class="status-text"></p>
+
+      </form>
+    </div>
+
+  </main>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebaseConfig.js"></script>
+
+  <script src="js/post-ad.js"></script>
+
+</body>
+</html>
