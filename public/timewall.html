@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TimeWall - Offerwall</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/offerwalls.css">
+</head>
+<body>
+                               
+  <!-- Topbar & Sidebar same as offerwalls.html -->
+  <header class="topbar">
+    <div class="top-left">
+      <button id="menuBtn" class="menu-btn">☰</button>
+      <h2 class="logo-text">Stu<span>Hustle</span></h2>
+    </div>
+    <div class="top-right">
+      <a href="profile.html" class="profile-btn">
+        <img src="https://i.pravatar.cc/40" alt="Profile">
+      </a>
+    </div>
+  </header>
+  <nav id="sidebar" class="sidebar">
+    <!-- same nav items -->
+  </nav>
+  <div id="overlay"></div>
+
+  <main class="dashboard-content">
+    <h1>TimeWall</h1>
+    <p>Earn rewards by completing tasks and offers on TimeWall.</p>
+    <p>Follow instructions carefully to earn points.</p>
+    <button id="startOfferwall" class="btn-primary">Start Earning</button>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebaseConfig.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuBtn = document.getElementById('menuBtn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+
+      menuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('show');
+      });
+
+      overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      });
+
+      const auth = firebase.auth();
+      auth.onAuthStateChanged(user => {
+        if (!user) return window.location.href = 'auth.html';
+      });
+
+      // Example: Open offerwall link
+      document.getElementById('startOfferwall').addEventListener('click', () => {
+        window.open('https://timewall.com/your-affiliate-link', '_blank');
+      });
+    });
+  </script>
+</body>
+</html>
