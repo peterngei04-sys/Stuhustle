@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offerwalls - StuHustle</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/offerwalls.css">
+</head>
+<body>
+                               
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="top-left">
+      <button id="menuBtn" class="menu-btn">☰</button>
+      <h2 class="logo-text">Stu<span>Hustle</span></h2>
+    </div>
+    <div class="top-right">
+      <a href="profile.html" class="profile-btn">
+        <img src="https://i.pravatar.cc/40" alt="Profile">
+      </a>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <nav id="sidebar" class="sidebar">
+    <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
+    <a href="freelancing.html" class="nav-item">💼 Freelancing</a>
+    <a href="post-ad.html" class="nav-item">📢 Post Ads</a>
+    <a href="wallet.html" class="nav-item">💰 Wallet</a>
+    <a href="withdraw.html" class="nav-item">🏧 Withdraw</a>
+    <a href="referrals.html" class="nav-item">🤝 Referrals</a>
+    <a href="offerwalls.html" class="nav-item active">🎯 Offerwalls</a>
+    <a href="settings.html" class="nav-item">⚙️ Settings</a>
+    <button id="logoutBtn" class="nav-item logout">🚪 Logout</button>
+  </nav>
+
+  <!-- Overlay -->
+  <div id="overlay"></div>
+
+  <!-- Content -->
+  <main class="dashboard-content">
+    <h1>Offerwalls</h1>
+    <p class="sub-text">Choose an offerwall to start earning rewards.</p>
+
+    <div class="offerwall-grid">
+      <div class="offerwall-card" data-link="timewall.html">
+        <h3>TimeWall</h3>
+        <p>Earn points completing offers and tasks.</p>
+      </div>
+      <div class="offerwall-card" data-link="bitlabs.html">
+        <h3>BitLabs</h3>
+        <p>Complete surveys and get rewarded instantly.</p>
+      </div>
+      <div class="offerwall-card" data-link="cpidroid.html">
+        <h3>CPI Droid</h3>
+        <p>Install apps and earn points.</p>
+      </div>
+      <div class="offerwall-card" data-link="notik.html">
+        <h3>Notik</h3>
+        <p>Various offers available for all users.</p>
+      </div>
+      <div class="offerwall-card" data-link="wannads.html">
+        <h3>Wannads</h3>
+        <p>Discover offers and earn rewards.</p>
+      </div>
+      <div class="offerwall-card" data-link="cox.html">
+        <h3>Cox Research</h3>
+        <p>Participate in tasks and surveys.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebaseConfig.js"></script>
+  
+  <!-- Offerwalls JS -->
+  <script src="js/offerwalls.js"></script>
+</body>
+</html>

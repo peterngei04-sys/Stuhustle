@@ -1,0 +1,30 @@
+.offerwall-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.offerwall-card {
+  background: rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.offerwall-card:hover {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.offerwall-card h3 {
+  margin-bottom: 0.5rem;
+}
+
+.offerwall-card p {
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+/* Dark mode handled by style.css */
