@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StuHustle - Referrals</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/referrals.css">
+</head>
+<body class="dashboard-body">
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="top-left">
+      <button id="menuBtn" class="menu-btn">☰</button>
+      <h2 class="logo-text">Stu<span>Hustle</span></h2>
+    </div>
+
+    <div class="top-right">
+      <a href="profile.html" class="profile-btn">
+        <img src="https://i.pravatar.cc/40" alt="Profile">
+      </a>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <nav id="sidebar" class="sidebar">
+    <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
+    <a href="freelancing.html" class="nav-item">💼 Freelancing</a>
+    <a href="post-ad.html" class="nav-item">📢 Post Ads</a>
+    <a href="wallet.html" class="nav-item">💰 Wallet</a>
+    <a href="withdraw.html" class="nav-item">🏧 Withdraw</a>
+    <a href="referrals.html" class="nav-item active">🤝 Referrals</a>
+    <a href="settings.html" class="nav-item">⚙️ Settings</a>
+    <button id="logoutBtn" class="nav-item logout">🚪 Logout</button>
+  </nav>
+
+  <!-- Overlay -->
+  <div id="overlay"></div>
+
+  <!-- Main Content -->
+  <main class="dashboard-content">
+    <h1>Referrals</h1>
+    <p class="sub-text">Invite friends and earn points! Each successful referral gives you <strong>100 points</strong>.</p>
+
+    <!-- Referral Link -->
+    <div class="referral-section">
+      <h3>Your Referral Link</h3>
+      <input type="text" id="referralLink" readonly>
+      <button id="copyBtn" class="btn-primary">Copy Link</button>
+    </div>
+
+    <!-- Referral History -->
+    <div class="referral-history">
+      <h3>Referral History</h3>
+      <ul id="referralList">
+        <!-- Referred users will appear here -->
+      </ul>
+    </div>
+
+    <!-- Total Points -->
+    <div class="referral-points">
+      <h3>Total Points Earned: <span id="totalPoints">0</span></h3>
+    </div>
+  </main>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebaseConfig.js"></script>
+  <script src="js/referrals.js"></script>
+</body>
+</html>
