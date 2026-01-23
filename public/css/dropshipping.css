@@ -1,0 +1,40 @@
+.dropship-card {
+  max-width: 600px;
+  margin: 20px auto;
+  background: rgba(255,255,255,0.08);
+  padding: 25px;
+  border-radius: 18px;
+  border: 1px solid #1e293b;
+}
+
+.dropship-card .form-group {
+  margin-bottom: 16px;
+}
+
+.dropship-card label {
+  font-size: 0.85rem;
+  display: block;
+  margin-bottom: 6px;
+  opacity: 0.9;
+}
+
+.dropship-card input,
+.dropship-card textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #020617;
+  color: white;
+}
+
+.dropship-card textarea {
+  min-height: 100px;
+}
+
+#statusMsg {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
