@@ -1,4 +1,4 @@
-const auth = firebase.auth();
+onst auth = firebase.auth();
 const db = firebase.firestore();
 
 const postGigForm = document.getElementById("postGigForm");
