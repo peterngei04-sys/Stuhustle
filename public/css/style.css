@@ -555,3 +555,62 @@ body.menu-open {
   overflow: hidden;
   height: 100vh;
 }
+/* ===== SIDEBAR SCROLL FIX ===== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100vh;
+
+  background: #020617;
+  padding-top: 80px;
+
+  overflow-y: auto;          /* ✅ ALLOW SIDEBAR SCROLL */
+  overscroll-behavior: contain;
+
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+/* hide scrollbar but keep scroll */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 6px;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+/* sidebar sections */
+.sidebar-section {
+  padding: 10px 20px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+/* BODY LOCK WHEN SIDEBAR OPEN */
+body.menu-open {
+  overflow: hidden;
+}
+/* ===== OVERLAY ===== */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s;
+  z-index: 900;
+}
+
+#overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
