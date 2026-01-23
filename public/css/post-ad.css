@@ -1,0 +1,49 @@
+.ad-container {
+  max-width: 650px;
+  margin: 2.5rem auto;
+  padding: 1rem;
+}
+
+.ad-card {
+  background: #020617;
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid #1e293b;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+}
+
+.ad-card h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.ad-card .sub-text {
+  opacity: 0.8;
+  margin-bottom: 1.5rem;
+}
+
+#adForm input,
+#adForm textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  margin: 0.6rem 0;
+  border-radius: 10px;
+  border: none;
+  font-size: 0.95rem;
+}
+
+#adForm textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.status-text {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
