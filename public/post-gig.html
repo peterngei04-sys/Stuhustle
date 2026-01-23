@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Freelancing | StuHustle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/freelancing.css">
+</head>
+<body class="dashboard-body">
+
+<header class="topbar">
+  <div class="top-left">
+    <button id="menuBtn" class="menu-btn">☰</button>
+    <h2 class="logo-text">Stu<span>Hustle</span></h2>
+  </div>
+  <div class="top-right">
+    <a href="profile.html" class="profile-btn">
+      <img src="https://i.pravatar.cc/40" alt="Profile">
+    </a>
+  </div>
+</header>
+
+<nav id="sidebar" class="sidebar">
+  <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
+  <p class="sidebar-section">Earning Options</p>
+  <a href="freelancing.html" class="nav-item active">💼 Freelancing</a>
+  <a href="post-gig.html" class="nav-item">➕ Post a Gig</a>
+  <a href="wallet.html" class="nav-item">💰 Wallet</a>
+  <a href="settings.html" class="nav-item">⚙️ Settings</a>
+</nav>
+
+<div id="overlay"></div>
+
+<main class="page-container">
+  <h1 class="page-title">Freelance Gigs</h1>
+  <p class="page-desc">Browse gigs and request services from freelancers.</p>
+
+  <div id="gigList" class="gig-grid">
+    <!-- Gigs will be populated here -->
+  </div>
+</main>
+
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebaseConfig.js"></script>
+<script src="js/app.js"></script>
+<script src="js/freelancing.js"></script>
+<div id="overlay"></div>
+
+<script src="js/sidebar.js"></script>
+</body>
+</html>

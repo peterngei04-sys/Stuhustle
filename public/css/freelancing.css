@@ -1,0 +1,66 @@
+.freelance-card {
+  max-width: 650px;
+  margin: 20px auto;
+  padding: 26px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid #1e293b;
+  backdrop-filter: blur(10px);
+}
+
+.freelance-card .form-group {
+  margin-bottom: 16px;
+}
+
+.freelance-card label {
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  display: block;
+  opacity: 0.85;
+}
+
+.freelance-card input,
+.freelance-card textarea,
+.freelance-card select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #020617;
+  color: white;
+}
+
+.freelance-card textarea {
+  min-height: 100px;
+}
+
+.gig-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.gig-card {
+  background: rgba(255,255,255,0.08);
+  padding: 18px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.gig-card:hover {
+  background: linear-gradient(90deg, #6a5cff, #00e0ff);
+}
+
+.sessions-list {
+  list-style: none;
+  padding: 0;
+}
+
+.sessions-list li {
+  padding: 10px;
+  margin: 6px 0;
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+}
