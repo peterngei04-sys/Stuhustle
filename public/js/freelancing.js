@@ -1,6 +1,7 @@
-// Get Firebase auth & firestore (compat)
-const auth = firebase.auth();
-const db = firebase.firestore();
+// Make sure firebaseConfig.js is already loaded
+// DO NOT redeclare auth or db
+// const auth = firebase.auth(); // REMOVE THIS
+// const db = firebase.firestore(); // REMOVE THIS
 
 const postGigForm = document.getElementById("postGigForm");
 const gigMessage = document.getElementById("gigMessage");
