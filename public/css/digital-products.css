@@ -1,0 +1,46 @@
+.digital-card {
+  max-width: 650px;
+  margin: 20px auto;
+  padding: 26px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid #1e293b;
+  backdrop-filter: blur(10px);
+}
+
+.digital-card .form-group {
+  margin-bottom: 16px;
+}
+
+.digital-card label {
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  display: block;
+  opacity: 0.85;
+}
+
+.digital-card input,
+.digital-card textarea,
+.digital-card select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #020617;
+  color: white;
+}
+
+.digital-card textarea {
+  min-height: 110px;
+}
+
+.btn-primary.full {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#statusMsg {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 0.9rem;
+}
