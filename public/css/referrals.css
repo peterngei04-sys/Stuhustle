@@ -1,43 +1,86 @@
-.referral-section,
-.referral-history,
-.referral-points {
-  background: rgba(255, 255, 255, 0.05);
+/* Referrals Page */
+.dashboard-content {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--secondary);
+}
+
+.referral-card,
+.referrals-list-section {
+  background: rgba(255,255,255,0.05);
   padding: 1.5rem;
+  margin-bottom: 1.5rem;
   border-radius: 16px;
-  margin-top: 2rem;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
 }
 
-.referral-section input {
-  width: 80%;
-  padding: 0.7rem 1rem;
-  margin-right: 0.5rem;
-  border-radius: 12px;
-  border: none;
-  font-size: 1rem;
-  color: var(--dark);
+.referral-card h3,
+.referrals-list-section h3 {
+  color: var(--primary);
+  margin-bottom: 0.8rem;
 }
 
-.referral-section button {
-  padding: 0.7rem 1.2rem;
-  border: none;
-  border-radius: 12px;
+#referralCode {
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+#copyBtn {
   cursor: pointer;
 }
 
-#referralList {
+#referralsList {
   list-style: none;
   padding: 0;
 }
 
-#referralList li {
+#referralsList li {
   padding: 0.8rem;
   margin: 0.5rem 0;
   background: rgba(255,255,255,0.1);
   border-radius: 8px;
 }
 
-.referral-points {
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: bold;
+/* Sidebar / Hamburger */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 250px;
+  height: 100%;
+  background: #020617;
+  padding-top: 70px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  z-index: 900;
+}
+
+#overlay.show {
+  display: block;
+}
+
+.menu-btn {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
