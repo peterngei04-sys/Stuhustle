@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Micro Gigs | StuHustle</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/microtask.css" />
+</head>
+<body class="dashboard-body">
+
+
+<!-- ===== TOP BAR ===== -->
+<header class="topbar">
+  <div class="top-left">
+    <button id="menuBtn" class="menu-btn">☰</button>
+    <h2 class="logo-text">Stu<span>Hustle</span></h2>
+  </div>
+
+  <div class="top-right">
+    <a href="profile.html" class="profile-btn">
+      <img src="https://i.pravatar.cc/40" alt="Profile">
+    </a>
+  </div>
+</header>
+
+<!-- ===== SIDEBAR ===== -->
+<nav id="sidebar" class="sidebar">
+  <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
+
+  <p class="sidebar-section">Earning Options</p>
+  <a href="microtasks.html" class="nav-item active">📝 Micro Gigs</a>
+  <a href="offerwalls.html" class="nav-item">🎯 Offerwalls</a>
+  <a href="referrals.html" class="nav-item">🤝 Referrals</a>
+
+  <p class="sidebar-section">Account</p>
+  <a href="wallet.html" class="nav-item">💰 Wallet</a>
+  <a href="withdraw.html" class="nav-item">🏧 Withdraw</a>
+  <a href="settings.html" class="nav-item">⚙️ Settings</a>
+
+  <button id="logoutBtn" class="nav-item logout">🚪 Logout</button>
+</nav>
+
+<div id="overlay"></div>
+
+<!-- ===== CONTENT ===== -->
+<main class="dashboard-content">
+
+  <section class="welcome">
+    <h1>Online Micro Gigs</h1>
+    <p>Complete small tasks and earn instantly</p>
+  </section>
+
+  <!-- CREATE TASK (ADMIN / FUTURE) -->
+  <section class="card micro-form">
+    <h3>Create Micro Task</h3>
+
+    <input type="text" id="taskTitle" placeholder="Task Title">
+    <textarea id="taskDesc" placeholder="Task Instructions"></textarea>
+
+    <select id="proofType">
+      <option value="">Proof Required</option>
+      <option value="screenshot">Screenshot</option>
+      <option value="link">Link</option>
+      <option value="text">Text Explanation</option>
+    </select>
+
+    <input type="number" id="reward" placeholder="Reward (KES)">
+
+    <button class="btn-primary" id="createTaskBtn">Create Task</button>
+  </section>
+
+  <!-- TASK LIST -->
+  <section class="tasks-list">
+    <h2>Available Tasks</h2>
+
+    <div id="tasksContainer" class="task-grid">
+      <!-- Tasks injected by JS -->
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FIREBASE ===== -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="js/firebaseConfig.js"></script>
+
+<script src="js/microtasks.js"></script>
+<div id="overlay"></div>
+
+<script src="js/sidebar.js"></script>
+</body>
+</html>

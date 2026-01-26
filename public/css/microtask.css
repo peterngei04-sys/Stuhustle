@@ -1,0 +1,42 @@
+/* ===== MICRO GIGS ===== */
+.micro-form input,
+.micro-form textarea,
+.micro-form select {
+  width: 100%;
+  padding: 0.7rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  border: none;
+}
+
+.tasks-list {
+  margin-top: 30px;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.task-card {
+  background: rgba(255,255,255,0.1);
+  padding: 16px;
+  border-radius: 14px;
+}
+
+.task-card h4 {
+  margin-bottom: 6px;
+}
+
+.task-card p {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.reward {
+  margin-top: 10px;
+  font-weight: bold;
+  color: var(--secondary);
+}
