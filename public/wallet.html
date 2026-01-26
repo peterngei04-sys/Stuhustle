@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wallet | StuHustle</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/wallet.css">
+</head>
+
+<body class="dashboard-body">
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="top-left">
+    <button id="menuBtn" class="menu-btn">☰</button>
+    <h2 class="logo-text">Stu<span>Hustle</span></h2>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<nav id="sidebar" class="sidebar">
+  <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
+  <a href="wallet.html" class="nav-item active">💰 Wallet</a>
+  <a href="profile.html" class="nav-item">👤 Profile</a>
+  <a href="settings.html" class="nav-item">⚙️ Settings</a>
+  <button id="logoutBtn" class="nav-item logout">🚪 Logout</button>
+</nav>
+
+<div id="overlay"></div>
+
+<!-- MAIN -->
+<main class="dashboard-content">
+
+  <h1>Wallet</h1>
+  <p class="sub-text">Manage your earnings, withdrawals and escrow</p>
+
+  <!-- BALANCES -->
+  <section class="wallet-cards">
+    <div class="wallet-card">
+      <h3>Available Balance</h3>
+      <p id="availableBalance">KES 0.00</p>
+    </div>
+
+    <div class="wallet-card">
+      <h3>Pending Balance</h3>
+      <p id="pendingBalance">KES 0.00</p>
+    </div>
+
+    <div class="wallet-card">
+      <h3>Escrow Balance</h3>
+      <p id="escrowBalance">KES 0.00</p>
+    </div>
+  </section>
+
+  <!-- ACTIONS -->
+  <section class="wallet-actions">
+    <button id="openWithdraw" class="btn-primary">Withdraw</button>
+  </section>
+
+  <!-- TRANSACTIONS -->
+  <section class="wallet-section">
+    <h2>Transaction History</h2>
+    <ul id="transactionList" class="transaction-list">
+      <li>No transactions yet</li>
+    </ul>
+  </section>
+
+</main>
+
+<!-- WITHDRAW MODAL -->
+<div id="withdrawModal" class="modal">
+  <div class="modal-content">
+    <h3>Withdraw Funds</h3>
+
+    <select id="withdrawMethod">
+      <option value="mpesa">M-Pesa</option>
+      <option value="paypal">PayPal</option>
+    </select>
+
+    <input type="number" id="withdrawAmount" placeholder="Enter amount">
+
+    <p class="fee-text">Fee: <span id="feeAmount">0</span> KES</p>
+
+    <button id="confirmWithdraw" class="btn-primary">Confirm</button>
+    <button id="closeWithdraw" class="btn-outline">Cancel</button>
+  </div>
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebaseConfig.js"></script>
+<script src="js/wallet.js"></script>
+<div id="overlay"></div>
+
+<script src="js/sidebar.js"></script>
+</body>
+</html>

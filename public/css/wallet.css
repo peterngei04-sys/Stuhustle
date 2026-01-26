@@ -1,0 +1,81 @@
+/* ===== WALLET ===== */
+.wallet-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.wallet-card {
+  background: rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.wallet-card h3 {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.wallet-card p {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.wallet-actions {
+  margin: 25px 0;
+}
+
+.wallet-section {
+  margin-top: 30px;
+}
+
+.transaction-list {
+  list-style: none;
+  padding: 0;
+}
+
+.transaction-list li {
+  background: rgba(255,255,255,0.08);
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #020617;
+  padding: 20px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+}
+
+.fee-text {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
