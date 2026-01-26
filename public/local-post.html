@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Local Gig | StuHustle</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/local.css"/>
+
+</head>
+<body class="dashboard-body">
+
+<header class="topbar">
+  <div class="top-left">
+    <button id="menuBtn" class="menu-btn">☰</button>
+    <h2 class="logo-text">Stu<span>Hustle</span></h2>
+  </div>
+</header>
+
+<nav id="sidebar" class="sidebar">
+  <a href="local.html" class="nav-item">⬅ Back</a>
+</nav>
+
+<div id="overlay"></div>
+
+<main class="dashboard-content">
+
+  <section class="card">
+    <h2>Post Service / Product</h2>
+
+    <input type="text" id="title" placeholder="Service or Product Name">
+    <textarea id="description" placeholder="Describe what you offer"></textarea>
+
+    <input type="number" id="price" placeholder="Price (KES)">
+    
+    <select id="location">
+      <option value="">Select Location</option>
+      <option value="Main Campus">Main Campus</option>
+      <option value="Town">Town</option>
+      <option value="Hostels">Hostels</option>
+      <option value="Nearby Estates">Nearby Estates</option>
+    </select>
+
+    <input type="file" id="image">
+
+    <button class="btn-primary" id="postBtn">Post Listing</button>
+  </section>
+
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="js/firebaseConfig.js"></script>
+
+<script src="js/local-post.js"></script>
+<div id="overlay"></div>
+
+<script src="js/sidebar.js"></script>
+</body>
+</html>

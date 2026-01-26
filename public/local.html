@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Local Gigs | StuHustle</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/local.css"/>
+
+</head>
+<body class="dashboard-body">
+
+<!-- ===== TOP BAR ===== -->
+<header class="topbar">
+  <div class="top-left">
+    <button id="menuBtn" class="menu-btn">☰</button>
+    <h2 class="logo-text">Stu<span>Hustle</span></h2>
+  </div>
+
+  <div class="top-right">
+    <a href="local-post.html" class="btn-primary">+ Post</a>
+  </div>
+</header>
+
+<!-- ===== SIDEBAR ===== -->
+<nav id="sidebar" class="sidebar">
+  <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
+  <a href="local.html" class="nav-item active">📍 Local Gigs</a>
+  <a href="microtasks.html" class="nav-item">📝 Micro Gigs</a>
+  <a href="offerwalls.html" class="nav-item">🎯 Offerwalls</a>
+  <a href="referrals.html" class="nav-item">🤝 Referrals</a>
+
+  <a href="wallet.html" class="nav-item">💰 Wallet</a>
+  <a href="settings.html" class="nav-item">⚙️ Settings</a>
+</nav>
+
+<div id="overlay"></div>
+
+<!-- ===== CONTENT ===== -->
+<main class="dashboard-content">
+
+  <section class="welcome">
+    <h1>Local Services & Products</h1>
+    <p>Find services and products near you</p>
+  </section>
+
+  <!-- SEARCH BAR -->
+  <div class="local-search">
+    <input type="text" id="searchInput" placeholder="Search service, product or location">
+    <button id="searchBtn">🔍</button>
+  </div>
+
+  <!-- LISTINGS -->
+  <section class="local-grid" id="localGrid">
+    <!-- Cards injected by JS -->
+  </section>
+
+</main>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="js/firebaseConfig.js"></script>
+
+<script src="js/local.js"></script>
+<div id="overlay"></div>
+
+<script src="js/sidebar.js"></script>
+</body>
+</html>
