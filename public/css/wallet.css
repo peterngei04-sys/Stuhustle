@@ -79,3 +79,20 @@
   font-size: 0.9rem;
   opacity: 0.8;
 }
+.verify-card {
+  background: rgba(255,255,255,0.08);
+  padding: 1.5rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.verify-card h3 {
+  color: var(--secondary);
+  margin-bottom: 0.5rem;
+}
+
+.verify-card p {
+  opacity: 0.85;
+  margin-bottom: 1rem;
+}
