@@ -25,7 +25,10 @@ body {
   align-items: center;
   padding: 1.2rem 2rem;
 }
-
+/* MOBILE MENU — hidden by default */
+.mobile-menu {
+  display: none;
+}
 .logo {
   font-size: 1.6rem;
   font-weight: bold;
