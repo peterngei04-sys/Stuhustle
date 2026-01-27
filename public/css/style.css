@@ -747,3 +747,24 @@ body.menu-open {
   font-size: 0.9rem;
   display: none;
 }
+.auth-message {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.auth-message.success {
+  background: #e6fff2;
+  color: #0f5132;
+}
+
+.auth-message.error {
+  background: #ffe6e6;
+  color: #842029;
+}
+
+.hidden {
+  display: none;
+}
