@@ -1,3 +1,16 @@
+firebase.auth().onAuthStateChanged(user => {
+  if (!user) {
+    // Not logged in
+    window.location.href = "login.html";
+    return;
+  }
+
+  if (!user.emailVerified) {
+    showVerificationBlock(user);
+  } else {
+    enableWithdrawal();
+  }
+});
 const auth = firebase.auth();
 const db = firebase.firestore();
 
