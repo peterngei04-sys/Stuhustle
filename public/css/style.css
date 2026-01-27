@@ -709,3 +709,41 @@ body.menu-open {
     grid-template-columns: 1fr;
   }
 }
+/* ===== Toast Notifications ===== */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.35s ease;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.success {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  color: #020617;
+}
+
+.toast.error {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+  color: white;
+}
+
+/* Inline form error */
+.form-error {
+  margin-top: 0.8rem;
+  color: #f87171;
+  font-size: 0.9rem;
+  display: none;
+}
