@@ -13,6 +13,36 @@ firebase.auth().onAuthStateChanged(user => {
 });
 const auth = firebase.auth();
 const db = firebase.firestore();
+function showVerificationBlock(user) {
+  const container = document.getElementById("withdrawalSection");
+
+  container.innerHTML = `
+    <div class="verify-card">
+      <h3>Email Verification Required</h3>
+      <p>
+        Please verify your email address before making withdrawals.
+      </p>
+      <button id="resendVerify" class="btn-primary">
+        Resend Verification Email
+      </button>
+    </div>
+  `;
+
+  document
+    .getElementById("resendVerify")
+    .addEventListener("click", () => {
+      user.sendEmailVerification()
+        .then(() => {
+          showToast("Verification email sent. Check your inbox 📧", "success");
+        })
+        .catch(err => {
+          showToast(err.message, "error");
+        });
+    });
+}
+function enableWithdrawal() {
+  document.getElementById("withdrawalSection").style.display = "block";
+}
 
 /* ===== HAMBURGER ===== */
 const menuBtn = document.getElementById("menuBtn");
