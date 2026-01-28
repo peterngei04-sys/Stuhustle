@@ -31,6 +31,18 @@
   margin-top: 30px;
 }
 
+.verify-box {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(255, 0, 0, 0.08);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.verify-box p {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
 .transaction-list {
   list-style: none;
   padding: 0;
