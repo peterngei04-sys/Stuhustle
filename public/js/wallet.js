@@ -1,126 +1,104 @@
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-/* ===== CONSTANTS ===== */
-const MIN_WITHDRAW_USD = 3;
-const USD_TO_KES = 150; // approximate
-const MIN_WITHDRAW_KES = MIN_WITHDRAW_USD * USD_TO_KES;
+const FX = 150;
+const FEE = 0.05;
+const MIN = 3;
 
-/* ===== ELEMENTS ===== */
-const openWithdrawBtn = document.getElementById("openWithdraw");
-const withdrawModal = document.getElementById("withdrawModal");
-const closeWithdrawBtn = document.getElementById("closeWithdraw");
-const verifyBox = document.getElementById("verifyBox");
-const resendVerifyBtn = document.getElementById("resendVerify");
-const withdrawError = document.getElementById("withdrawError");
+let currentUser;
+let draft = null;
+let userCountry = "Kenya"; // fetch from profile later
 
-/* ===== AUTH ===== */
 auth.onAuthStateChanged(user => {
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
+  if (!user) return location.href = "login.html";
+  currentUser = user;
 
   if (!user.emailVerified) {
-    lockWithdrawal(user);
-  } else {
-    unlockWithdrawal();
+    document.getElementById("verifyBox").style.display = "block";
+    document.getElementById("openWithdraw").disabled = true;
   }
 
-  loadWallet(user.uid);
-  loadTransactions(user.uid);
+  document.getElementById("availableBalance").innerText = "$25.00";
 });
 
-/* ===== VERIFICATION GUARD ===== */
-function lockWithdrawal(user) {
-  verifyBox.style.display = "block";
-  openWithdrawBtn.disabled = true;
-  openWithdrawBtn.style.opacity = "0.5";
+/* MODAL */
+const modal = document.getElementById("withdrawModal");
+document.getElementById("openWithdraw").onclick = () => modal.classList.add("show");
+document.getElementById("closeWithdraw").onclick = () => modal.classList.remove("show");
 
-  resendVerifyBtn.onclick = () => {
-    user.sendEmailVerification()
-      .then(() => alert("Verification email sent 📧"))
-      .catch(err => alert(err.message));
+/* METHOD SWITCH */
+document.querySelectorAll(".method-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".method-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    const m = btn.dataset.method;
+    document.getElementById("paypalForm").style.display = m === "paypal" ? "block" : "none";
+    document.getElementById("mpesaForm").style.display = m === "mpesa" ? "block" : "none";
+
+    if (m === "mpesa" && userCountry !== "Kenya") {
+      document.getElementById("mpesaNotice").style.display = "block";
+    } else {
+      document.getElementById("mpesaNotice").style.display = "none";
+    }
   };
-}
+});
 
-function unlockWithdrawal() {
-  verifyBox.style.display = "none";
-  openWithdrawBtn.disabled = false;
-  openWithdrawBtn.style.opacity = "1";
-}
-
-/* ===== WALLET DATA ===== */
-function loadWallet(uid) {
-  db.collection("wallets").doc(uid).onSnapshot(doc => {
-    if (!doc.exists) return;
-
-    const d = doc.data();
-    window.availableBalance = d.available || 0;
-
-    document.getElementById("availableBalance").innerText = `KES ${d.available || 0}`;
-    document.getElementById("pendingBalance").innerText = `KES ${d.pending || 0}`;
-    document.getElementById("escrowBalance").innerText = `KES ${d.escrow || 0}`;
-  });
-}
-
-/* ===== TRANSACTIONS ===== */
-function loadTransactions(uid) {
-  db.collection("transactions")
-    .where("userId", "==", uid)
-    .orderBy("createdAt", "desc")
-    .onSnapshot(snap => {
-      const list = document.getElementById("transactionList");
-      list.innerHTML = "";
-
-      if (snap.empty) {
-        list.innerHTML = "<li>No transactions yet</li>";
-        return;
-      }
-
-      snap.forEach(doc => {
-        const t = doc.data();
-        list.innerHTML += `<li>${t.type} — KES ${t.amount} (${t.status})</li>`;
-      });
-    });
-}
-
-/* ===== MODAL ===== */
-openWithdrawBtn.onclick = () => {
-  withdrawModal.classList.add("show");
-  withdrawError.innerText = "";
-};
-
-closeWithdrawBtn.onclick = () => {
-  withdrawModal.classList.remove("show");
-};
-
-/* ===== FEE ===== */
-document.getElementById("withdrawAmount").oninput = e => {
-  const amt = Number(e.target.value || 0);
-  document.getElementById("feeAmount").innerText = Math.floor(amt * 0.05);
-};
-
-/* ===== WITHDRAW VALIDATION ===== */
+/* CONFIRM DETAILS */
 document.getElementById("confirmWithdraw").onclick = () => {
-  const amount = Number(document.getElementById("withdrawAmount").value);
+  const method = document.querySelector(".method-btn.active").dataset.method;
+  let amount;
 
-  if (!amount || amount <= 0) {
-    withdrawError.innerText = "Enter a valid amount";
+  if (method === "paypal") {
+    amount = Number(document.getElementById("paypalAmount").value);
+    draft = {
+      method,
+      email: document.getElementById("paypalEmail").value
+    };
+  } else {
+    amount = Number(document.getElementById("mpesaAmount").value);
+    draft = {
+      method,
+      name: document.getElementById("mpesaName").value,
+      phone: document.getElementById("mpesaPhone").value
+    };
+  }
+
+  if (amount < MIN) {
+    document.getElementById("withdrawError").innerText = "Minimum withdrawal is $3";
     return;
   }
 
-  if (amount < MIN_WITHDRAW_KES) {
-    withdrawError.innerText = `Minimum withdrawal is $${MIN_WITHDRAW_USD} (≈ KES ${MIN_WITHDRAW_KES})`;
-    return;
-  }
+  const fee = +(amount * FEE).toFixed(2);
+  const net = +(amount - fee).toFixed(2);
 
-  if (amount > window.availableBalance) {
-    withdrawError.innerText = "Insufficient balance";
-    return;
-  }
+  draft.amount = amount;
+  draft.fee = fee;
+  draft.net = net;
 
-  withdrawError.innerText = "";
-  alert("Withdrawal request submitted (backend coming next)");
-  withdrawModal.classList.remove("show");
+  modal.classList.remove("show");
+
+  document.getElementById("withdrawReview").style.display = "block";
+  document.getElementById("rMethod").innerText = method.toUpperCase();
+  document.getElementById("rAmount").innerText = `$${amount}`;
+  document.getElementById("rFee").innerText = `$${fee}`;
+  document.getElementById("rReceive").innerText = `$${net}`;
+
+  if (method === "mpesa") {
+    document.getElementById("rExtra").innerHTML =
+      `<p>You receive: KES ${Math.floor(net * FX)}</p>`;
+  }
+};
+
+/* SUBMIT */
+document.getElementById("submitWithdrawal").onclick = () => {
+  db.collection("withdrawals").add({
+    uid: currentUser.uid,
+    ...draft,
+    status: "pending",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  document.getElementById("submitWithdrawal").disabled = true;
+  document.getElementById("pendingText").style.display = "block";
 };

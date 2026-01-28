@@ -11,7 +11,6 @@
 
 <body class="dashboard-body">
 
-<!-- TOP BAR -->
 <header class="topbar">
   <div class="top-left">
     <button id="menuBtn" class="menu-btn">☰</button>
@@ -19,83 +18,93 @@
   </div>
 </header>
 
-<!-- SIDEBAR -->
 <nav id="sidebar" class="sidebar">
   <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
   <a href="wallet.html" class="nav-item active">💰 Wallet</a>
   <a href="profile.html" class="nav-item">👤 Profile</a>
   <a href="settings.html" class="nav-item">⚙️ Settings</a>
-  <button id="logoutBtn" class="nav-item logout">🚪 Logout</button>
 </nav>
 
 <div id="overlay"></div>
 
-<!-- MAIN -->
 <main class="dashboard-content">
 
   <h1>Wallet</h1>
-  <p class="sub-text">Manage your earnings, withdrawals and escrow</p>
+  <p class="sub-text">Manage your withdrawals securely</p>
 
-  <!-- EMAIL VERIFICATION BLOCK -->
+  <!-- EMAIL VERIFICATION -->
   <div id="verifyBox" class="verify-box" style="display:none;">
-    <h3>Email Verification Required</h3>
-    <p>You must verify your email before withdrawing funds.</p>
-    <button id="resendVerify" class="btn-primary">Resend Verification Email</button>
+    <p>⚠️ Verify your email to withdraw funds</p>
+    <button id="resendVerify" class="btn-outline">Resend Email</button>
   </div>
 
-  <!-- BALANCES -->
+  <!-- BALANCE -->
   <section class="wallet-cards">
     <div class="wallet-card">
       <h3>Available Balance</h3>
-      <p id="availableBalance">KES 0.00</p>
-    </div>
-
-    <div class="wallet-card">
-      <h3>Pending Balance</h3>
-      <p id="pendingBalance">KES 0.00</p>
-    </div>
-
-    <div class="wallet-card">
-      <h3>Escrow Balance</h3>
-      <p id="escrowBalance">KES 0.00</p>
+      <p id="availableBalance">$0.00</p>
     </div>
   </section>
 
-  <!-- ACTIONS -->
+  <!-- ACTION -->
   <section class="wallet-actions">
     <button id="openWithdraw" class="btn-primary">Withdraw</button>
-    <p class="note-text">Minimum withdrawal: <strong>$3</strong></p>
   </section>
 
-  <!-- TRANSACTIONS -->
-  <section class="wallet-section">
-    <h2>Transaction History</h2>
-    <ul id="transactionList" class="transaction-list">
-      <li>No transactions yet</li>
-    </ul>
-  </section>
+  <!-- REVIEW -->
+  <div id="withdrawReview" class="withdraw-review" style="display:none;">
+    <h3>Review Withdrawal</h3>
+
+    <div class="review-item"><span>Method</span><strong id="rMethod"></strong></div>
+    <div class="review-item"><span>Amount</span><strong id="rAmount"></strong></div>
+    <div class="review-item"><span>Fee</span><strong id="rFee"></strong></div>
+    <div class="review-item"><span>You Receive</span><strong id="rReceive"></strong></div>
+
+    <div id="rExtra"></div>
+
+    <button id="submitWithdrawal" class="btn-primary full-btn">
+      Submit Withdrawal
+    </button>
+
+    <p id="pendingText" class="queue-text" style="display:none;">
+      ⏳ Withdrawal pending (up to 24 hours)
+    </p>
+  </div>
 
 </main>
 
-<!-- WITHDRAW MODAL -->
+<!-- MODAL -->
 <div id="withdrawModal" class="modal">
   <div class="modal-content">
     <h3>Withdraw Funds</h3>
 
-    <select id="withdrawMethod">
-      <option value="mpesa">M-Pesa</option>
-      <option value="paypal">PayPal</option>
-    </select>
+    <div class="method-toggle">
+      <button class="method-btn active" data-method="paypal">PayPal</button>
+      <button class="method-btn" data-method="mpesa">M-Pesa</button>
+    </div>
 
-    <input type="number" id="withdrawAmount" placeholder="Enter amount (KES)">
+    <!-- PAYPAL -->
+    <div id="paypalForm" class="withdraw-form">
+      <input type="email" id="paypalEmail" placeholder="PayPal Email">
+      <input type="number" id="paypalAmount" placeholder="Amount (USD)">
+    </div>
 
-    <p class="fee-text">
-      Fee: <span id="feeAmount">0</span> KES
-    </p>
+    <!-- MPESA -->
+    <div id="mpesaForm" class="withdraw-form" style="display:none;">
+      <p id="mpesaNotice" class="error-text" style="display:none;">
+        M-Pesa is only available for Kenyan users 🇰🇪
+      </p>
+      <input type="text" id="mpesaName" placeholder="M-Pesa Registered Name">
+      <input type="text" id="mpesaPhone" placeholder="M-Pesa Phone (2547...)">
+      <input type="number" id="mpesaAmount" placeholder="Amount (USD)">
+    </div>
+
+    <p class="fee-text">Fee: <span id="feePreview">$0.00</span></p>
+    <p class="fee-text" id="kesPreview" style="display:none;"></p>
 
     <p id="withdrawError" class="error-text"></p>
 
-    <button id="confirmWithdraw" class="btn-primary">Confirm</button>
+    <button id="confirmWithdraw" class="btn-primary">Confirm Details</button>
     <button id="closeWithdraw" class="btn-outline">Cancel</button>
   </div>
 </div>
@@ -104,10 +113,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
 <script src="js/firebaseConfig.js"></script>
 <script src="js/wallet.js"></script>
-<script src="js/sidebar.js"></script>
 
 </body>
 </html>
