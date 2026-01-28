@@ -108,3 +108,26 @@
   opacity: 0.85;
   margin-bottom: 1rem;
 }
+.verify-box {
+  background: #ffe5e5;
+  border: 1px solid #ff4d4d;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.verify-box h3 {
+  color: #cc0000;
+}
+
+.note-text {
+  margin-top: 8px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.error-text {
+  color: red;
+  font-size: 14px;
+  margin-top: 8px;
+}
