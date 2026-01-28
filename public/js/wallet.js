@@ -1,14 +1,20 @@
-/* ===== FIREBASE ===== */
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+/* ===== CONSTANTS ===== */
+const MIN_WITHDRAW_USD = 3;
+const USD_TO_KES = 150; // approximate
+const MIN_WITHDRAW_KES = MIN_WITHDRAW_USD * USD_TO_KES;
 
 /* ===== ELEMENTS ===== */
 const openWithdrawBtn = document.getElementById("openWithdraw");
 const withdrawModal = document.getElementById("withdrawModal");
 const closeWithdrawBtn = document.getElementById("closeWithdraw");
-const withdrawalSection = document.getElementById("withdrawalSection");
+const verifyBox = document.getElementById("verifyBox");
+const resendVerifyBtn = document.getElementById("resendVerify");
+const withdrawError = document.getElementById("withdrawError");
 
-/* ===== AUTH STATE ===== */
+/* ===== AUTH ===== */
 auth.onAuthStateChanged(user => {
   if (!user) {
     window.location.href = "login.html";
@@ -16,112 +22,105 @@ auth.onAuthStateChanged(user => {
   }
 
   if (!user.emailVerified) {
-    showVerificationBlock(user);
+    lockWithdrawal(user);
   } else {
-    enableWithdrawal();
+    unlockWithdrawal();
   }
 
-  loadWalletData(user.uid);
+  loadWallet(user.uid);
   loadTransactions(user.uid);
 });
 
-/* ===== VERIFICATION BLOCK ===== */
-function showVerificationBlock(user) {
-  withdrawalSection.style.display = "block";
-  withdrawalSection.innerHTML = `
-    <div class="verify-card">
-      <h3>Email Verification Required</h3>
-      <p>Please verify your email address before making withdrawals.</p>
-      <button id="resendVerify" class="btn-primary">
-        Resend Verification Email
-      </button>
-    </div>
-  `;
-
+/* ===== VERIFICATION GUARD ===== */
+function lockWithdrawal(user) {
+  verifyBox.style.display = "block";
   openWithdrawBtn.disabled = true;
   openWithdrawBtn.style.opacity = "0.5";
 
-  document.getElementById("resendVerify").onclick = () => {
+  resendVerifyBtn.onclick = () => {
     user.sendEmailVerification()
-      .then(() => {
-        alert("Verification email sent. Check your inbox 📧");
-      })
+      .then(() => alert("Verification email sent 📧"))
       .catch(err => alert(err.message));
   };
 }
 
-function enableWithdrawal() {
-  withdrawalSection.style.display = "none";
+function unlockWithdrawal() {
+  verifyBox.style.display = "none";
   openWithdrawBtn.disabled = false;
   openWithdrawBtn.style.opacity = "1";
 }
 
 /* ===== WALLET DATA ===== */
-function loadWalletData(uid) {
+function loadWallet(uid) {
   db.collection("wallets").doc(uid).onSnapshot(doc => {
     if (!doc.exists) return;
 
-    const data = doc.data();
-    document.getElementById("availableBalance").innerText = `KES ${data.available || 0}`;
-    document.getElementById("pendingBalance").innerText = `KES ${data.pending || 0}`;
-    document.getElementById("escrowBalance").innerText = `KES ${data.escrow || 0}`;
+    const d = doc.data();
+    window.availableBalance = d.available || 0;
+
+    document.getElementById("availableBalance").innerText = `KES ${d.available || 0}`;
+    document.getElementById("pendingBalance").innerText = `KES ${d.pending || 0}`;
+    document.getElementById("escrowBalance").innerText = `KES ${d.escrow || 0}`;
   });
 }
 
+/* ===== TRANSACTIONS ===== */
 function loadTransactions(uid) {
   db.collection("transactions")
     .where("userId", "==", uid)
     .orderBy("createdAt", "desc")
-    .onSnapshot(snapshot => {
+    .onSnapshot(snap => {
       const list = document.getElementById("transactionList");
       list.innerHTML = "";
 
-      if (snapshot.empty) {
+      if (snap.empty) {
         list.innerHTML = "<li>No transactions yet</li>";
         return;
       }
 
-      snapshot.forEach(doc => {
+      snap.forEach(doc => {
         const t = doc.data();
-        list.innerHTML += `
-          <li>${t.type} — KES ${t.amount} (${t.status})</li>
-        `;
+        list.innerHTML += `<li>${t.type} — KES ${t.amount} (${t.status})</li>`;
       });
     });
 }
 
-/* ===== WITHDRAW MODAL ===== */
+/* ===== MODAL ===== */
 openWithdrawBtn.onclick = () => {
   withdrawModal.classList.add("show");
+  withdrawError.innerText = "";
 };
 
 closeWithdrawBtn.onclick = () => {
   withdrawModal.classList.remove("show");
 };
 
-/* ===== WITHDRAW FEE ===== */
+/* ===== FEE ===== */
 document.getElementById("withdrawAmount").oninput = e => {
-  const amount = Number(e.target.value || 0);
-  const fee = Math.floor(amount * 0.05);
-  document.getElementById("feeAmount").innerText = fee;
+  const amt = Number(e.target.value || 0);
+  document.getElementById("feeAmount").innerText = Math.floor(amt * 0.05);
 };
 
-/* ===== CONFIRM WITHDRAW ===== */
+/* ===== WITHDRAW VALIDATION ===== */
 document.getElementById("confirmWithdraw").onclick = () => {
-  alert("Withdrawal request submitted (backend logic later)");
-};
+  const amount = Number(document.getElementById("withdrawAmount").value);
 
-/* ===== HAMBURGER ===== */
-const menuBtn = document.getElementById("menuBtn");
-const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("overlay");
+  if (!amount || amount <= 0) {
+    withdrawError.innerText = "Enter a valid amount";
+    return;
+  }
 
-menuBtn.onclick = () => {
-  sidebar.classList.add("open");
-  overlay.classList.add("show");
-};
+  if (amount < MIN_WITHDRAW_KES) {
+    withdrawError.innerText = `Minimum withdrawal is $${MIN_WITHDRAW_USD} (≈ KES ${MIN_WITHDRAW_KES})`;
+    return;
+  }
 
-overlay.onclick = () => {
-  sidebar.classList.remove("open");
-  overlay.classList.remove("show");
+  if (amount > window.availableBalance) {
+    withdrawError.innerText = "Insufficient balance";
+    return;
+  }
+
+  withdrawError.innerText = "";
+  alert("Withdrawal request submitted (backend coming next)");
+  withdrawModal.classList.remove("show");
 };
