@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Wallet | StuHustle</title>
+
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/wallet.css">
 </head>
@@ -35,6 +36,13 @@
   <h1>Wallet</h1>
   <p class="sub-text">Manage your earnings, withdrawals and escrow</p>
 
+  <!-- EMAIL VERIFICATION BLOCK -->
+  <div id="verifyBox" class="verify-box" style="display:none;">
+    <h3>Email Verification Required</h3>
+    <p>You must verify your email before withdrawing funds.</p>
+    <button id="resendVerify" class="btn-primary">Resend Verification Email</button>
+  </div>
+
   <!-- BALANCES -->
   <section class="wallet-cards">
     <div class="wallet-card">
@@ -53,22 +61,11 @@
     </div>
   </section>
 
-<!-- EMAIL VERIFICATION WARNING -->
-<div id="verifyBox" class="verify-box" style="display:none;">
-  <p>⚠️ Please verify your email to withdraw funds.</p>
-  <button id="resendVerify" class="btn-outline">
-    Resend Verification Email
-  </button>
-</div>
-
-
   <!-- ACTIONS -->
   <section class="wallet-actions">
     <button id="openWithdraw" class="btn-primary">Withdraw</button>
+    <p class="note-text">Minimum withdrawal: <strong>$3</strong></p>
   </section>
-<div id="withdrawalSection" style="display:none;">
-  <!-- withdrawal form here -->
-</div>
 
   <!-- TRANSACTIONS -->
   <section class="wallet-section">
@@ -90,9 +87,13 @@
       <option value="paypal">PayPal</option>
     </select>
 
-    <input type="number" id="withdrawAmount" placeholder="Enter amount">
+    <input type="number" id="withdrawAmount" placeholder="Enter amount (KES)">
 
-    <p class="fee-text">Fee: <span id="feeAmount">0</span> KES</p>
+    <p class="fee-text">
+      Fee: <span id="feeAmount">0</span> KES
+    </p>
+
+    <p id="withdrawError" class="error-text"></p>
 
     <button id="confirmWithdraw" class="btn-primary">Confirm</button>
     <button id="closeWithdraw" class="btn-outline">Cancel</button>
@@ -103,10 +104,10 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <script src="js/firebaseConfig.js"></script>
 <script src="js/wallet.js"></script>
-<div id="overlay"></div>
-
 <script src="js/sidebar.js"></script>
+
 </body>
 </html>
