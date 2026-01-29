@@ -1,82 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Wallet | StuHustle</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/wallet.css">
 </head>
+<body>
 
-<body class="dashboard-body">
-
-<header class="topbar">
-  <button id="menuBtn" class="menu-btn">☰</button>
-  <h2 class="logo-text">Stu<span>Hustle</span></h2>
+<!-- HEADER -->
+<header class="header">
+  <div class="menu-btn" id="menuBtn">☰</div>
+  <h2>Wallet</h2>
 </header>
 
-<nav id="sidebar" class="sidebar">
-  <a href="dashboard.html">🏠 Dashboard</a>
-  <a href="wallet.html" class="active">💰 Wallet</a>
-  <a href="profile.html">👤 Profile</a>
-  <button id="logoutBtn">🚪 Logout</button>
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <a href="#">Dashboard</a>
+  <a href="#">Wallet</a>
+  <a href="#">Withdrawals</a>
+  <a href="#">Profile</a>
+  <a href="#">Logout</a>
 </nav>
 
-<div id="overlay"></div>
+<!-- OVERLAY -->
+<div class="overlay" id="overlay"></div>
 
-<main class="dashboard-content">
+<!-- MAIN CONTENT -->
+<main class="container">
 
-  <h1>Wallet</h1>
-  <p class="sub-text">Manage your withdrawals securely</p>
-
-  <div class="wallet-card">
+  <!-- BALANCE -->
+  <div class="balance-card">
     <h3>Available Balance</h3>
-    <p id="availableBalance">$0.00</p>
+    <p id="balance">$12.50</p>
   </div>
 
-  <!-- EMAIL VERIFICATION -->
-  <div id="verifyBox" class="verify-box" style="display:none">
-    ⚠️ Verify your email to withdraw  
-    <button id="resendVerify" class="btn-outline">Resend Email</button>
+  <!-- WITHDRAW DETAILS -->
+  <div class="withdraw-details" id="withdrawDetails">
+    <h3>Withdrawal Details</h3>
+    <p><strong>Method:</strong> <span id="showMethod">—</span></p>
+    <p><strong>Account:</strong> <span id="showAccount">—</span></p>
+    <p><strong>Amount:</strong> <span id="showAmount">—</span></p>
+
+    <button id="withdrawBtn" disabled>Withdraw</button>
+
+    <p id="statusText"></p>
   </div>
 
-  <button id="withdrawBtn" class="btn-primary">Withdraw</button>
-
-  <!-- WITHDRAW CARD -->
-  <div id="withdrawCard" class="withdraw-card" style="display:none">
-
-    <select id="method">
-      <option value="">Select Method</option>
-      <option value="paypal">PayPal</option>
-      <option value="mpesa">M-Pesa</option>
-    </select>
-
-    <div id="paypalBox" class="method-box">
-      <input type="email" id="paypalEmail" placeholder="PayPal Email">
-    </div>
-
-    <div id="mpesaBox" class="method-box">
-      <input type="text" id="mpesaName" placeholder="M-Pesa Name">
-      <input type="text" id="mpesaNumber" placeholder="M-Pesa Number">
-    </div>
-
-    <input type="number" id="amount" placeholder="Amount (min $3)">
-
-    <div class="summary">
-      <p>Fee (5%): <span id="fee">$0</span></p>
-      <p>You Receive: <span id="receive">$0</span></p>
-    </div>
-
-    <button id="confirmBtn" class="btn-primary">Confirm</button>
-  </div>
+  <!-- OPEN FORM BUTTON -->
+  <button class="open-form-btn" id="openFormBtn">Enter Withdrawal Details</button>
 
 </main>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="js/firebaseConfig.js"></script>
-<script src="js/wallet.js"></script>
+<!-- WITHDRAW FORM MODAL -->
+<div class="modal" id="withdrawModal">
+  <div class="modal-card">
+    <h3>Withdrawal Form</h3>
 
+    <label>Method</label>
+    <select id="method">
+      <option value="">Select Method</option>
+      <option value="PayPal">PayPal</option>
+      <option value="M-Pesa">M-Pesa</option>
+    </select>
+
+    <label>Account</label>
+    <input type="text" id="account" placeholder="Email or Phone">
+
+    <label>Amount ($)</label>
+    <input type="number" id="amount" min="1">
+
+    <div class="modal-actions">
+      <button id="confirmDetails">Confirm</button>
+      <button id="cancelForm">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/wallet.js"></script>
 </body>
 </html>

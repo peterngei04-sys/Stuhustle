@@ -1,241 +1,166 @@
-/* ===== GENERAL PAGE ===== */
-body.dashboard-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #0B0E1D;
-  color: #fff;
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
-h1, h2, h3 {
-  margin: 0;
-}
-
-p.sub-text {
-  opacity: 0.8;
-  margin-top: 5px;
-  font-size: 0.95rem;
-}
-
-/* ===== TOPBAR ===== */
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  background: linear-gradient(90deg, #4f8eff, #5fffd3);
-  padding: 15px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.topbar .logo-text {
-  font-weight: bold;
-  font-size: 1.5rem;
-  margin-left: 15px;
-}
-
-.topbar .logo-text span {
+body {
+  background: #0f172a;
   color: #fff;
 }
 
-/* ===== SIDEBAR ===== */
+/* HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: #020617;
+}
+
+.menu-btn {
+  font-size: 26px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+/* SIDEBAR */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -250px;
+  left: -260px;
   width: 250px;
   height: 100%;
-  background: #121827;
+  background: #020617;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
   transition: 0.3s;
-  z-index: 1100;
+  z-index: 1000;
 }
 
-.sidebar.open {
-  left: 0;
-}
-
-.sidebar .nav-item {
-  padding: 12px 10px;
-  border-radius: 10px;
-  text-decoration: none;
-  color: #fff;
-  font-weight: 500;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.sidebar .nav-item.active,
-.sidebar .nav-item:hover {
-  background: rgba(255,255,255,0.1);
-}
-
-#overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  z-index: 1050;
-}
-
-#overlay.show {
+.sidebar a {
   display: block;
-}
-
-/* ===== WALLET CARDS ===== */
-.wallet-card {
-  background: rgba(255,255,255,0.05);
-  padding: 20px;
-  border-radius: 16px;
-  margin-top: 20px;
-}
-
-.wallet-card h3 {
-  font-size: 1rem;
-  opacity: 0.8;
-  margin-bottom: 8px;
-}
-
-.wallet-card p {
-  font-size: 1.6rem;
-  font-weight: bold;
-}
-
-/* ===== WALLET ACTIONS ===== */
-.wallet-actions {
-  margin: 25px 0;
-}
-
-.btn-primary {
-  background: linear-gradient(90deg, #4f8eff, #5fffd3);
-  border: none;
   color: #fff;
-  padding: 12px 25px;
-  border-radius: 25px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
+  text-decoration: none;
+  padding: 12px 0;
+  border-bottom: 1px solid #1e293b;
 }
 
-.btn-primary:hover {
-  opacity: 0.85;
-}
-
-.btn-outline {
-  border: 2px solid #4f8eff;
-  color: #4f8eff;
-  padding: 10px 20px;
-  border-radius: 25px;
-  background: transparent;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.btn-outline:hover {
-  background: rgba(79,142,255,0.1);
-}
-
-/* ===== VERIFICATION BOX ===== */
-.verify-box {
-  margin-top: 20px;
-  padding: 20px;
-  background: rgba(255,0,0,0.08);
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-.verify-box p,
-.verify-box h3 {
-  margin-bottom: 10px;
-}
-
-/* ===== WITHDRAW CARD ===== */
-.withdraw-card {
-  margin-top: 20px;
-  background: rgba(255,255,255,0.05);
-  padding: 20px;
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.withdraw-card select,
-.withdraw-card input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 12px;
-  border: none;
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-}
-
-.method-box {
-  display: none;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* ===== SUMMARY ===== */
-.summary {
-  margin-top: 15px;
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-/* ===== TRANSACTION LIST ===== */
-.transaction-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
-}
-
-.transaction-list li {
-  background: rgba(255,255,255,0.05);
-  padding: 12px;
-  border-radius: 12px;
-  margin-bottom: 10px;
-}
-
-/* ===== MODAL (if needed later) ===== */
-.modal {
+/* OVERLAY */
+.overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.6);
   display: none;
-  justify-content: center;
+  z-index: 900;
+}
+
+/* MAIN */
+.container {
+  padding: 20px;
+}
+
+/* BALANCE */
+.balance-card {
+  background: linear-gradient(135deg, #3b82f6, #9333ea);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.balance-card p {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* DETAILS */
+.withdraw-details {
+  background: #020617;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.withdraw-details p {
+  margin: 10px 0;
+}
+
+.withdraw-details button {
+  width: 100%;
+  padding: 12px;
+  background: #22c55e;
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.withdraw-details button:disabled {
+  background: #475569;
+  cursor: not-allowed;
+}
+
+#statusText {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* OPEN FORM */
+.open-form-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
   align-items: center;
+  justify-content: center;
   z-index: 2000;
 }
 
-.modal.show {
-  display: flex;
-}
-
-.modal-content {
+.modal-card {
   background: #020617;
   padding: 20px;
-  border-radius: 16px;
   width: 90%;
   max-width: 400px;
+  border-radius: 12px;
 }
 
-.modal-content input,
-.modal-content select {
+.modal-card label {
+  display: block;
+  margin-top: 10px;
+}
+
+.modal-card input,
+.modal-card select {
   width: 100%;
   padding: 10px;
-  margin: 10px 0;
-  border-radius: 8px;
+  margin-top: 5px;
+  border-radius: 6px;
   border: none;
 }
 
-.fee-text {
-  font-size: 0.9rem;
-  opacity: 0.8;
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
