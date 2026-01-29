@@ -1,166 +1,82 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+.section-title {
+  margin: 25px 0 10px;
 }
 
-body {
-  background: #0f172a;
-  color: #fff;
+.wallet-cards {
+  margin-bottom: 30px;
 }
 
-/* HEADER */
-.header {
+.withdraw-methods {
   display: flex;
-  align-items: center;
-  padding: 15px;
-  background: #020617;
-}
-
-.menu-btn {
-  font-size: 26px;
-  margin-right: 15px;
-  cursor: pointer;
-}
-
-/* SIDEBAR */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -260px;
-  width: 250px;
-  height: 100%;
-  background: #020617;
-  padding: 20px;
-  transition: 0.3s;
-  z-index: 1000;
-}
-
-.sidebar a {
-  display: block;
-  color: #fff;
-  text-decoration: none;
-  padding: 12px 0;
-  border-bottom: 1px solid #1e293b;
-}
-
-/* OVERLAY */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  z-index: 900;
-}
-
-/* MAIN */
-.container {
-  padding: 20px;
-}
-
-/* BALANCE */
-.balance-card {
-  background: linear-gradient(135deg, #3b82f6, #9333ea);
-  padding: 20px;
-  border-radius: 10px;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
-.balance-card p {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-/* DETAILS */
-.withdraw-details {
-  background: #020617;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.withdraw-details p {
-  margin: 10px 0;
-}
-
-.withdraw-details button {
-  width: 100%;
-  padding: 12px;
-  background: #22c55e;
-  border: none;
-  border-radius: 8px;
-  color: #000;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.withdraw-details button:disabled {
-  background: #475569;
-  cursor: not-allowed;
-}
-
-#statusText {
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-/* OPEN FORM */
-.open-form-btn {
-  width: 100%;
+.method-btn {
+  flex: 1;
   padding: 14px;
-  margin-top: 20px;
-  background: #3b82f6;
+  border-radius: 14px;
   border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 16px;
+  font-size: 1rem;
   cursor: pointer;
+  background: rgba(255,255,255,0.1);
+  color: white;
 }
 
-/* MODAL */
+.method-btn:hover {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.withdraw-summary {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 16px;
+}
+
+.withdraw-summary p {
+  margin: 8px 0;
+}
+
+.pending-text {
+  margin-top: 12px;
+  color: #facc15;
+}
+
 .modal {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.7);
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
 }
 
 .modal-card {
-  background: #020617;
-  padding: 20px;
   width: 90%;
-  max-width: 400px;
-  border-radius: 12px;
+  max-width: 420px;
+  background: #020617;
+  padding: 22px;
+  border-radius: 18px;
 }
 
-.modal-card label {
-  display: block;
-  margin-top: 10px;
-}
-
-.modal-card input,
-.modal-card select {
+.modal-card input {
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 6px;
+  margin: 8px 0;
+  padding: 12px;
+  border-radius: 10px;
   border: none;
+  background: rgba(255,255,255,0.08);
+  color: white;
 }
 
-.modal-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
+.calc-box {
+  margin: 10px 0;
+  font-size: 0.9rem;
+  color: #cbd5f5;
 }
 
-.modal-actions button {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+.hidden {
+  display: none;
 }

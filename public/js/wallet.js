@@ -1,48 +1,107 @@
-// SIDEBAR
+/* ===== SIDEBAR ===== */
 const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
 const overlay = document.getElementById("overlay");
 
 menuBtn.onclick = () => {
-  sidebar.style.left = "0";
-  overlay.style.display = "block";
+  sidebar.classList.add("open");
+  overlay.classList.add("show");
+  document.body.classList.add("menu-open");
 };
 
 overlay.onclick = () => {
-  sidebar.style.left = "-260px";
-  overlay.style.display = "none";
+  sidebar.classList.remove("open");
+  overlay.classList.remove("show");
+  document.body.classList.remove("menu-open");
 };
 
-// MODAL
-const openFormBtn = document.getElementById("openFormBtn");
-const modal = document.getElementById("withdrawModal");
-const cancelForm = document.getElementById("cancelForm");
+/* ===== MODALS ===== */
+const paypalModal = document.getElementById("paypalModal");
+const mpesaModal = document.getElementById("mpesaModal");
 
-openFormBtn.onclick = () => modal.style.display = "flex";
-cancelForm.onclick = () => modal.style.display = "none";
+document.getElementById("paypalBtn").onclick = () => paypalModal.classList.remove("hidden");
+document.getElementById("mpesaBtn").onclick = () => mpesaModal.classList.remove("hidden");
 
-// CONFIRM DETAILS
-document.getElementById("confirmDetails").onclick = () => {
-  const method = document.getElementById("method").value;
-  const account = document.getElementById("account").value;
-  const amount = document.getElementById("amount").value;
+document.getElementById("closePaypal").onclick = () => paypalModal.classList.add("hidden");
+document.getElementById("closeMpesa").onclick = () => mpesaModal.classList.add("hidden");
 
-  if (!method || !account || !amount) {
-    alert("Fill all fields");
-    return;
+/* ===== CALCULATIONS ===== */
+const RATE = 150;
+const FEE = 0.07;
+
+function calc(amount) {
+  const fee = amount * FEE;
+  return {
+    fee: fee.toFixed(2),
+    net: (amount - fee).toFixed(2)
+  };
+}
+
+/* PAYPAL */
+paypalAmount.oninput = () => {
+  const amt = Number(paypalAmount.value);
+  if (amt >= 3) {
+    const c = calc(amt);
+    paypalFee.innerText = c.fee;
+    paypalReceive.innerText = c.net;
   }
-
-  document.getElementById("showMethod").innerText = method;
-  document.getElementById("showAccount").innerText = account;
-  document.getElementById("showAmount").innerText = `$${amount}`;
-
-  document.getElementById("withdrawBtn").disabled = false;
-  modal.style.display = "none";
 };
 
-// WITHDRAW ACTION
-document.getElementById("withdrawBtn").onclick = () => {
-  document.getElementById("statusText").innerText =
-    "⏳ Withdrawal pending (24 hours)";
-  document.getElementById("withdrawBtn").disabled = true;
+/* MPESA */
+mpesaAmount.oninput = () => {
+  const amt = Number(mpesaAmount.value);
+  if (amt >= 3) {
+    const c = calc(amt);
+    mpesaFee.innerText = c.fee;
+    mpesaReceive.innerText = Math.floor(c.net * RATE);
+  }
+};
+
+/* CONFIRM */
+function confirmWithdrawal(method, account, amount, receive, fee) {
+  summaryMethod.innerText = method;
+  summaryAccount.innerText = account;
+  summaryAmount.innerText = amount;
+  summaryFee.innerText = fee;
+  summaryReceive.innerText = receive;
+
+  withdrawSummary.classList.remove("hidden");
+}
+
+/* PAYPAL CONFIRM */
+confirmPaypal.onclick = () => {
+  const amt = Number(paypalAmount.value);
+  if (amt < 3) return alert("Minimum withdrawal is $3");
+
+  const c = calc(amt);
+  confirmWithdrawal(
+    "PayPal",
+    paypalEmail.value,
+    amt,
+    `$${c.net}`,
+    c.fee
+  );
+  paypalModal.classList.add("hidden");
+};
+
+/* MPESA CONFIRM */
+confirmMpesa.onclick = () => {
+  const amt = Number(mpesaAmount.value);
+  if (amt < 3) return alert("Minimum withdrawal is $3");
+
+  const c = calc(amt);
+  confirmWithdrawal(
+    "M-Pesa",
+    mpesaNumber.value,
+    amt,
+    `KES ${Math.floor(c.net * RATE)}`,
+    c.fee
+  );
+  mpesaModal.classList.add("hidden");
+};
+
+/* FINAL WITHDRAW */
+withdrawBtn.onclick = () => {
+  pendingText.classList.remove("hidden");
+  withdrawBtn.disabled = true;
 };
