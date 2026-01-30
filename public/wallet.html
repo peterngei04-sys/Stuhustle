@@ -5,20 +5,17 @@
   <title>Wallet | StuHustle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- GLOBAL -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/wallet.css">
 </head>
 
 <body class="dashboard-body">
 
-<!-- TOPBAR -->
+<!-- TOP BAR -->
 <header class="topbar">
   <button id="menuBtn" class="menu-btn">☰</button>
-  <h2 class="logo-text">Stu<span>Hustle</span></h2>
+  <div class="logo-text">Stu<span>Hustle</span></div>
 </header>
-
-<div id="overlay"></div>
 
 <!-- SIDEBAR -->
 <nav id="sidebar" class="sidebar">
@@ -26,78 +23,61 @@
   <a href="wallet.html" class="active">💰 Wallet</a>
   <a href="profile.html">👤 Profile</a>
   <a href="settings.html">⚙️ Settings</a>
-  <button id="logoutBtn">🚪 Logout</button>
 </nav>
 
-<!-- MAIN -->
+<div id="overlay"></div>
+
+<!-- CONTENT -->
 <main class="dashboard-content">
 
-  <div class="wallet-cards">
-    <div class="card">
-      <h3>Available Balance</h3>
-      <p id="balanceAmount">$0.00</p>
-    </div>
+  <div class="balance-card">
+    <p>Available Balance</p>
+    <h1>$12.50</h1>
   </div>
 
   <h2 class="section-title">Withdraw Funds</h2>
 
-  <div class="withdraw-methods">
-    <button id="paypalBtn" class="method-btn">💳 PayPal</button>
-    <button id="mpesaBtn" class="method-btn">📱 M-Pesa</button>
-  </div>
+  <div class="withdraw-grid">
+    <div class="withdraw-card" id="paypalBtn">
+      <h3>💳 PayPal</h3>
+      <p>Withdraw to PayPal email</p>
+    </div>
 
-  <div id="withdrawSummary" class="withdraw-summary hidden">
-    <p><strong>Method:</strong> <span id="summaryMethod"></span></p>
-    <p><strong>Account:</strong> <span id="summaryAccount"></span></p>
-    <p><strong>Amount:</strong> $<span id="summaryAmount"></span></p>
-    <p><strong>Fee:</strong> $<span id="summaryFee"></span></p>
-    <p><strong>You Receive:</strong> <span id="summaryReceive"></span></p>
-
-    <button id="withdrawBtn" class="btn-primary">
-      Withdraw (24hrs)
-    </button>
-
-    <p id="pendingText" class="pending-text hidden">
-      ⏳ Withdrawal pending approval
-    </p>
+    <div class="withdraw-card" id="mpesaBtn">
+      <h3>📱 M-Pesa</h3>
+      <p>Kenya only (KES)</p>
+    </div>
   </div>
 
 </main>
 
 <!-- PAYPAL MODAL -->
-<div id="paypalModal" class="modal hidden">
-  <div class="modal-card">
+<div class="modal hidden" id="paypalModal">
+  <div class="modal-box">
     <h3>PayPal Withdrawal</h3>
-    <input id="paypalEmail" type="email" placeholder="PayPal Email">
-    <input id="paypalAmount" type="number" min="3" placeholder="Amount ($)">
-    <p>Fee (7%): $<span id="paypalFee">0</span></p>
-    <p>You Receive: $<span id="paypalReceive">0</span></p>
+    <input id="paypalEmail" type="email" placeholder="PayPal email">
+    <input id="paypalAmount" type="number" placeholder="Amount (USD)" min="3">
+    <p class="calc">Fee: <span id="paypalFee">$0</span></p>
+    <p class="calc">You receive: <strong>$<span id="paypalReceive">0</span></strong></p>
     <button id="confirmPaypal" class="btn-primary">Confirm</button>
-    <button id="closePaypal" class="btn-outline">Cancel</button>
+    <button class="btn-outline close">Cancel</button>
   </div>
 </div>
 
 <!-- MPESA MODAL -->
-<div id="mpesaModal" class="modal hidden">
-  <div class="modal-card">
+<div class="modal hidden" id="mpesaModal">
+  <div class="modal-box">
     <h3>M-Pesa Withdrawal</h3>
-    <input id="mpesaName" type="text" placeholder="Full Name">
-    <input id="mpesaNumber" type="tel" placeholder="M-Pesa Number">
-    <input id="mpesaAmount" type="number" min="3" placeholder="Amount ($)">
-    <p>Fee (7%): $<span id="mpesaFee">0</span></p>
-    <p>You Receive: KES <span id="mpesaReceive">0</span></p>
+    <input id="mpesaName" type="text" placeholder="Full name">
+    <input id="mpesaNumber" type="tel" placeholder="07XXXXXXXX">
+    <input id="mpesaAmount" type="number" placeholder="Amount (USD)" min="3">
+    <p class="calc">Fee: <span id="mpesaFee">$0</span></p>
+    <p class="calc">You receive: <strong>KES <span id="mpesaReceive">0</span></strong></p>
     <button id="confirmMpesa" class="btn-primary">Confirm</button>
-    <button id="closeMpesa" class="btn-outline">Cancel</button>
+    <button class="btn-outline close">Cancel</button>
   </div>
 </div>
 
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<script src="js/firebaseConfig.js"></script>
 <script src="js/wallet.js"></script>
-
 </body>
 </html>
