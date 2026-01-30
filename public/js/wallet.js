@@ -1,48 +1,107 @@
-document.addEventListener("DOMContentLoaded", () => {
+/* ===== SIDEBAR ===== */
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
 
-  const sidebar = document.getElementById("sidebar");
-  const overlay = document.getElementById("overlay");
-  const menuBtn = document.getElementById("menuBtn");
+menuBtn.onclick = () => {
+  sidebar.classList.add("open");
+  overlay.classList.add("show");
+  document.body.classList.add("menu-open");
+};
 
-  menuBtn.onclick = () => {
-    sidebar.classList.add("open");
-    overlay.classList.add("show");
+overlay.onclick = () => {
+  sidebar.classList.remove("open");
+  overlay.classList.remove("show");
+  document.body.classList.remove("menu-open");
+};
+
+/* ===== MODALS ===== */
+const paypalModal = document.getElementById("paypalModal");
+const mpesaModal = document.getElementById("mpesaModal");
+
+document.getElementById("paypalBtn").onclick = () => paypalModal.classList.remove("hidden");
+document.getElementById("mpesaBtn").onclick = () => mpesaModal.classList.remove("hidden");
+
+document.getElementById("closePaypal").onclick = () => paypalModal.classList.add("hidden");
+document.getElementById("closeMpesa").onclick = () => mpesaModal.classList.add("hidden");
+
+/* ===== CALCULATIONS ===== */
+const RATE = 150;
+const FEE = 0.07;
+
+function calc(amount) {
+  const fee = amount * FEE;
+  return {
+    fee: fee.toFixed(2),
+    net: (amount - fee).toFixed(2)
   };
+}
 
-  overlay.onclick = () => {
-    sidebar.classList.remove("open");
-    overlay.classList.remove("show");
-  };
+/* PAYPAL */
+paypalAmount.oninput = () => {
+  const amt = Number(paypalAmount.value);
+  if (amt >= 3) {
+    const c = calc(amt);
+    paypalFee.innerText = c.fee;
+    paypalReceive.innerText = c.net;
+  }
+};
 
-  const paypalModal = document.getElementById("paypalModal");
-  const mpesaModal = document.getElementById("mpesaModal");
+/* MPESA */
+mpesaAmount.oninput = () => {
+  const amt = Number(mpesaAmount.value);
+  if (amt >= 3) {
+    const c = calc(amt);
+    mpesaFee.innerText = c.fee;
+    mpesaReceive.innerText = Math.floor(c.net * RATE);
+  }
+};
 
-  document.getElementById("paypalBtn").onclick = () => paypalModal.classList.remove("hidden");
-  document.getElementById("mpesaBtn").onclick = () => mpesaModal.classList.remove("hidden");
+/* CONFIRM */
+function confirmWithdrawal(method, account, amount, receive, fee) {
+  summaryMethod.innerText = method;
+  summaryAccount.innerText = account;
+  summaryAmount.innerText = amount;
+  summaryFee.innerText = fee;
+  summaryReceive.innerText = receive;
 
-  document.querySelectorAll(".close").forEach(btn => {
-    btn.onclick = () => {
-      paypalModal.classList.add("hidden");
-      mpesaModal.classList.add("hidden");
-    };
-  });
+  withdrawSummary.classList.remove("hidden");
+}
 
-  const RATE = 150, FEE = 0.07;
+/* PAYPAL CONFIRM */
+confirmPaypal.onclick = () => {
+  const amt = Number(paypalAmount.value);
+  if (amt < 3) return alert("Minimum withdrawal is $3");
 
-  paypalAmount.oninput = () => {
-    let a = +paypalAmount.value;
-    if (a >= 3) {
-      paypalFee.textContent = (a * FEE).toFixed(2);
-      paypalReceive.textContent = (a - a * FEE).toFixed(2);
-    }
-  };
+  const c = calc(amt);
+  confirmWithdrawal(
+    "PayPal",
+    paypalEmail.value,
+    amt,
+    `$${c.net}`,
+    c.fee
+  );
+  paypalModal.classList.add("hidden");
+};
 
-  mpesaAmount.oninput = () => {
-    let a = +mpesaAmount.value;
-    if (a >= 3) {
-      mpesaFee.textContent = (a * FEE).toFixed(2);
-      mpesaReceive.textContent = Math.floor((a - a * FEE) * RATE);
-    }
-  };
+/* MPESA CONFIRM */
+confirmMpesa.onclick = () => {
+  const amt = Number(mpesaAmount.value);
+  if (amt < 3) return alert("Minimum withdrawal is $3");
 
-});
+  const c = calc(amt);
+  confirmWithdrawal(
+    "M-Pesa",
+    mpesaNumber.value,
+    amt,
+    `KES ${Math.floor(c.net * RATE)}`,
+    c.fee
+  );
+  mpesaModal.classList.add("hidden");
+};
+
+/* FINAL WITHDRAW */
+withdrawBtn.onclick = () => {
+  pendingText.classList.remove("hidden");
+  withdrawBtn.disabled = true;
+};
