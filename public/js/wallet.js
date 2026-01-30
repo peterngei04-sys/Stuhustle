@@ -105,3 +105,90 @@ withdrawBtn.onclick = () => {
   pendingText.classList.remove("hidden");
   withdrawBtn.disabled = true;
 };
+/* ================================
+   FIREBASE GUARDS & DATA (ADD ONLY)
+================================ */
+
+/* Ensure Firebase is loaded */
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+/* ===== AUTH + EMAIL VERIFICATION GUARD ===== */
+auth.onAuthStateChanged(async (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  if (!user.emailVerified) {
+    document.getElementById("walletContent").innerHTML = `
+      <div class="withdraw-summary">
+        <h3>Email Verification Required</h3>
+        <p>Please verify your email before withdrawing.</p>
+        <button class="btn-primary" id="resendVerify">
+          Resend Verification Email
+        </button>
+      </div>
+    `;
+
+    document.getElementById("resendVerify").onclick = () => {
+      user.sendEmailVerification().then(() => {
+        alert("Verification email sent. Check your inbox.");
+      });
+    };
+    return;
+  }
+
+  loadUserBalance(user.uid);
+  applyCountryLock();
+});
+
+/* ===== LOAD REAL BALANCE FROM FIRESTORE ===== */
+function loadUserBalance(uid) {
+  db.collection("users").doc(uid).get().then(doc => {
+    if (doc.exists) {
+      const balance = doc.data().balance || 0;
+      document.querySelector(".amount").innerText = `$${balance.toFixed(2)}`;
+    }
+  });
+}
+
+/* ===== COUNTRY-BASED WITHDRAWAL LOCK ===== */
+function applyCountryLock() {
+  fetch("https://ipapi.co/json/")
+    .then(res => res.json())
+    .then(data => {
+      const country = data.country_code;
+      const notice = document.getElementById("countryNotice");
+
+      if (country !== "KE") {
+        document.getElementById("mpesaBtn").style.display = "none";
+        notice.innerText = "M-Pesa is only available in Kenya. PayPal enabled.";
+      } else {
+        notice.innerText = "M-Pesa and PayPal withdrawals are available.";
+      }
+    })
+    .catch(() => {
+      console.warn("Country detection failed");
+    });
+}
+
+/* ===== SAVE WITHDRAWAL TO FIRESTORE (ON FINAL CONFIRM) ===== */
+const originalWithdraw = withdrawBtn.onclick;
+
+withdrawBtn.onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  await db.collection("withdrawals").add({
+    uid: user.uid,
+    method: summaryMethod.innerText,
+    account: summaryAccount.innerText,
+    amount: Number(summaryAmount.innerText),
+    status: "pending",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  pendingText.classList.remove("hidden");
+  withdrawBtn.disabled = true;
+};
