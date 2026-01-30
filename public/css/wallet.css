@@ -1,15 +1,20 @@
 .section-title {
-  margin: 25px 0 10px;
+  margin: 25px 0 15px;
 }
 
 .wallet-cards {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
+}
+
+.card {
+  background: #020617;
+  padding: 20px;
+  border-radius: 16px;
 }
 
 .withdraw-methods {
   display: flex;
   gap: 12px;
-  margin-bottom: 20px;
 }
 
 .method-btn {
@@ -17,25 +22,21 @@
   padding: 14px;
   border-radius: 14px;
   border: none;
-  font-size: 1rem;
-  cursor: pointer;
   background: rgba(255,255,255,0.1);
   color: white;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .method-btn:hover {
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  background: #6366f1;
 }
 
 .withdraw-summary {
   margin-top: 20px;
-  padding: 20px;
   background: rgba(255,255,255,0.08);
+  padding: 20px;
   border-radius: 16px;
-}
-
-.withdraw-summary p {
-  margin: 8px 0;
 }
 
 .pending-text {
@@ -43,22 +44,23 @@
   color: #facc15;
 }
 
+/* MODALS */
 .modal {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.7);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 2000;
+  align-items: center;
+  z-index: 3000;
 }
 
 .modal-card {
+  background: #020617;
+  padding: 20px;
+  border-radius: 18px;
   width: 90%;
   max-width: 420px;
-  background: #020617;
-  padding: 22px;
-  border-radius: 18px;
 }
 
 .modal-card input {
@@ -69,12 +71,6 @@
   border: none;
   background: rgba(255,255,255,0.08);
   color: white;
-}
-
-.calc-box {
-  margin: 10px 0;
-  font-size: 0.9rem;
-  color: #cbd5f5;
 }
 
 .hidden {

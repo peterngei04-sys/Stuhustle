@@ -5,61 +5,72 @@
   <title>Wallet | StuHustle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- GLOBAL -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/wallet.css">
 </head>
 
 <body class="dashboard-body">
 
-<div class="topbar">
-  <div class="top-left">
-    <button class="menu-btn" id="menuBtn">☰</button>
-    <div class="logo-text">Stu<span>Hustle</span></div>
-  </div>
-</div>
-
-<nav id="sidebar" class="sidebar">
-  <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
-  <a href="wallet.html" class="nav-item active">💰 Wallet</a>
-  <button id="logoutBtn" class="nav-item logout">🚪 Logout</button>
-</nav>
+<!-- TOPBAR -->
+<header class="topbar">
+  <button id="menuBtn" class="menu-btn">☰</button>
+  <h2 class="logo-text">Stu<span>Hustle</span></h2>
+</header>
 
 <div id="overlay"></div>
 
+<!-- SIDEBAR -->
+<nav id="sidebar" class="sidebar">
+  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="wallet.html" class="active">💰 Wallet</a>
+  <a href="profile.html">👤 Profile</a>
+  <a href="settings.html">⚙️ Settings</a>
+  <button id="logoutBtn">🚪 Logout</button>
+</nav>
+
+<!-- MAIN -->
 <main class="dashboard-content">
 
   <div class="wallet-cards">
-    <div class="card gradient-purple">
+    <div class="card">
       <h3>Available Balance</h3>
-      <div class="amount" id="balance">$0.00</div>
+      <p id="balanceAmount">$0.00</p>
     </div>
   </div>
 
   <h2 class="section-title">Withdraw Funds</h2>
 
   <div class="withdraw-methods">
-    <button class="method-btn" id="paypalBtn">💳 PayPal</button>
-    <button class="method-btn" id="mpesaBtn">📱 M-Pesa</button>
+    <button id="paypalBtn" class="method-btn">💳 PayPal</button>
+    <button id="mpesaBtn" class="method-btn">📱 M-Pesa</button>
   </div>
 
-  <div class="withdraw-summary hidden" id="withdrawSummary">
+  <div id="withdrawSummary" class="withdraw-summary hidden">
     <p><strong>Method:</strong> <span id="summaryMethod"></span></p>
     <p><strong>Account:</strong> <span id="summaryAccount"></span></p>
     <p><strong>Amount:</strong> $<span id="summaryAmount"></span></p>
     <p><strong>Fee:</strong> $<span id="summaryFee"></span></p>
     <p><strong>You Receive:</strong> <span id="summaryReceive"></span></p>
 
-    <button class="btn-primary big" id="withdrawBtn">Withdraw</button>
-    <p class="pending-text hidden" id="pendingText">⏳ Processing…</p>
+    <button id="withdrawBtn" class="btn-primary">
+      Withdraw (24hrs)
+    </button>
+
+    <p id="pendingText" class="pending-text hidden">
+      ⏳ Withdrawal pending approval
+    </p>
   </div>
+
 </main>
 
 <!-- PAYPAL MODAL -->
-<div class="modal hidden" id="paypalModal">
+<div id="paypalModal" class="modal hidden">
   <div class="modal-card">
-    <input id="paypalEmail" placeholder="PayPal Email">
+    <h3>PayPal Withdrawal</h3>
+    <input id="paypalEmail" type="email" placeholder="PayPal Email">
     <input id="paypalAmount" type="number" min="3" placeholder="Amount ($)">
-    <p>Fee: $<span id="paypalFee">0</span></p>
+    <p>Fee (7%): $<span id="paypalFee">0</span></p>
     <p>You Receive: $<span id="paypalReceive">0</span></p>
     <button id="confirmPaypal" class="btn-primary">Confirm</button>
     <button id="closePaypal" class="btn-outline">Cancel</button>
@@ -67,11 +78,13 @@
 </div>
 
 <!-- MPESA MODAL -->
-<div class="modal hidden" id="mpesaModal">
+<div id="mpesaModal" class="modal hidden">
   <div class="modal-card">
-    <input id="mpesaNumber" placeholder="M-Pesa Number">
+    <h3>M-Pesa Withdrawal</h3>
+    <input id="mpesaName" type="text" placeholder="Full Name">
+    <input id="mpesaNumber" type="tel" placeholder="M-Pesa Number">
     <input id="mpesaAmount" type="number" min="3" placeholder="Amount ($)">
-    <p>Fee: $<span id="mpesaFee">0</span></p>
+    <p>Fee (7%): $<span id="mpesaFee">0</span></p>
     <p>You Receive: KES <span id="mpesaReceive">0</span></p>
     <button id="confirmMpesa" class="btn-primary">Confirm</button>
     <button id="closeMpesa" class="btn-outline">Cancel</button>
@@ -82,8 +95,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="js/firebaseConfig.js"></script>
 
+<script src="js/firebaseConfig.js"></script>
 <script src="js/wallet.js"></script>
+
 </body>
 </html>
