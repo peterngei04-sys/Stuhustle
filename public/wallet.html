@@ -5,10 +5,7 @@
   <title>Wallet | StuHustle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- GLOBAL STYLES -->
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- WALLET ONLY -->
   <link rel="stylesheet" href="css/wallet.css">
 </head>
 
@@ -24,33 +21,19 @@
 
 <!-- SIDEBAR -->
 <nav id="sidebar" class="sidebar">
-  <a href="dashboard.html" class="nav-item active">🏠 Dashboard</a>
-
-  <p class="sidebar-section">Earning Options</p>
-  <a href="post-ad.html" class="nav-item">📢 Post Ads</a>
-  <a href="dropshipping.html" class="nav-item">📦 Dropshipping</a>
-  <a href="digital-products.html" class="nav-item">💾 Digital Products</a>
-  <a href="freelancing.html" class="nav-item">💼 Freelancing</a>
-  <a href="referrals.html" class="nav-item">🤝 Referrals</a>
-  <a href="offerwalls.html" class="nav-item">🎯 Offerwalls / Paid Tasks</a>
-  <a href="reselling.html" class="nav-item">🎮 Account Reselling</a>
-  <a href="microtask.html" class="nav-item">📝 Micro-tasks / Gigs</a>
-  <a href="local.html" class="nav-item">📍 Local Services</a>
-
+  <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
   <p class="sidebar-section">Account</p>
-  <a href="wallet.html" class="nav-item">💰 Wallet</a>
-  <a href="profile.html" class="nav-item">👤 Profile</a>
+  <a href="wallet.html" class="nav-item active">💰 Wallet</a>
   <a href="settings.html" class="nav-item">⚙️ Settings</a>
-
-  <button id="logoutBtn" class="nav-item logout">🚪 Logout</button>
 </nav>
 
 <div id="overlay"></div>
 
 <!-- MAIN CONTENT -->
-<main class="dashboard-content">
+<main class="dashboard-content" id="walletContent">
 
-  <!-- BALANCES -->
+  <p id="countryNotice" class="pending-text"></p>
+
   <div class="wallet-cards">
     <div class="card gradient-purple">
       <h3>Available Balance</h3>
@@ -58,7 +41,6 @@
     </div>
   </div>
 
-  <!-- WITHDRAW METHODS -->
   <h2 class="section-title">Withdraw Funds</h2>
 
   <div class="withdraw-methods">
@@ -66,7 +48,6 @@
     <button class="method-btn" id="mpesaBtn">📱 M-Pesa</button>
   </div>
 
-  <!-- WITHDRAW SUMMARY -->
   <div class="withdraw-summary hidden" id="withdrawSummary">
     <h3>Withdrawal Summary</h3>
     <p><strong>Method:</strong> <span id="summaryMethod"></span></p>
@@ -83,22 +64,18 @@
       ⏳ Withdrawal queued. Completed within 24 hours.
     </p>
   </div>
-
 </main>
 
 <!-- PAYPAL MODAL -->
 <div class="modal hidden" id="paypalModal">
   <div class="modal-card">
     <h3>PayPal Withdrawal</h3>
-
     <input type="email" id="paypalEmail" placeholder="PayPal Email">
     <input type="number" id="paypalAmount" placeholder="Amount ($)" min="3">
-
     <div class="calc-box">
       <p>Fee (7%): $<span id="paypalFee">0</span></p>
       <p>You Receive: $<span id="paypalReceive">0</span></p>
     </div>
-
     <button class="btn-primary" id="confirmPaypal">Confirm</button>
     <button class="btn-outline" id="closePaypal">Cancel</button>
   </div>
@@ -108,22 +85,24 @@
 <div class="modal hidden" id="mpesaModal">
   <div class="modal-card">
     <h3>M-Pesa Withdrawal</h3>
-
-    <input type="text" id="mpesaName" placeholder="Full Name">
     <input type="tel" id="mpesaNumber" placeholder="M-Pesa Number">
     <input type="number" id="mpesaAmount" placeholder="Amount ($)" min="3">
-
     <div class="calc-box">
-      <p>Rate: 1 USD = 150 KES</p>
       <p>Fee (7%): $<span id="mpesaFee">0</span></p>
-      <p>You Receive: <strong>KES <span id="mpesaReceive">0</span></strong></p>
+      <p>You Receive: KES <span id="mpesaReceive">0</span></p>
     </div>
-
     <button class="btn-primary" id="confirmMpesa">Confirm</button>
     <button class="btn-outline" id="closeMpesa">Cancel</button>
   </div>
 </div>
 
+<!-- 🔥 FIREBASE COMPAT -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script src="js/firebaseConfig.js"></script>
 <script src="js/wallet.js"></script>
+
 </body>
 </html>
