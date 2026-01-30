@@ -1,47 +1,32 @@
-.section-title {
-  margin: 25px 0 15px;
+/* OVERLAY */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 900;
 }
 
-.wallet-cards {
-  margin-bottom: 25px;
+#overlay.show {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-.card {
+/* SIDEBAR */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100%;
   background: #020617;
-  padding: 20px;
-  border-radius: 16px;
+  transition: left 0.3s ease;
+  z-index: 1000;
 }
 
-.withdraw-methods {
-  display: flex;
-  gap: 12px;
-}
-
-.method-btn {
-  flex: 1;
-  padding: 14px;
-  border-radius: 14px;
-  border: none;
-  background: rgba(255,255,255,0.1);
-  color: white;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.method-btn:hover {
-  background: #6366f1;
-}
-
-.withdraw-summary {
-  margin-top: 20px;
-  background: rgba(255,255,255,0.08);
-  padding: 20px;
-  border-radius: 16px;
-}
-
-.pending-text {
-  margin-top: 12px;
-  color: #facc15;
+.sidebar.open {
+  left: 0;
 }
 
 /* MODALS */
@@ -50,27 +35,9 @@
   inset: 0;
   background: rgba(0,0,0,0.7);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 3000;
-}
-
-.modal-card {
-  background: #020617;
-  padding: 20px;
-  border-radius: 18px;
-  width: 90%;
-  max-width: 420px;
-}
-
-.modal-card input {
-  width: 100%;
-  margin: 8px 0;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: rgba(255,255,255,0.08);
-  color: white;
+  justify-content: center;
+  z-index: 2000;
 }
 
 .hidden {
