@@ -2,6 +2,7 @@
   margin: 25px 0 10px;
 }
 
+
 .wallet-cards {
   margin-bottom: 30px;
 }
@@ -79,4 +80,11 @@
 
 .hidden {
   display: none;
+}
+#overlay {
+  pointer-events: auto;
+}
+
+.modal {
+  pointer-events: auto;
 }
