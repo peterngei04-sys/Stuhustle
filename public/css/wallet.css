@@ -88,3 +88,16 @@
 .modal {
   pointer-events: auto;
 }
+/* ===== WITHDRAW BUTTON FORCE FIX ===== */
+#withdrawBtn {
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  z-index: 99999 !important;
+  position: relative;
+}
+
+#withdrawSummary,
+.summary-card,
+.card {
+  pointer-events: auto;
+}

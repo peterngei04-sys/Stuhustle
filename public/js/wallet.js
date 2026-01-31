@@ -157,15 +157,47 @@
       mpesaModal.classList.add("hidden");
     });
 
+
     /* ===== FINAL WITHDRAW ===== */
-    withdrawBtn && withdrawBtn.addEventListener("click", () => {
-      pendingText.classList.remove("hidden");
-      withdrawBtn.disabled = true;
-    });
+document.addEventListener("DOMContentLoaded", () => {
+  const withdrawBtn = document.getElementById("withdrawBtn");
 
+  if (!withdrawBtn) {
+    console.error("withdrawBtn not found");
+    return;
+  }
+
+  withdrawBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    const user = firebase.auth().currentUser;
+    if (!user) return alert("User not logged in");
+
+    withdrawBtn.disabled = true;
+    pendingText.classList.remove("hidden");
+
+    try {
+      await firebase.firestore().collection("withdrawals").add({
+        userId: user.uid,
+        method: summaryMethod.innerText,
+        account: summaryAccount.innerText,
+        amountUSD: Number(summaryAmount.innerText),
+        feeUSD: Number(summaryFee.innerText),
+        receive: summaryReceive.innerText,
+        status: "pending",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      alert("Withdrawal submitted ⏳ Pending approval");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to submit withdrawal");
+      withdrawBtn.disabled = false;
+      pendingText.classList.add("hidden");
+    }
   });
+});
 
-})();
 /* ===== EMAIL VERIFICATION GUARD ===== */
 
 firebase.auth().onAuthStateChanged((user) => {
