@@ -3,7 +3,6 @@
    PHONE-SAFE / NO REGRESSION
 ================================ */
 
-
 (function () {
 
   function ready(fn) {
@@ -52,33 +51,21 @@
 
     /* ===== SIDEBAR ===== */
     if (menuBtn && sidebar && overlay) {
-      menuBtn.addEventListener("click", () => {
+      menuBtn.onclick = () => {
         sidebar.classList.add("open");
         overlay.classList.add("show");
-      });
-
-      overlay.addEventListener("click", () => {
+      };
+      overlay.onclick = () => {
         sidebar.classList.remove("open");
         overlay.classList.remove("show");
-      });
+      };
     }
 
     /* ===== MODALS ===== */
-    paypalBtn && paypalBtn.addEventListener("click", () => {
-      paypalModal.classList.remove("hidden");
-    });
-
-    mpesaBtn && mpesaBtn.addEventListener("click", () => {
-      mpesaModal.classList.remove("hidden");
-    });
-
-    closePaypal && closePaypal.addEventListener("click", () => {
-      paypalModal.classList.add("hidden");
-    });
-
-    closeMpesa && closeMpesa.addEventListener("click", () => {
-      mpesaModal.classList.add("hidden");
-    });
+    paypalBtn && (paypalBtn.onclick = () => paypalModal.classList.remove("hidden"));
+    mpesaBtn && (mpesaBtn.onclick = () => mpesaModal.classList.remove("hidden"));
+    closePaypal && (closePaypal.onclick = () => paypalModal.classList.add("hidden"));
+    closeMpesa && (closeMpesa.onclick = () => mpesaModal.classList.add("hidden"));
 
     /* ===== CALCULATIONS ===== */
     const RATE = 150;
@@ -92,7 +79,7 @@
       };
     }
 
-    /* ===== PAYPAL INPUT ===== */
+    /* ===== INPUT LISTENERS ===== */
     paypalAmount && paypalAmount.addEventListener("input", () => {
       const amt = Number(paypalAmount.value);
       if (amt >= 3) {
@@ -102,7 +89,6 @@
       }
     });
 
-    /* ===== MPESA INPUT ===== */
     mpesaAmount && mpesaAmount.addEventListener("input", () => {
       const amt = Number(mpesaAmount.value);
       if (amt >= 3) {
@@ -113,7 +99,7 @@
     });
 
     /* ===== SUMMARY ===== */
-    function confirmWithdrawal(method, account, amount, receive, fee) {
+    function showSummary(method, account, amount, receive, fee) {
       summaryMethod.textContent = method;
       summaryAccount.textContent = account;
       summaryAmount.textContent = amount;
@@ -122,32 +108,24 @@
       withdrawSummary.classList.remove("hidden");
     }
 
-    /* ===== PAYPAL CONFIRM ===== */
-    confirmPaypal && confirmPaypal.addEventListener("click", () => {
+    confirmPaypal && (confirmPaypal.onclick = () => {
       const amt = Number(paypalAmount.value);
       if (amt < 3) return alert("Minimum withdrawal is $3");
       if (!paypalEmail.value) return alert("Enter PayPal email");
 
       const c = calc(amt);
-      confirmWithdrawal(
-        "PayPal",
-        paypalEmail.value,
-        amt,
-        `$${c.net}`,
-        c.fee
-      );
+      showSummary("PayPal", paypalEmail.value, amt, `$${c.net}`, c.fee);
       paypalModal.classList.add("hidden");
     });
 
-    /* ===== MPESA CONFIRM ===== */
-    confirmMpesa && confirmMpesa.addEventListener("click", () => {
+    confirmMpesa && (confirmMpesa.onclick = () => {
       const amt = Number(mpesaAmount.value);
       if (amt < 3) return alert("Minimum withdrawal is $3");
       if (!mpesaNumber.value || !mpesaName.value)
         return alert("Enter M-Pesa name and number");
 
       const c = calc(amt);
-      confirmWithdrawal(
+      showSummary(
         "M-Pesa",
         `${mpesaName.value} (${mpesaNumber.value})`,
         amt,
@@ -157,143 +135,72 @@
       mpesaModal.classList.add("hidden");
     });
 
+    /* ===== AUTH + COUNTRY GUARD ===== */
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) return;
 
-    /* ===== FINAL WITHDRAW ===== */
-document.addEventListener("DOMContentLoaded", () => {
-  const withdrawBtn = document.getElementById("withdrawBtn");
+      // Email verification
+      if (!user.emailVerified) {
+        withdrawBtn.disabled = true;
+        pendingText.classList.remove("hidden");
+        pendingText.innerHTML = `
+          ⚠️ Verify your email before withdrawing<br>
+          <button id="resendEmail">Resend verification email</button>
+        `;
 
-  if (!withdrawBtn) {
-    console.error("withdrawBtn not found");
-    return;
-  }
+        document.getElementById("resendEmail").onclick = () =>
+          user.sendEmailVerification().then(() =>
+            alert("Verification email sent")
+          );
+        return;
+      }
 
-  withdrawBtn.addEventListener("click", async (e) => {
-    e.preventDefault();
-
-    const user = firebase.auth().currentUser;
-    if (!user) return alert("User not logged in");
-
-    withdrawBtn.disabled = true;
-    pendingText.classList.remove("hidden");
-
-    try {
-      await firebase.firestore().collection("withdrawals").add({
-        userId: user.uid,
-        method: summaryMethod.innerText,
-        account: summaryAccount.innerText,
-        amountUSD: Number(summaryAmount.innerText),
-        feeUSD: Number(summaryFee.innerText),
-        receive: summaryReceive.innerText,
-        status: "pending",
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      alert("Withdrawal submitted ⏳ Pending approval");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to submit withdrawal");
-      withdrawBtn.disabled = false;
       pendingText.classList.add("hidden");
-    }
-  });
-});
+      withdrawBtn.disabled = false;
 
-/* ===== EMAIL VERIFICATION GUARD ===== */
+      // Country lock
+      const doc = await firebase.firestore().collection("users").doc(user.uid).get();
+      const country = (doc.data()?.country || "").toLowerCase();
 
-firebase.auth().onAuthStateChanged((user) => {
-  if (!user) return;
-
-  // If email NOT verified
-  if (!user.emailVerified) {
-    withdrawBtn.disabled = true;
-
-    pendingText.classList.remove("hidden");
-    pendingText.innerHTML = `
-      ⚠️ Please verify your email before withdrawing.<br>
-      <button id="resendEmail" style="
-        margin-top:8px;
-        background:#2563eb;
-        color:white;
-        border:none;
-        padding:6px 12px;
-        border-radius:8px;
-        cursor:pointer;
-      ">
-        Resend verification email
-      </button>
-    `;
-
-    // Resend verification
-    document.getElementById("resendEmail").onclick = () => {
-      user.sendEmailVerification()
-        .then(() => {
-          alert("Verification email sent. Check your inbox.");
-        })
-        .catch((err) => {
-          alert(err.message);
-        });
-    };
-
-  } else {
-    // Email verified → allow withdrawal
-    withdrawBtn.disabled = false;
-    pendingText.classList.add("hidden");
-  }
-});
-/* ===== COUNTRY LOCK (MPESA = KENYA ONLY) ===== */
-
-firebase.auth().onAuthStateChanged((user) => {
-  if (!user) return;
-
-  firebase.firestore()
-    .collection("users")
-    .doc(user.uid)
-    .get()
-    .then((doc) => {
-      if (!doc.exists) return;
-
-      const userCountry = (doc.data().country || "").toLowerCase();
-
-      // Intercept MPESA button
       mpesaBtn.onclick = () => {
-        if (userCountry !== "kenya") {
-          alert("M-Pesa withdrawals are only available for Kenyan users 🇰🇪");
+        if (country !== "kenya") {
+          alert("M-Pesa is only available in Kenya 🇰🇪");
           return;
         }
         mpesaModal.classList.remove("hidden");
       };
-
-    })
-    .catch((err) => {
-      console.error("Country check failed:", err);
-    });
-});
-/* ===== STEP 3: SAVE WITHDRAWAL TO FIRESTORE ===== */
-
-withdrawBtn?.addEventListener("click", async () => {
-  const user = firebase.auth().currentUser;
-  if (!user) return alert("Not authenticated");
-
-  withdrawBtn.disabled = true;
-  pendingText.classList.remove("hidden");
-
-  try {
-    await firebase.firestore().collection("withdrawals").add({
-      userId: user.uid,
-      method: summaryMethod.innerText,
-      account: summaryAccount.innerText,
-      amountUSD: Number(summaryAmount.innerText),
-      feeUSD: Number(summaryFee.innerText),
-      receive: summaryReceive.innerText,
-      status: "pending",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
-    alert("Withdrawal request submitted. Processing within 24 hours ⏳");
-  } catch (err) {
-    console.error(err);
-    alert("Withdrawal failed. Try again.");
-    withdrawBtn.disabled = false;
-    pendingText.classList.add("hidden");
-  }
-});
+    /* ===== FINAL WITHDRAW (SINGLE HANDLER) ===== */
+    withdrawBtn && withdrawBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const user = firebase.auth().currentUser;
+      if (!user) return alert("Not logged in");
+
+      withdrawBtn.disabled = true;
+      pendingText.classList.remove("hidden");
+
+      try {
+        await firebase.firestore().collection("withdrawals").add({
+          userId: user.uid,
+          method: summaryMethod.innerText,
+          account: summaryAccount.innerText,
+          amountUSD: Number(summaryAmount.innerText),
+          feeUSD: Number(summaryFee.innerText),
+          receive: summaryReceive.innerText,
+          status: "pending",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        alert("Withdrawal submitted ⏳ Pending approval");
+      } catch (err) {
+        console.error(err);
+        alert("Withdrawal failed");
+        withdrawBtn.disabled = false;
+        pendingText.classList.add("hidden");
+      }
+    });
+
+  });
+})();
