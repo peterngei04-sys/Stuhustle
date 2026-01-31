@@ -101,3 +101,29 @@
 .card {
   pointer-events: auto;
 }
+/* ===== WITHDRAW BUTTON FIX ===== */
+#withdrawBtn {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #6d5dfc, #22d3ee);
+  color: #fff;
+
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
+
+#withdrawBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Remove ugly underline / overlays just in case */
+button {
+  text-decoration: none;
+}

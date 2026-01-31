@@ -135,10 +135,26 @@
       mpesaModal.classList.add("hidden");
     });
 
-    /* ===== AUTH + COUNTRY GUARD ===== */
-    firebase.auth().onAuthStateChanged(async (user) => {
       if (!user) return;
 
+      // Email verification
+      if (!user.emailVerified) {
+        withdrawBtn.disabled = true;
+        pendingText.classList.remove("hidden");
+        pendingText.innerHTML = `
+          ⚠️ Verify your email before withdrawing<br>
+          <button id="resendEmail">Resend verification email</button>
+        `;
+
+        document.getElementById("resendEmail").onclick = () =>
+          user.sendEmailVerification().then(() =>
+            alert("Verification email sent")
+          );
+        return;
+      }
+
+      pendingText.classList.add("hidden");
+      withdrawBtn.disabled = false;
 
       // Country lock
       const doc = await firebase.firestore().collection("users").doc(user.uid).get();
@@ -153,45 +169,36 @@
       };
     });
 
-/* ===== FINAL WITHDRAW (CLEAN + CLICKABLE) ===== */
-withdrawBtn.addEventListener("click", async (e) => {
-  e.preventDefault();
+    /* ===== FINAL WITHDRAW (SINGLE HANDLER) ===== */
+    withdrawBtn && withdrawBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
 
-  console.log("Withdraw button clicked"); // DEBUG
+      const user = firebase.auth().currentUser;
+      if (!user) return alert("Not logged in");
 
-  const user = firebase.auth().currentUser;
-  if (!user) {
-    alert("Please log in again");
-    return;
-  }
+      withdrawBtn.disabled = true;
+      pendingText.classList.remove("hidden");
 
-  if (!summaryMethod.innerText) {
-    alert("Select a withdrawal method first");
-    return;
-  }
+      try {
+        await firebase.firestore().collection("withdrawals").add({
+          userId: user.uid,
+          method: summaryMethod.innerText,
+          account: summaryAccount.innerText,
+          amountUSD: Number(summaryAmount.innerText),
+          feeUSD: Number(summaryFee.innerText),
+          receive: summaryReceive.innerText,
+          status: "pending",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
 
-  withdrawBtn.disabled = true;
-  withdrawBtn.textContent = "Processing...";
-  pendingText.classList.remove("hidden");
-
-  try {
-    await firebase.firestore().collection("withdrawals").add({
-      userId: user.uid,
-      method: summaryMethod.innerText,
-      account: summaryAccount.innerText,
-      amountUSD: Number(summaryAmount.innerText),
-      feeUSD: Number(summaryFee.innerText),
-      receive: summaryReceive.innerText,
-      status: "pending",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        alert("Withdrawal submitted ⏳ Pending approval");
+      } catch (err) {
+        console.error(err);
+        alert("Withdrawal failed");
+        withdrawBtn.disabled = false;
+        pendingText.classList.add("hidden");
+      }
     });
 
-    alert("Withdrawal submitted successfully ⏳");
-    withdrawBtn.textContent = "Withdraw";
-  } catch (err) {
-    console.error(err);
-    alert("Withdrawal failed. Try again.");
-    withdrawBtn.disabled = false;
-    withdrawBtn.textContent = "Withdraw";
-  }
-});
+  });
+})();
