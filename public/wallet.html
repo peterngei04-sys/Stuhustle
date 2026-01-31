@@ -80,22 +80,24 @@
     <button class="btn-outline" id="closePaypal">Cancel</button>
   </div>
 </div>
-
 <!-- MPESA MODAL -->
 <div class="modal hidden" id="mpesaModal">
   <div class="modal-card">
     <h3>M-Pesa Withdrawal</h3>
+
+    <input type="text" id="mpesaName" placeholder="Full Name">
     <input type="tel" id="mpesaNumber" placeholder="M-Pesa Number">
     <input type="number" id="mpesaAmount" placeholder="Amount ($)" min="3">
+
     <div class="calc-box">
       <p>Fee (7%): $<span id="mpesaFee">0</span></p>
       <p>You Receive: KES <span id="mpesaReceive">0</span></p>
     </div>
+
     <button class="btn-primary" id="confirmMpesa">Confirm</button>
     <button class="btn-outline" id="closeMpesa">Cancel</button>
   </div>
 </div>
-
 <!-- 🔥 FIREBASE COMPAT -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
