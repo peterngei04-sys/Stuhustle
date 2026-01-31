@@ -236,3 +236,32 @@ firebase.auth().onAuthStateChanged((user) => {
       console.error("Country check failed:", err);
     });
 });
+/* ===== STEP 3: SAVE WITHDRAWAL TO FIRESTORE ===== */
+
+withdrawBtn?.addEventListener("click", async () => {
+  const user = firebase.auth().currentUser;
+  if (!user) return alert("Not authenticated");
+
+  withdrawBtn.disabled = true;
+  pendingText.classList.remove("hidden");
+
+  try {
+    await firebase.firestore().collection("withdrawals").add({
+      userId: user.uid,
+      method: summaryMethod.innerText,
+      account: summaryAccount.innerText,
+      amountUSD: Number(summaryAmount.innerText),
+      feeUSD: Number(summaryFee.innerText),
+      receive: summaryReceive.innerText,
+      status: "pending",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    alert("Withdrawal request submitted. Processing within 24 hours ⏳");
+  } catch (err) {
+    console.error(err);
+    alert("Withdrawal failed. Try again.");
+    withdrawBtn.disabled = false;
+    pendingText.classList.add("hidden");
+  }
+});
