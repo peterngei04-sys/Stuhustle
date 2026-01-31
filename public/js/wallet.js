@@ -166,3 +166,45 @@
   });
 
 })();
+/* ===== EMAIL VERIFICATION GUARD ===== */
+
+firebase.auth().onAuthStateChanged((user) => {
+  if (!user) return;
+
+  // If email NOT verified
+  if (!user.emailVerified) {
+    withdrawBtn.disabled = true;
+
+    pendingText.classList.remove("hidden");
+    pendingText.innerHTML = `
+      ⚠️ Please verify your email before withdrawing.<br>
+      <button id="resendEmail" style="
+        margin-top:8px;
+        background:#2563eb;
+        color:white;
+        border:none;
+        padding:6px 12px;
+        border-radius:8px;
+        cursor:pointer;
+      ">
+        Resend verification email
+      </button>
+    `;
+
+    // Resend verification
+    document.getElementById("resendEmail").onclick = () => {
+      user.sendEmailVerification()
+        .then(() => {
+          alert("Verification email sent. Check your inbox.");
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    };
+
+  } else {
+    // Email verified → allow withdrawal
+    withdrawBtn.disabled = false;
+    pendingText.classList.add("hidden");
+  }
+});
