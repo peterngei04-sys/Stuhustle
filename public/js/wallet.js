@@ -208,3 +208,31 @@ firebase.auth().onAuthStateChanged((user) => {
     pendingText.classList.add("hidden");
   }
 });
+/* ===== COUNTRY LOCK (MPESA = KENYA ONLY) ===== */
+
+firebase.auth().onAuthStateChanged((user) => {
+  if (!user) return;
+
+  firebase.firestore()
+    .collection("users")
+    .doc(user.uid)
+    .get()
+    .then((doc) => {
+      if (!doc.exists) return;
+
+      const userCountry = (doc.data().country || "").toLowerCase();
+
+      // Intercept MPESA button
+      mpesaBtn.onclick = () => {
+        if (userCountry !== "kenya") {
+          alert("M-Pesa withdrawals are only available for Kenyan users 🇰🇪");
+          return;
+        }
+        mpesaModal.classList.remove("hidden");
+      };
+
+    })
+    .catch((err) => {
+      console.error("Country check failed:", err);
+    });
+});
