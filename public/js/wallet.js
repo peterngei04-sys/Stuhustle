@@ -1,165 +1,139 @@
-========== */
-const menuBtn = document.getElementById("menuBtn");
-const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("overlay");
+window.addEventListener("load", () => {
 
-const paypalBtn = document.getElementById("paypalBtn");
-const mpesaBtn = document.getElementById("mpesaBtn");
+  /* ========= SAFE GET ========= */
+  const $ = (id) => document.getElementById(id);
 
-const paypalModal = document.getElementById("paypalModal");
-const mpesaModal = document.getElementById("mpesaModal");
+  /* ========= ELEMENTS ========= */
+  const menuBtn = $("menuBtn");
+  const sidebar = $("sidebar");
+  const overlay = $("overlay");
 
-const closePaypal = document.getElementById("closePaypal");
-const closeMpesa = document.getElementById("closeMpesa");
+  const paypalBtn = $("paypalBtn");
+  const mpesaBtn = $("mpesaBtn");
 
-const paypalEmail = document.getElementById("paypalEmail");
-const paypalAmount = document.getElementById("paypalAmount");
-const paypalFee = document.getElementById("paypalFee");
-const paypalReceive = document.getElementById("paypalReceive");
-const confirmPaypal = document.getElementById("confirmPaypal");
+  const paypalModal = $("paypalModal");
+  const mpesaModal = $("mpesaModal");
 
-const mpesaName = document.getElementById("mpesaName");
-const mpesaNumber = document.getElementById("mpesaNumber");
-const mpesaAmount = document.getElementById("mpesaAmount");
-const mpesaFee = document.getElementById("mpesaFee");
-const mpesaReceive = document.getElementById("mpesaReceive");
-const confirmMpesa = document.getElementById("confirmMpesa");
+  const closePaypal = $("closePaypal");
+  const closeMpesa = $("closeMpesa");
 
-const withdrawSummary = document.getElementById("withdrawSummary");
-const withdrawBtn = document.getElementById("withdrawBtn");
-const pendingText = document.getElementById("pendingText");
+  const paypalEmail = $("paypalEmail");
+  const paypalAmount = $("paypalAmount");
+  const paypalFee = $("paypalFee");
+  const paypalReceive = $("paypalReceive");
+  const confirmPaypal = $("confirmPaypal");
 
-const summaryMethod = document.getElementById("summaryMethod");
-const summaryAccount = document.getElementById("summaryAccount");
-const summaryAmount = document.getElementById("summaryAmount");
-const summaryFee = document.getElementById("summaryFee");
-const summaryReceive = document.getElementById("summaryReceive");
+  const mpesaName = $("mpesaName");
+  const mpesaNumber = $("mpesaNumber");
+  const mpesaAmount = $("mpesaAmount");
+  const mpesaFee = $("mpesaFee");
+  const mpesaReceive = $("mpesaReceive");
+  const confirmMpesa = $("confirmMpesa");
 
-/* ===========================
-   SIDEBAR (HAMBURGER)
-=========================== */
-menuBtn.addEventListener("click", () => {
-  sidebar.classList.add("open");
-  overlay.classList.add("show");
-});
+  const withdrawSummary = $("withdrawSummary");
+  const withdrawBtn = $("withdrawBtn");
+  const pendingText = $("pendingText");
 
-overlay.addEventListener("click", () => {
-  sidebar.classList.remove("open");
-  overlay.classList.remove("show");
-});
+  const summaryMethod = $("summaryMethod");
+  const summaryAccount = $("summaryAccount");
+  const summaryAmount = $("summaryAmount");
+  const summaryFee = $("summaryFee");
+  const summaryReceive = $("summaryReceive");
 
-/* ===========================
-   MODALS
-=========================== */
-paypalBtn.addEventListener("click", () => {
-  paypalModal.classList.remove("hidden");
-});
+  /* ========= SIDEBAR ========= */
+  if (menuBtn && sidebar && overlay) {
+    menuBtn.onclick = () => {
+      sidebar.classList.add("open");
+      overlay.classList.add("show");
+    };
 
-mpesaBtn.addEventListener("click", () => {
-  mpesaModal.classList.remove("hidden");
-});
+    overlay.onclick = () => {
+      sidebar.classList.remove("open");
+      overlay.classList.remove("show");
+    };
+  }
 
-closePaypal.addEventListener("click", () => {
-  paypalModal.classList.add("hidden");
-});
+  /* ========= MODALS ========= */
+  paypalBtn && paypalBtn.onclick = () => paypalModal.classList.remove("hidden");
+  mpesaBtn && mpesaBtn.onclick = () => mpesaModal.classList.remove("hidden");
 
-closeMpesa.addEventListener("click", () => {
-  mpesaModal.classList.add("hidden");
-});
+  closePaypal && closePaypal.onclick = () => paypalModal.classList.add("hidden");
+  closeMpesa && closeMpesa.onclick = () => mpesaModal.classList.add("hidden");
 
-/* ===========================
-   CALCULATIONS
-=========================== */
-const RATE = 150;
-const FEE = 0.07;
+  /* ========= CALC ========= */
+  const RATE = 150;
+  const FEE = 0.07;
 
-function calc(amount) {
-  const fee = amount * FEE;
-  return {
-    fee: fee.toFixed(2),
-    net: (amount - fee).toFixed(2)
+  const calc = (amount) => {
+    const fee = amount * FEE;
+    return {
+      fee: fee.toFixed(2),
+      net: (amount - fee).toFixed(2)
+    };
   };
-}
 
-/* ===========================
-   PAYPAL INPUT
-=========================== */
-paypalAmount.addEventListener("input", () => {
-  const amt = Number(paypalAmount.value);
-  if (amt >= 3) {
+  /* ========= PAYPAL ========= */
+  paypalAmount && paypalAmount.addEventListener("input", () => {
+    const amt = Number(paypalAmount.value);
+    if (amt >= 3) {
+      const c = calc(amt);
+      paypalFee.textContent = c.fee;
+      paypalReceive.textContent = c.net;
+    }
+  });
+
+  /* ========= MPESA ========= */
+  mpesaAmount && mpesaAmount.addEventListener("input", () => {
+    const amt = Number(mpesaAmount.value);
+    if (amt >= 3) {
+      const c = calc(amt);
+      mpesaFee.textContent = c.fee;
+      mpesaReceive.textContent = Math.floor(c.net * RATE);
+    }
+  });
+
+  /* ========= SUMMARY ========= */
+  function showSummary(method, account, amount, receive, fee) {
+    summaryMethod.textContent = method;
+    summaryAccount.textContent = account;
+    summaryAmount.textContent = amount;
+    summaryFee.textContent = fee;
+    summaryReceive.textContent = receive;
+    withdrawSummary.classList.remove("hidden");
+  }
+
+  /* ========= CONFIRM PAYPAL ========= */
+  confirmPaypal && confirmPaypal.onclick = () => {
+    const amt = Number(paypalAmount.value);
+    if (amt < 3 || !paypalEmail.value) return alert("Invalid PayPal details");
+
     const c = calc(amt);
-    paypalFee.textContent = c.fee;
-    paypalReceive.textContent = c.net;
-  }
-});
+    showSummary("PayPal", paypalEmail.value, amt, `$${c.net}`, c.fee);
+    paypalModal.classList.add("hidden");
+  };
 
-/* ===========================
-   MPESA INPUT
-=========================== */
-mpesaAmount.addEventListener("input", () => {
-  const amt = Number(mpesaAmount.value);
-  if (amt >= 3) {
+  /* ========= CONFIRM MPESA ========= */
+  confirmMpesa && confirmMpesa.onclick = () => {
+    const amt = Number(mpesaAmount.value);
+    if (amt < 3 || !mpesaName.value || !mpesaNumber.value) {
+      return alert("Invalid M-Pesa details");
+    }
+
     const c = calc(amt);
-    mpesaFee.textContent = c.fee;
-    mpesaReceive.textContent = Math.floor(c.net * RATE);
-  }
-});
+    showSummary(
+      "M-Pesa",
+      `${mpesaName.value} (${mpesaNumber.value})`,
+      amt,
+      `KES ${Math.floor(c.net * RATE)}`,
+      c.fee
+    );
+    mpesaModal.classList.add("hidden");
+  };
 
-/* ===========================
-   SUMMARY
-=========================== */
-function showSummary(method, account, amount, receive, fee) {
-  summaryMethod.textContent = method;
-  summaryAccount.textContent = account;
-  summaryAmount.textContent = amount;
-  summaryFee.textContent = fee;
-  summaryReceive.textContent = receive;
+  /* ========= FINAL ========= */
+  withdrawBtn && withdrawBtn.onclick = () => {
+    pendingText.classList.remove("hidden");
+    withdrawBtn.disabled = true;
+  };
 
-  withdrawSummary.classList.remove("hidden");
-}
-
-/* ===========================
-   PAYPAL CONFIRM
-=========================== */
-confirmPaypal.addEventListener("click", () => {
-  const amt = Number(paypalAmount.value);
-  if (amt < 3 || !paypalEmail.value) {
-    alert("Enter valid PayPal details");
-    return;
-  }
-
-  const c = calc(amt);
-  showSummary("PayPal", paypalEmail.value, amt, `$${c.net}`, c.fee);
-  paypalModal.classList.add("hidden");
-});
-
-/* ===========================
-   MPESA CONFIRM
-=========================== */
-confirmMpesa.addEventListener("click", () => {
-  const amt = Number(mpesaAmount.value);
-
-  if (amt < 3 || !mpesaName.value || !mpesaNumber.value) {
-    alert("Enter full M-Pesa details");
-    return;
-  }
-
-  const c = calc(amt);
-  showSummary(
-    "M-Pesa",
-    `${mpesaName.value} (${mpesaNumber.value})`,
-    amt,
-    `KES ${Math.floor(c.net * RATE)}`,
-    c.fee
-  );
-
-  mpesaModal.classList.add("hidden");
-});
-
-/* ===========================
-   FINAL WITHDRAW
-=========================== */
-withdrawBtn.addEventListener("click", () => {
-  pendingText.classList.remove("hidden");
-  withdrawBtn.disabled = true;
 });
