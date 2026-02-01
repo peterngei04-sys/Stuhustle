@@ -1,131 +1,217 @@
-// ==============================
-// Firebase imports assumed already loaded in HTML
-// ==============================
+/* ===============================
+   STUHUSTLE WALLET SCRIPT
+   MERGED + SAFE + NO REGRESSION
+================================ */
 
-// Global state
-let currentUser = null;
-let userCountry = "";
+(function () {
 
-// ==============================
-// Toast helper (NO alerts)
-// ==============================
-function showToast(message, duration = 3000) {
-  const toast = document.getElementById("toast");
-  if (!toast) return;
-
-  toast.textContent = message;
-  toast.classList.remove("hidden");
-
-  setTimeout(() => {
-    toast.classList.add("hidden");
-  }, duration);
-}
-
-// ==============================
-// DOM Ready
-// ==============================
-document.addEventListener("DOMContentLoaded", () => {
-
-  // ---------- ELEMENTS ----------
-  const mpesaBtn = document.getElementById("mpesaBtn");
-  const paypalBtn = document.getElementById("paypalBtn");
-  const mpesaModal = document.getElementById("mpesaModal");
-  const paypalModal = document.getElementById("paypalModal");
-  const withdrawBtn = document.getElementById("finalWithdrawBtn");
-
-  // Safety checks (prevents silent crashes)
-  if (!mpesaBtn || !paypalBtn) {
-    console.warn("Withdrawal buttons not found");
-    return;
+  function ready(fn) {
+    if (document.readyState !== "loading") fn();
+    else document.addEventListener("DOMContentLoaded", fn);
   }
 
-  // ==============================
-  // AUTH STATE
-  // ==============================
-  firebase.auth().onAuthStateChanged(async (user) => {
-    if (!user) return;
+  // ---------- TOAST (NO ALERTS) ----------
+  function showToast(message, duration = 3000) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
 
-    currentUser = user;
+    toast.textContent = message;
+    toast.classList.remove("hidden");
 
-    try {
-      const snap = await firebase
-        .firestore()
-        .collection("users")
-        .doc(user.uid)
-        .get();
+    setTimeout(() => {
+      toast.classList.add("hidden");
+    }, duration);
+  }
 
-      if (!snap.exists) return;
+  ready(() => {
 
-      // ✅ BULLETPROOF country normalization
-      userCountry = (snap.data()?.country || "")
-        .toString()
-        .trim()
-        .toLowerCase();
+    /* ===== ELEMENTS ===== */
+    const menuBtn = document.getElementById("menuBtn");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
 
-      console.log("User country:", userCountry);
+    const paypalBtn = document.getElementById("paypalBtn");
+    const mpesaBtn = document.getElementById("mpesaBtn");
 
-    } catch (err) {
-      console.error("Country fetch error:", err);
+    const paypalModal = document.getElementById("paypalModal");
+    const mpesaModal = document.getElementById("mpesaModal");
+
+    const closePaypal = document.getElementById("closePaypal");
+    const closeMpesa = document.getElementById("closeMpesa");
+
+    const paypalAmount = document.getElementById("paypalAmount");
+    const paypalFee = document.getElementById("paypalFee");
+    const paypalReceive = document.getElementById("paypalReceive");
+    const paypalEmail = document.getElementById("paypalEmail");
+    const confirmPaypal = document.getElementById("confirmPaypal");
+
+    const mpesaAmount = document.getElementById("mpesaAmount");
+    const mpesaFee = document.getElementById("mpesaFee");
+    const mpesaReceive = document.getElementById("mpesaReceive");
+    const mpesaNumber = document.getElementById("mpesaNumber");
+    const mpesaName = document.getElementById("mpesaName");
+    const confirmMpesa = document.getElementById("confirmMpesa");
+
+    const withdrawSummary = document.getElementById("withdrawSummary");
+    const withdrawBtn = document.getElementById("withdrawBtn");
+
+    const summaryMethod = document.getElementById("summaryMethod");
+    const summaryAccount = document.getElementById("summaryAccount");
+    const summaryAmount = document.getElementById("summaryAmount");
+    const summaryFee = document.getElementById("summaryFee");
+    const summaryReceive = document.getElementById("summaryReceive");
+
+    /* ===== SIDEBAR ===== */
+    if (menuBtn && sidebar && overlay) {
+      menuBtn.onclick = () => {
+        sidebar.classList.add("open");
+        overlay.classList.add("show");
+      };
+      overlay.onclick = () => {
+        sidebar.classList.remove("open");
+        overlay.classList.remove("show");
+      };
     }
+
+    /* ===== MODALS ===== */
+    paypalBtn && (paypalBtn.onclick = () => paypalModal.classList.remove("hidden"));
+    closePaypal && (closePaypal.onclick = () => paypalModal.classList.add("hidden"));
+    closeMpesa && (closeMpesa.onclick = () => mpesaModal.classList.add("hidden"));
+
+    /* ===== CALCULATIONS ===== */
+    const RATE = 150;
+    const FEE = 0.07;
+
+    function calc(amount) {
+      const fee = amount * FEE;
+      return {
+        fee: fee.toFixed(2),
+        net: (amount - fee).toFixed(2)
+      };
+    }
+
+    paypalAmount?.addEventListener("input", () => {
+      const amt = Number(paypalAmount.value);
+      if (amt >= 3) {
+        const c = calc(amt);
+        paypalFee.textContent = c.fee;
+        paypalReceive.textContent = c.net;
+      }
+    });
+
+    mpesaAmount?.addEventListener("input", () => {
+      const amt = Number(mpesaAmount.value);
+      if (amt >= 3) {
+        const c = calc(amt);
+        mpesaFee.textContent = c.fee;
+        mpesaReceive.textContent = Math.floor(c.net * RATE);
+      }
+    });
+
+    /* ===== SUMMARY ===== */
+    function showSummary(method, account, amount, receive, fee) {
+      summaryMethod.textContent = method;
+      summaryAccount.textContent = account;
+      summaryAmount.textContent = amount;
+      summaryFee.textContent = fee;
+      summaryReceive.textContent = receive;
+      withdrawSummary.classList.remove("hidden");
+    }
+
+    confirmPaypal?.addEventListener("click", () => {
+      const amt = Number(paypalAmount.value);
+      if (amt < 3) return showToast("Minimum withdrawal is $3");
+      if (!paypalEmail.value) return showToast("Enter PayPal email");
+
+      const c = calc(amt);
+      showSummary("PayPal", paypalEmail.value, amt, `$${c.net}`, c.fee);
+      paypalModal.classList.add("hidden");
+    });
+
+    confirmMpesa?.addEventListener("click", () => {
+      const amt = Number(mpesaAmount.value);
+      if (amt < 3) return showToast("Minimum withdrawal is $3");
+      if (!mpesaNumber.value || !mpesaName.value)
+        return showToast("Enter M-Pesa name and number");
+
+      const c = calc(amt);
+      showSummary(
+        "M-Pesa",
+        `${mpesaName.value} (${mpesaNumber.value})`,
+        amt,
+        `KES ${Math.floor(c.net * RATE)}`,
+        c.fee
+      );
+      mpesaModal.classList.add("hidden");
+    });
+
+    /* ===== AUTH + COUNTRY LOCK (FIXED) ===== */
+    let userCountry = "";
+
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) return;
+
+      try {
+        const doc = await firebase.firestore()
+          .collection("users")
+          .doc(user.uid)
+          .get();
+
+        userCountry = (doc.data()?.country || "")
+          .toString()
+          .trim()
+          .toLowerCase();
+
+      } catch (e) {
+        console.error("Country fetch error", e);
+      }
+    });
+
+    mpesaBtn?.addEventListener("click", () => {
+      if (userCountry !== "kenya") {
+        showToast("M-Pesa withdrawals are only available in Kenya 🇰🇪");
+        return;
+      }
+      mpesaModal.classList.remove("hidden");
+    });
+
+    /* ===== FINAL WITHDRAW ===== */
+    withdrawBtn?.addEventListener("click", async () => {
+
+      const user = firebase.auth().currentUser;
+      if (!user) return showToast("Please log in again");
+
+      if (!summaryMethod.textContent)
+        return showToast("Select a withdrawal method first");
+
+      withdrawBtn.disabled = true;
+      withdrawBtn.textContent = "Processing...";
+
+      try {
+        await firebase.firestore().collection("withdrawals").add({
+          userId: user.uid,
+          method: summaryMethod.textContent,
+          account: summaryAccount.textContent,
+          amountUSD: Number(summaryAmount.textContent),
+          feeUSD: Number(summaryFee.textContent),
+          receive: summaryReceive.textContent,
+          status: "pending",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        showToast("Withdrawal submitted ⏳");
+
+        withdrawBtn.disabled = false;
+        withdrawBtn.textContent = "Withdraw";
+
+      } catch (err) {
+        console.error(err);
+        showToast("Withdrawal failed");
+        withdrawBtn.disabled = false;
+        withdrawBtn.textContent = "Withdraw";
+      }
+    });
+
   });
 
-  // ==============================
-  // BUTTON HANDLERS
-  // ==============================
-
-  // ---- M-PESA ----
-  mpesaBtn.onclick = () => {
-    if (userCountry !== "kenya") {
-      showToast("M-Pesa withdrawals are only available in Kenya 🇰🇪");
-      return;
-    }
-    mpesaModal?.classList.remove("hidden");
-  };
-
-  // ---- PAYPAL ----
-  paypalBtn.onclick = () => {
-    paypalModal?.classList.remove("hidden");
-  };
-
-  // ==============================
-  // FINAL WITHDRAW
-  // ==============================
-  withdrawBtn?.addEventListener("click", async () => {
-
-    if (!currentUser) {
-      showToast("Please log in again");
-      return;
-    }
-
-    const amountInput = document.getElementById("withdrawAmount");
-    const amount = Number(amountInput?.value || 0);
-
-    if (amount < 3) {
-      showToast("Minimum withdrawal is $3");
-      return;
-    }
-
-    try {
-      await firebase.firestore().collection("withdrawals").add({
-        uid: currentUser.uid,
-        amount,
-        method: mpesaModal && !mpesaModal.classList.contains("hidden")
-          ? "mpesa"
-          : "paypal",
-        status: "pending",
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      showToast("Withdrawal submitted successfully ⏳");
-
-      mpesaModal?.classList.add("hidden");
-      paypalModal?.classList.add("hidden");
-      amountInput.value = "";
-
-    } catch (err) {
-      console.error(err);
-      showToast("Something went wrong. Try again.");
-    }
-  });
-
-});
+})();
