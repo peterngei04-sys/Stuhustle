@@ -1,0 +1,50 @@
+.splash-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.tagline {
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.primary-btn {
+  padding: 14px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #00c6ff;
+  color: black;
+  font-weight: bold;
+}
+
+.secondary-btn {
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 8px;
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+}
