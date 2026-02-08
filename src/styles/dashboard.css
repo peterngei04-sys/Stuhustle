@@ -1,0 +1,116 @@
+.dashboard {
+  min-height: 100vh;
+  background: #0f2027;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #08151c;
+}
+
+.hamburger {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.menu {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 260px;
+  height: calc(100% - 60px);
+  background: #08151c;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  z-index: 1000;
+}
+
+.menu section h4 {
+  margin-bottom: 10px;
+  color: #00c6ff;
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #203a43;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu button:hover {
+  background: #00c6ff;
+  color: #000;
+}
+
+.logout {
+  background: #ff6b6b !important;
+}
+
+main {
+  padding: 20px;
+}
+
+.balance-card {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.balance-card p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.balance-card h1 {
+  font-size: 2rem;
+  margin: 10px 0;
+}
+
+.balance-card span {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.quick-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.primary {
+  flex: 1;
+  padding: 15px;
+  background: #00c6ff;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.secondary {
+  flex: 1;
+  padding: 15px;
+  background: transparent;
+  border: 2px solid #00c6ff;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
