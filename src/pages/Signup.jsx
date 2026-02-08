@@ -52,21 +52,38 @@ function Signup() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [errorUsername, setErrorUsername] = useState("");
+  const [errorConfirm, setErrorConfirm] = useState("");
 
   // Handle input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+
+    // Inline confirm password check
+    if (name === "confirmPassword" || name === "password") {
+      if (form.password && (name === "confirmPassword" ? value : form.confirmPassword) !== (name === "password" ? value : form.password)) {
+        setErrorConfirm("Passwords do not match");
+      } else {
+        setErrorConfirm("");
+      }
+    }
   };
 
   // Check if username is unique
   const checkUsernameUnique = async () => {
-    const q = query(
-      collection(db, "users"),
-      where("username", "==", form.username)
-    );
+    if (!form.username) return false;
+    const q = query(collection(db, "users"), where("username", "==", form.username));
     const snapshot = await getDocs(q);
     return snapshot.empty;
+  };
+
+  // Handle username blur (check availability)
+  const handleUsernameBlur = async () => {
+    if (form.username) {
+      const isUnique = await checkUsernameUnique();
+      setErrorUsername(isUnique ? "" : "Username is not available");
+    }
   };
 
   // Handle form submission
@@ -82,21 +99,15 @@ function Signup() {
       return setError("Passwords do not match.");
     }
 
+    if (errorUsername) {
+      return setError("Please choose a different username.");
+    }
+
     setLoading(true);
 
     try {
-      const isUnique = await checkUsernameUnique();
-      if (!isUnique) {
-        setLoading(false);
-        return setError("Username already taken.");
-      }
-
       // Create user in Firebase Auth
-      const userCred = await createUserWithEmailAndPassword(
-        auth,
-        form.email,
-        form.password
-      );
+      const userCred = await createUserWithEmailAndPassword(auth, form.email, form.password);
 
       // Create user document in Firestore
       await setDoc(doc(db, "users", userCred.user.uid), {
@@ -128,8 +139,10 @@ function Signup() {
           placeholder="Username"
           value={form.username}
           onChange={handleChange}
+          onBlur={handleUsernameBlur}
           required
         />
+        {errorUsername && <p className="inline-error">{errorUsername}</p>}
 
         <input
           type="email"
@@ -157,6 +170,7 @@ function Signup() {
           onChange={handleChange}
           required
         />
+        {errorConfirm && <p className="inline-error">{errorConfirm}</p>}
 
         <select
           name="country"
