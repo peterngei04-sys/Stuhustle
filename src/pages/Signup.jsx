@@ -1,7 +1,8 @@
+// src/pages/Signup.jsx
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../firebase";
+import { auth, db } from "../firebase"; // Make sure your firebase.js exports auth & db correctly
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/signup.css";
 
