@@ -1,8 +1,7 @@
-// src/pages/Signup.jsx
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../firebase"; // Make sure your firebase.js exports auth & db correctly
+import { auth, db } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/signup.css";
 
@@ -47,6 +46,7 @@ function Signup() {
     confirmPassword: "",
     country: "",
     gender: "",
+    referralInput: "", // ✅ ADDED
     agree: false
   });
 
@@ -55,12 +55,10 @@ function Signup() {
   const [errorUsername, setErrorUsername] = useState("");
   const [errorConfirm, setErrorConfirm] = useState("");
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
 
-    // Inline confirm password check
     if (name === "confirmPassword" || name === "password") {
       if (
         form.password &&
@@ -74,7 +72,6 @@ function Signup() {
     }
   };
 
-  // Check if username is unique
   const checkUsernameUnique = async () => {
     if (!form.username) return false;
     const q = query(collection(db, "users"), where("username", "==", form.username));
@@ -82,7 +79,6 @@ function Signup() {
     return snapshot.empty;
   };
 
-  // Handle username blur (check availability)
   const handleUsernameBlur = async () => {
     if (form.username) {
       const isUnique = await checkUsernameUnique();
@@ -90,63 +86,77 @@ function Signup() {
     }
   };
 
-  // Handle form submission
+  // ✅ ADDED: referral existence check
+  const checkReferralExists = async (code) => {
+    if (!code) return null;
+    const q = query(collection(db, "users"), where("referralCode", "==", code));
+    const snap = await getDocs(q);
+    if (snap.empty) return null;
+    return snap.docs[0];
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!form.agree) {
-      return setError("You must agree to the Privacy Policy and Terms.");
-    }
-
-    if (form.password !== form.confirmPassword) {
-      return setError("Passwords do not match.");
-    }
-
-    if (errorUsername) {
-      return setError("Please choose a different username.");
-    }
+    if (!form.agree) return setError("You must agree to the Privacy Policy and Terms.");
+    if (form.password !== form.confirmPassword) return setError("Passwords do not match.");
+    if (errorUsername) return setError("Please choose a different username.");
 
     setLoading(true);
 
     try {
-      // Create user in Firebase Auth
+      let referredByUid = null;
+
+      // ✅ ADDED: referral validation
+      if (form.referralInput) {
+        const refUser = await checkReferralExists(form.referralInput);
+        if (!refUser) {
+          setLoading(false);
+          return setError("Referral code does not exist.");
+        }
+        referredByUid = refUser.id;
+      }
+
       const userCred = await createUserWithEmailAndPassword(
         auth,
         form.email,
         form.password
       );
-     // Create user document in Firestore
-await setDoc(doc(db, "users", userCred.user.uid), {
-  uid: userCred.user.uid,
-  username: form.username,
-  email: form.email,
-  country: form.country,
-  gender: form.gender,
 
-  // 🔐 Access & control
-  role: "user",
-  status: "active",
-  isBanned: false,
-  banReason: null,
+      await setDoc(doc(db, "users", userCred.user.uid), {
+        uid: userCred.user.uid,
+        username: form.username,
+        email: form.email,
+        country: form.country,
+        gender: form.gender,
 
-  // 💰 Earnings & wallet
-  balanceUSD: 0,
-  points: 0,
-  totalEarnedUSD: 0,
-  totalWithdrawnUSD: 0,
+        role: "user",
+        status: "active",
+        isBanned: false,
+        banReason: null,
 
-  // 📊 Tracking
-  emailVerified: userCred.user.emailVerified,
-  lastLogin: null,
+        // 💰 Wallet
+        balanceUSD: 0,
+        pendingUSD: 0, // ✅ ADDED
+        totalEarnedUSD: 0, // ✅ ADDED
+        totalWithdrawnUSD: 0,
 
-  // 🔗 Referrals (future-proof)
-  referralCode: form.username + "_" + userCred.user.uid.slice(0, 6),
-  referredBy: null,
+        // 🎯 Points
+        pointsPending: 0, // ✅ ADDED
+        pointsApproved: 0, // ✅ ADDED
 
-  // ⏰ Timestamps
-  createdAt: new Date()
-});
+        // 📊 Tracking
+        referrals: 0, // ✅ ADDED
+        tasksCompleted: 0, // ✅ ADDED
+
+        // 🔗 Referral system
+        referralCode: form.username + "_" + userCred.user.uid.slice(0, 6),
+        referredBy: referredByUid,
+
+        createdAt: new Date()
+      });
+
       navigate("/login");
     } catch (err) {
       setError(err.message);
@@ -158,79 +168,46 @@ await setDoc(doc(db, "users", userCred.user.uid), {
   return (
     <div className="signup-container">
       <h2>Create Account</h2>
-
       {error && <p className="error">{error}</p>}
 
       <form onSubmit={handleSubmit}>
-        <input
-          name="username"
-          placeholder="Username"
-          value={form.username}
-          onChange={handleChange}
-          onBlur={handleUsernameBlur}
-          required
-        />
+        <input name="username" placeholder="Username" value={form.username}
+          onChange={handleChange} onBlur={handleUsernameBlur} required />
         {errorUsername && <p className="inline-error">{errorUsername}</p>}
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
+        <input type="email" name="email" placeholder="Email"
+          value={form.email} onChange={handleChange} required />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
+        <input type="password" name="password" placeholder="Password"
+          value={form.password} onChange={handleChange} required />
 
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={form.confirmPassword}
-          onChange={handleChange}
-          required
-        />
+        <input type="password" name="confirmPassword" placeholder="Confirm Password"
+          value={form.confirmPassword} onChange={handleChange} required />
         {errorConfirm && <p className="inline-error">{errorConfirm}</p>}
 
-        <select
-          name="country"
-          value={form.country}
-          onChange={handleChange}
-          required
-        >
+        <select name="country" value={form.country} onChange={handleChange} required>
           <option value="">Select Country</option>
-          {countries.map((c) => (
-            <option key={c} value={c}>{c}</option>
-          ))}
+          {countries.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
 
-        <select
-          name="gender"
-          value={form.gender}
-          onChange={handleChange}
-          required
-        >
+        <select name="gender" value={form.gender} onChange={handleChange} required>
           <option value="">Select Gender</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
           <option value="Other">Other</option>
         </select>
 
+        {/* ✅ ADDED */}
+        <input
+          name="referralInput"
+          placeholder="Referral code (optional)"
+          value={form.referralInput}
+          onChange={handleChange}
+        />
+
         <label className="checkbox">
-          <input
-            type="checkbox"
-            name="agree"
-            checked={form.agree}
-            onChange={handleChange}
-          />
+          <input type="checkbox" name="agree"
+            checked={form.agree} onChange={handleChange} />
           I agree to <Link to="/privacy">Privacy Policy</Link> &{" "}
           <Link to="/terms">Terms</Link>
         </label>
@@ -244,7 +221,6 @@ await setDoc(doc(db, "users", userCred.user.uid), {
         Already have an account? <Link to="/login">Login</Link>
       </p>
 
-      {/* ✅ ONLY ADDITION */}
       <footer className="signup-footer">
         © 2026 StuHustle · Powered by PECO Industries
       </footer>
