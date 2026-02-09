@@ -5,7 +5,6 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "../styles/dashboard.css";
 
-
 function Dashboard() {
   const navigate = useNavigate();
   const user = auth.currentUser;
@@ -86,9 +85,8 @@ function Dashboard() {
 
         <section>
           <h4>Wallet</h4>
-          <button>Balance</button>
-          <button>Withdraw</button>
-          <button>Transaction History</button>
+          {/* ✅ ADDED: single wallet button as requested */}
+          <button>Wallet</button>
         </section>
 
         <section>
@@ -133,6 +131,22 @@ function Dashboard() {
             <p className={data.accountStatus === "active" ? "active" : "danger"}>
               {data.accountStatus || "active"}
             </p>
+          </div>
+
+          {/* ✅ ADDED POINTS */}
+          <div className="stat">
+            <h4>Pending Points</h4>
+            <p>{data.pointsPending || 0}</p>
+          </div>
+
+          <div className="stat">
+            <h4>Approved Points</h4>
+            <p>{data.pointsApproved || 0}</p>
+          </div>
+
+          <div className="stat">
+            <h4>Points Value</h4>
+            <p>${((data.pointsApproved || 0) / 1000).toFixed(2)}</p>
           </div>
         </div>
 
