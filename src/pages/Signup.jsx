@@ -62,7 +62,11 @@ function Signup() {
 
     // Inline confirm password check
     if (name === "confirmPassword" || name === "password") {
-      if (form.password && (name === "confirmPassword" ? value : form.confirmPassword) !== (name === "password" ? value : form.password)) {
+      if (
+        form.password &&
+        (name === "confirmPassword" ? value : form.confirmPassword) !==
+          (name === "password" ? value : form.password)
+      ) {
         setErrorConfirm("Passwords do not match");
       } else {
         setErrorConfirm("");
@@ -107,18 +111,42 @@ function Signup() {
 
     try {
       // Create user in Firebase Auth
-      const userCred = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password
+      );
+     // Create user document in Firestore
+await setDoc(doc(db, "users", userCred.user.uid), {
+  uid: userCred.user.uid,
+  username: form.username,
+  email: form.email,
+  country: form.country,
+  gender: form.gender,
 
-      // Create user document in Firestore
-      await setDoc(doc(db, "users", userCred.user.uid), {
-        uid: userCred.user.uid,
-        username: form.username,
-        email: form.email,
-        country: form.country,
-        gender: form.gender,
-        createdAt: new Date()
-      });
+  // 🔐 Access & control
+  role: "user",
+  status: "active",
+  isBanned: false,
+  banReason: null,
 
+  // 💰 Earnings & wallet
+  balanceUSD: 0,
+  points: 0,
+  totalEarnedUSD: 0,
+  totalWithdrawnUSD: 0,
+
+  // 📊 Tracking
+  emailVerified: userCred.user.emailVerified,
+  lastLogin: null,
+
+  // 🔗 Referrals (future-proof)
+  referralCode: form.username + "_" + userCred.user.uid.slice(0, 6),
+  referredBy: null,
+
+  // ⏰ Timestamps
+  createdAt: new Date()
+});
       navigate("/login");
     } catch (err) {
       setError(err.message);
@@ -215,6 +243,11 @@ function Signup() {
       <p className="link">
         Already have an account? <Link to="/login">Login</Link>
       </p>
+
+      {/* ✅ ONLY ADDITION */}
+      <footer className="signup-footer">
+        © 2026 StuHustle · Powered by PECO Industries
+      </footer>
     </div>
   );
 }
