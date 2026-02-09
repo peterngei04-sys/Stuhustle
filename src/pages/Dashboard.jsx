@@ -37,6 +37,11 @@ function Dashboard() {
     navigate("/login");
   };
 
+  const handleStartEarning = () => {
+    setMenuOpen(true);
+    window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top to show menu
+  };
+
   if (loading) {
     return <div className="dashboard loading">Loading dashboard...</div>;
   }
@@ -56,42 +61,40 @@ function Dashboard() {
       </header>
 
       {/* SIDE MENU */}
-      {menuOpen && (
-        <aside className="menu">
-          <section>
-            <h4>Earning Methods</h4>
-            <button>Offerwalls</button>
-            <button>Paid Tasks</button>
-            <button>Micro Jobs</button>
-            <button>Affiliate Marketing</button>
-            <button>Referrals</button>
-            <button>Freelancing Hub</button>
-            <button>Skill Gigs</button>
-            <button>Surveys</button>
-            <button>Sponsored Campaigns</button>
-          </section>
+      <aside className={`menu ${menuOpen ? "open" : ""}`}>
+        <section>
+          <h4>Earning Methods</h4>
+          <button>Offerwalls</button>
+          <button>Paid Tasks</button>
+          <button>Micro Jobs</button>
+          <button>Affiliate Marketing</button>
+          <button>Referrals</button>
+          <button>Freelancing Hub</button>
+          <button>Skill Gigs</button>
+          <button>Surveys</button>
+          <button>Sponsored Campaigns</button>
+        </section>
 
-          <section>
-            <h4>Wallet</h4>
-            <button>Balance</button>
-            <button>Withdraw</button>
-            <button>Transaction History</button>
-          </section>
+        <section>
+          <h4>Wallet</h4>
+          <button>Balance</button>
+          <button>Withdraw</button>
+          <button>Transaction History</button>
+        </section>
 
-          <section>
-            <h4>Account</h4>
-            <button>Profile</button>
-            <button>Security</button>
-            <button>Support</button>
-            <button className="logout" onClick={handleLogout}>
-              Logout
-            </button>
-          </section>
-        </aside>
-      )}
+        <section>
+          <h4>Account</h4>
+          <button>Profile</button>
+          <button>Security</button>
+          <button>Support</button>
+          <button className="logout" onClick={handleLogout}>
+            Logout
+          </button>
+        </section>
+      </aside>
 
       {/* MAIN CONTENT */}
-      <main className="content">
+      <main className={`content ${menuOpen ? "menu-open" : ""}`}>
         <h3>
           Welcome back, <span>{data.username}</span> 👋
         </h3>
@@ -130,14 +133,15 @@ function Dashboard() {
 
         {/* QUICK ACTIONS */}
         <div className="quick-actions">
-          <button className="primary">Start Earning</button>
+          <button className="primary" onClick={handleStartEarning}>
+            Start Earning
+          </button>
           <button className="secondary">Withdraw Funds</button>
         </div>
 
         {/* EARNING OVERVIEW */}
         <section className="earnings-overview">
           <h4>Ways to Earn</h4>
-
           <div className="earning-grid">
             <div className="earning-card">Offerwalls</div>
             <div className="earning-card">Sponsored Campaigns</div>
