@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
@@ -9,15 +8,25 @@ import "../styles/dashboard.css";
 function Dashboard() {
   const navigate = useNavigate();
   const user = auth.currentUser;
+
   const [data, setData] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
 
     const loadUserData = async () => {
-      const snap = await getDoc(doc(db, "users", user.uid));
-      if (snap.exists()) setData(snap.data());
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) {
+          setData(snap.data());
+        }
+      } catch (err) {
+        console.error("Failed to load user data", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadUserData();
@@ -28,9 +37,17 @@ function Dashboard() {
     navigate("/login");
   };
 
+  if (loading) {
+    return <div className="dashboard loading">Loading dashboard...</div>;
+  }
+
+  if (!data) {
+    return <div className="dashboard error">Failed to load data.</div>;
+  }
+
   return (
     <div className="dashboard">
-      {/* TOPBAR */}
+      {/* TOP BAR */}
       <header className="topbar">
         <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
           ☰
@@ -38,15 +55,20 @@ function Dashboard() {
         <h2>StuHustle</h2>
       </header>
 
-      {/* HAMBURGER MENU */}
+      {/* SIDE MENU */}
       {menuOpen && (
         <aside className="menu">
           <section>
-            <h4>Earning</h4>
+            <h4>Earning Methods</h4>
             <button>Offerwalls</button>
-            <button>Watch Ads</button>
-            <button>Tasks</button>
+            <button>Paid Tasks</button>
+            <button>Micro Jobs</button>
+            <button>Affiliate Marketing</button>
             <button>Referrals</button>
+            <button>Freelancing Hub</button>
+            <button>Skill Gigs</button>
+            <button>Surveys</button>
+            <button>Sponsored Campaigns</button>
           </section>
 
           <section>
@@ -59,28 +81,80 @@ function Dashboard() {
           <section>
             <h4>Account</h4>
             <button>Profile</button>
-            <button>Settings</button>
+            <button>Security</button>
             <button>Support</button>
-            <button className="logout" onClick={handleLogout}>Logout</button>
+            <button className="logout" onClick={handleLogout}>
+              Logout
+            </button>
           </section>
         </aside>
       )}
 
-      {/* MAIN DASHBOARD */}
-      <main>
-        <h3>Welcome back, {data?.username || "User"} 👋</h3>
+      {/* MAIN CONTENT */}
+      <main className="content">
+        <h3>
+          Welcome back, <span>{data.username}</span> 👋
+        </h3>
 
+        {/* BALANCE */}
         <div className="balance-card">
           <p>Available Balance</p>
-          <h1>${data?.balanceUSD?.toFixed(2) || "0.00"}</h1>
-          <span>Pending: ${data?.pendingUSD?.toFixed(2) || "0.00"}</span>
+          <h1>${(data.balanceUSD || 0).toFixed(2)}</h1>
+          <span>Pending: ${(data.pendingUSD || 0).toFixed(2)}</span>
         </div>
 
+        {/* STATS */}
+        <div className="stats">
+          <div className="stat">
+            <h4>Total Earned</h4>
+            <p>${(data.totalEarnedUSD || 0).toFixed(2)}</p>
+          </div>
+
+          <div className="stat">
+            <h4>Referrals</h4>
+            <p>{data.referrals || 0}</p>
+          </div>
+
+          <div className="stat">
+            <h4>Tasks Completed</h4>
+            <p>{data.tasksCompleted || 0}</p>
+          </div>
+
+          <div className="stat">
+            <h4>Account Status</h4>
+            <p className={data.accountStatus === "active" ? "active" : "danger"}>
+              {data.accountStatus || "active"}
+            </p>
+          </div>
+        </div>
+
+        {/* QUICK ACTIONS */}
         <div className="quick-actions">
           <button className="primary">Start Earning</button>
-          <button className="secondary">Withdraw</button>
+          <button className="secondary">Withdraw Funds</button>
         </div>
+
+        {/* EARNING OVERVIEW */}
+        <section className="earnings-overview">
+          <h4>Ways to Earn</h4>
+
+          <div className="earning-grid">
+            <div className="earning-card">Offerwalls</div>
+            <div className="earning-card">Sponsored Campaigns</div>
+            <div className="earning-card">Freelancing</div>
+            <div className="earning-card">Affiliate Programs</div>
+            <div className="earning-card">Paid Surveys</div>
+            <div className="earning-card">Referrals</div>
+            <div className="earning-card">Micro Tasks</div>
+            <div className="earning-card">Skill-Based Gigs</div>
+          </div>
+        </section>
       </main>
+
+      {/* FOOTER */}
+      <footer className="dashboard-footer">
+        © 2026 StuHustle · Powered by PECO Industries
+      </footer>
     </div>
   );
 }
