@@ -122,62 +122,54 @@ main {
   background: rgba(0,0,0,0.45);
   z-index: 99;
 }
-
-/* ===== SIDE MENU ===== */
 .menu {
   position: fixed;
   top: 0;
   left: -270px;
   width: 260px;
   height: 100vh;
-  background: #111827;
+  background: #0b1c26;
   padding: 1rem;
   overflow-y: auto;
   z-index: 100;
-  transition: left 0.3s ease;
+  transition: left 0.3s ease, visibility 0.3s ease;
+  visibility: hidden;        /* 👈 KEY */
 }
 
 .menu.open {
   left: 0;
+  visibility: visible;       /* 👈 KEY */
+}.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 90;
+}.earnings-overview {
+  margin-top: 2rem;
 }
 
-.menu h4 {
-  margin: 1rem 0 0.5rem;
-  font-size: 0.8rem;
-  color: #9ca3af;
-  text-transform: uppercase;
+.earnings-overview h4 {
+  margin-bottom: 1rem;
+  color: #e5e7eb;
 }
 
-.menu button {
-  width: 100%;
-  padding: 0.6rem;
-  margin-bottom: 0.4rem;
-  background: transparent;
-  border: none;
-  color: white;
-  text-align: left;
-  border-radius: 6px;
-}
-
-.menu button:hover {
-  background: #1f2933;
-}
-
-.menu .logout {
-  color: #f87171;
-}
-
-/* ===== EARNING GRID IMPROVEMENT ===== */
 .earning-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
 .earning-card {
-  background: #f9fafb;
-  padding: 1rem;
-  border-radius: 12px;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: white;
+  padding: 1.2rem;
+  border-radius: 14px;
+  font-weight: 600;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 8px 20px rgba(14,165,233,0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.earning-card:active {
+  transform: scale(0.97);
 }
