@@ -114,3 +114,69 @@ main {
   font-weight: bold;
   cursor: pointer;
 }
+/* ===== MENU OVERLAY ===== */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 99;
+}
+
+/* ===== SIDE MENU ===== */
+.menu {
+  position: fixed;
+  top: 0;
+  left: -270px;
+  width: 260px;
+  height: 100vh;
+  background: #111827;
+  padding: 1rem;
+  overflow-y: auto;
+  z-index: 100;
+  transition: left 0.3s ease;
+}
+
+.menu.open {
+  left: 0;
+}
+
+.menu h4 {
+  margin: 1rem 0 0.5rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+
+.menu button {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 0.4rem;
+  background: transparent;
+  border: none;
+  color: white;
+  text-align: left;
+  border-radius: 6px;
+}
+
+.menu button:hover {
+  background: #1f2933;
+}
+
+.menu .logout {
+  color: #f87171;
+}
+
+/* ===== EARNING GRID IMPROVEMENT ===== */
+.earning-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.earning-card {
+  background: #f9fafb;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}

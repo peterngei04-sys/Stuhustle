@@ -37,9 +37,16 @@ function Dashboard() {
     navigate("/login");
   };
 
+  const toggleMenu = () => {
+    setMenuOpen(prev => !prev);
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
   const handleStartEarning = () => {
     setMenuOpen(true);
-    window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top to show menu
   };
 
   if (loading) {
@@ -54,11 +61,12 @@ function Dashboard() {
     <div className="dashboard">
       {/* TOP BAR */}
       <header className="topbar">
-        <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-          ☰
-        </button>
+        <button className="hamburger" onClick={toggleMenu}>☰</button>
         <h2>StuHustle</h2>
       </header>
+
+      {/* OVERLAY */}
+      {menuOpen && <div className="menu-overlay" onClick={closeMenu} />}
 
       {/* SIDE MENU */}
       <aside className={`menu ${menuOpen ? "open" : ""}`}>
@@ -87,26 +95,22 @@ function Dashboard() {
           <button>Profile</button>
           <button>Security</button>
           <button>Support</button>
-          <button className="logout" onClick={handleLogout}>
-            Logout
-          </button>
+          <button className="logout" onClick={handleLogout}>Logout</button>
         </section>
       </aside>
 
       {/* MAIN CONTENT */}
-      <main className={`content ${menuOpen ? "menu-open" : ""}`}>
+      <main className="content">
         <h3>
           Welcome back, <span>{data.username}</span> 👋
         </h3>
 
-        {/* BALANCE */}
         <div className="balance-card">
           <p>Available Balance</p>
           <h1>${(data.balanceUSD || 0).toFixed(2)}</h1>
           <span>Pending: ${(data.pendingUSD || 0).toFixed(2)}</span>
         </div>
 
-        {/* STATS */}
         <div className="stats">
           <div className="stat">
             <h4>Total Earned</h4>
@@ -131,7 +135,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* QUICK ACTIONS */}
         <div className="quick-actions">
           <button className="primary" onClick={handleStartEarning}>
             Start Earning
@@ -139,7 +142,6 @@ function Dashboard() {
           <button className="secondary">Withdraw Funds</button>
         </div>
 
-        {/* EARNING OVERVIEW */}
         <section className="earnings-overview">
           <h4>Ways to Earn</h4>
           <div className="earning-grid">
@@ -155,7 +157,6 @@ function Dashboard() {
         </section>
       </main>
 
-      {/* FOOTER */}
       <footer className="dashboard-footer">
         © 2026 StuHustle · Powered by PECO Industries
       </footer>
