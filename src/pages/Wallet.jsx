@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { doc, getDoc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import "../styles/wallet.css";
 
@@ -8,143 +18,135 @@ function Wallet() {
   const navigate = useNavigate();
   const user = auth.currentUser;
 
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Withdraw modal
+  const [userData, setUserData] = useState(null);
+  const [withdrawals, setWithdrawals] = useState([]);
   const [showWithdraw, setShowWithdraw] = useState(false);
-  const [paypalEmail, setPaypalEmail] = useState("");
   const [amount, setAmount] = useState("");
+  const [paypalEmail, setPaypalEmail] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const MIN_WITHDRAW = 2;
+  const WITHDRAW_MIN = 2;
   const FEE_RATE = 0.15;
 
   useEffect(() => {
     if (!user) return;
 
-    const loadWallet = async () => {
-      try {
-        const snap = await getDoc(doc(db, "users", user.uid));
-        if (snap.exists()) setData(snap.data());
-      } catch (e) {
-        console.error("Wallet load error", e);
-      } finally {
-        setLoading(false);
-      }
+    const loadData = async () => {
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (snap.exists()) setUserData(snap.data());
+
+      const q = query(
+        collection(db, "withdrawals"),
+        where("uid", "==", user.uid)
+      );
+      const wsnap = await getDocs(q);
+      setWithdrawals(wsnap.docs.map(d => ({ id: d.id, ...d.data() })));
     };
 
-    loadWallet();
+    loadData();
   }, [user]);
 
   const handleWithdraw = async () => {
-    const value = parseFloat(amount);
-    if (!paypalEmail || !value) return alert("Fill all fields");
+    setError("");
+    const amt = Number(amount);
 
-    if (value < MIN_WITHDRAW) {
-      return alert("Minimum withdrawal is $2.00");
+    if (amt < WITHDRAW_MIN) {
+      return setError("Minimum withdrawal is $2");
     }
 
-    if (value > data.balanceUSD) {
-      return alert("Insufficient balance");
+    if (amt > userData.balanceUSD) {
+      return setError("Insufficient balance");
     }
 
-    const fee = value * FEE_RATE;
-    const receive = value - fee;
+    setLoading(true);
+
+    const fee = amt * FEE_RATE;
+    const net = amt - fee;
 
     try {
-      await updateDoc(doc(db, "users", user.uid), {
-        balanceUSD: data.balanceUSD - value,
-        pendingUSD: (data.pendingUSD || 0) + receive,
-        withdrawals: arrayUnion({
-          amount: value,
-          fee,
-          receive,
-          method: "PayPal",
-          paypalEmail,
-          status: "pending",
-          createdAt: serverTimestamp(),
-        }),
+      await addDoc(collection(db, "withdrawals"), {
+        uid: user.uid,
+        email: paypalEmail,
+        amount: amt,
+        fee,
+        netAmount: net,
+        method: "paypal",
+        status: "pending",
+        createdAt: serverTimestamp(),
       });
 
-      alert("Withdrawal submitted. Processing within 24 hours.");
+      await updateDoc(doc(db, "users", user.uid), {
+        balanceUSD: userData.balanceUSD - amt,
+        pendingUSD: (userData.pendingUSD || 0) + amt,
+      });
+
       setShowWithdraw(false);
       setAmount("");
       setPaypalEmail("");
-
-      const snap = await getDoc(doc(db, "users", user.uid));
-      setData(snap.data());
-    } catch (e) {
-      alert("Withdrawal failed");
+      window.location.reload();
+    } catch (err) {
+      setError("Withdrawal failed. Try again.");
     }
+
+    setLoading(false);
   };
 
-  if (loading) return <div className="wallet loading">Loading wallet...</div>;
+  if (!userData) return <div className="wallet">Loading...</div>;
 
   return (
     <div className="wallet">
-      {/* HEADER */}
       <header className="wallet-header">
         <button onClick={() => navigate("/dashboard")}>← Back</button>
         <h2>Wallet</h2>
       </header>
 
-      {/* BALANCES */}
       <div className="wallet-cards">
         <div className="card">
           <p>Available Balance</p>
-          <h1>${(data.balanceUSD || 0).toFixed(2)}</h1>
+          <h1>${userData.balanceUSD.toFixed(2)}</h1>
         </div>
 
-        <div className="card pending">
-          <p>Pending Balance</p>
-          <h2>${(data.pendingUSD || 0).toFixed(2)}</h2>
+        <div className="card">
+          <p>Pending Withdrawals</p>
+          <h1>${(userData.pendingUSD || 0).toFixed(2)}</h1>
         </div>
       </div>
 
-      {/* PAYPAL WITHDRAW */}
-      <section className="withdraw-section">
-        <h3>Withdraw Funds</h3>
-        <button className="paypal-btn" onClick={() => setShowWithdraw(true)}>
-          <img src="/paypal.svg" alt="PayPal" />
-          Withdraw via PayPal
-        </button>
-        <p className="rules">
-          Minimum: $2 • Fee: 15% • Processing: within 24 hours
-        </p>
-      </section>
+      <button className="withdraw-btn" onClick={() => setShowWithdraw(true)}>
+        Withdraw via PayPal
+      </button>
 
-      {/* WITHDRAW MODAL */}
+      {/* MODAL */}
       {showWithdraw && (
         <div className="modal-overlay">
           <div className="modal">
             <h3>PayPal Withdrawal</h3>
 
+            {error && <p className="error">{error}</p>}
+
             <input
-              type="email"
               placeholder="PayPal Email"
               value={paypalEmail}
-              onChange={(e) => setPaypalEmail(e.target.value)}
+              onChange={e => setPaypalEmail(e.target.value)}
             />
 
             <input
               type="number"
-              placeholder="Amount (USD)"
+              placeholder="Amount ($)"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={e => setAmount(e.target.value)}
             />
 
-            {amount && (
-              <div className="calc">
-                <p>Fee (15%): ${(amount * FEE_RATE).toFixed(2)}</p>
-                <p className="receive">
-                  You Receive: ${(amount - amount * FEE_RATE).toFixed(2)}
-                </p>
-              </div>
-            )}
+            <p className="fee">
+              Fee (15%): ${(amount * FEE_RATE || 0).toFixed(2)} <br />
+              You receive: ${(amount - amount * FEE_RATE || 0).toFixed(2)}
+            </p>
 
-            <button className="confirm" onClick={handleWithdraw}>
-              Confirm Withdrawal
+            <button onClick={handleWithdraw} disabled={loading}>
+              {loading ? "Processing..." : "Confirm Withdrawal"}
             </button>
+
             <button className="cancel" onClick={() => setShowWithdraw(false)}>
               Cancel
             </button>
@@ -152,29 +154,21 @@ function Wallet() {
         </div>
       )}
 
-      {/* HISTORY */}
       <section className="history">
         <h3>Withdrawal History</h3>
 
-        {data.withdrawals?.length ? (
-          data.withdrawals
-            .slice()
-            .reverse()
-            .map((w, i) => (
-              <div className="history-item" key={i}>
-                <div>
-                  <strong>${w.receive.toFixed(2)}</strong>
-                  <span>PayPal</span>
-                </div>
-                <span className={w.status}>{w.status}</span>
-              </div>
-            ))
-        ) : (
-          <p className="empty">No withdrawals yet</p>
-        )}
+        {withdrawals.length === 0 && <p>No withdrawals yet.</p>}
+
+        {withdrawals.map(w => (
+          <div key={w.id} className={`history-item ${w.status}`}>
+            <div>
+              <strong>${w.amount}</strong> → ${w.netAmount}
+            </div>
+            <span>{w.status.toUpperCase()}</span>
+          </div>
+        ))}
       </section>
 
-      {/* FOOTER */}
       <footer className="wallet-footer">
         © 2026 StuHustle · Powered by PECO Industries
       </footer>

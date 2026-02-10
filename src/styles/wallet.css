@@ -1,8 +1,8 @@
 .wallet {
-  min-height: 100vh;
-  background: #0b0f1a;
-  color: #fff;
   padding: 16px;
+  background: #0f172a;
+  min-height: 100vh;
+  color: #fff;
 }
 
 .wallet-header {
@@ -14,132 +14,91 @@
 .wallet-header button {
   background: none;
   border: none;
-  color: #7aa2ff;
-  font-size: 16px;
-  cursor: pointer;
+  color: #38bdf8;
+  font-size: 18px;
 }
 
 .wallet-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-top: 20px;
+  gap: 12px;
+  margin: 20px 0;
 }
 
 .card {
-  background: #12172a;
-  padding: 18px;
-  border-radius: 14px;
+  background: #020617;
+  padding: 16px;
+  border-radius: 12px;
 }
 
-.card.pending {
-  background: #1a1f3c;
-}
-
-.withdraw-section {
-  margin-top: 26px;
-}
-
-.paypal-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #003087;
-  color: white;
-  border: none;
+.withdraw-btn {
+  width: 100%;
   padding: 14px;
   border-radius: 10px;
-  cursor: pointer;
+  border: none;
+  background: #38bdf8;
+  color: #000;
   font-weight: bold;
-}
-
-.paypal-btn img {
-  width: 22px;
-}
-
-.rules {
-  font-size: 13px;
-  color: #aaa;
-  margin-top: 6px;
 }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,.7);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .modal {
-  background: #12172a;
+  background: #020617;
   padding: 20px;
+  border-radius: 14px;
   width: 90%;
   max-width: 400px;
-  border-radius: 14px;
 }
 
 .modal input {
   width: 100%;
+  margin: 8px 0;
   padding: 12px;
-  margin-top: 10px;
   border-radius: 8px;
   border: none;
 }
 
-.calc {
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-.receive {
-  color: #00ffae;
-  font-weight: bold;
-}
-
-.confirm {
+.modal button {
   width: 100%;
-  margin-top: 14px;
+  margin-top: 10px;
   padding: 12px;
-  background: linear-gradient(135deg, #5b7cfa, #8f6bff);
-  border: none;
   border-radius: 8px;
-  color: white;
+  border: none;
 }
 
 .cancel {
-  width: 100%;
-  margin-top: 8px;
-  background: none;
-  border: none;
-  color: #aaa;
+  background: transparent;
+  color: #f87171;
 }
 
 .history {
-  margin-top: 28px;
+  margin-top: 30px;
 }
 
 .history-item {
   display: flex;
   justify-content: space-between;
-  background: #12172a;
+  background: #020617;
   padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
 }
 
-.history-item .pending {
-  color: orange;
-}
-
-.history-item .paid {
-  color: #00ffae;
-}
+.history-item.pending { border-left: 4px solid orange; }
+.history-item.approved { border-left: 4px solid blue; }
+.history-item.paid { border-left: 4px solid green; }
+.history-item.rejected { border-left: 4px solid red; }
 
 .wallet-footer {
-  margin-top: 40px;
   text-align: center;
-  font-size: 13px;
-  color: #777;
+  margin-top: 40px;
+  opacity: .6;
 }
