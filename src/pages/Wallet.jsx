@@ -1,173 +1,148 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import {
-  doc,
-  getDoc,
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { doc, getDoc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
 import "../styles/wallet.css";
 
 function Wallet() {
-  const navigate = useNavigate();
   const user = auth.currentUser;
-
-  const [userData, setUserData] = useState(null);
-  const [withdrawals, setWithdrawals] = useState([]);
-  const [showWithdraw, setShowWithdraw] = useState(false);
-  const [amount, setAmount] = useState("");
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [withdrawAmount, setWithdrawAmount] = useState("");
   const [paypalEmail, setPaypalEmail] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const WITHDRAW_MIN = 2;
-  const FEE_RATE = 0.15;
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     if (!user) return;
 
-    const loadData = async () => {
-      const snap = await getDoc(doc(db, "users", user.uid));
-      if (snap.exists()) setUserData(snap.data());
-
-      const q = query(
-        collection(db, "withdrawals"),
-        where("uid", "==", user.uid)
-      );
-      const wsnap = await getDocs(q);
-      setWithdrawals(wsnap.docs.map(d => ({ id: d.id, ...d.data() })));
+    const loadUserData = async () => {
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) {
+          setData(snap.data());
+        }
+      } catch (err) {
+        console.error("Failed to load wallet data", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    loadData();
+    loadUserData();
   }, [user]);
 
   const handleWithdraw = async () => {
     setError("");
-    const amt = Number(amount);
+    setSuccess("");
 
-    if (amt < WITHDRAW_MIN) {
-      return setError("Minimum withdrawal is $2");
-    }
+    const amount = parseFloat(withdrawAmount);
 
-    if (amt > userData.balanceUSD) {
-      return setError("Insufficient balance");
-    }
-
-    setLoading(true);
-
-    const fee = amt * FEE_RATE;
-    const net = amt - fee;
+    if (!paypalEmail) return setError("Please enter your PayPal email.");
+    if (isNaN(amount) || amount < 2)
+      return setError("Minimum withdrawal is $2.");
+    if (amount > data.balanceUSD)
+      return setError("You don't have enough balance.");
 
     try {
-      await addDoc(collection(db, "withdrawals"), {
-        uid: user.uid,
-        email: paypalEmail,
-        amount: amt,
-        fee,
-        netAmount: net,
-        method: "paypal",
-        status: "pending",
-        createdAt: serverTimestamp(),
-      });
+      // Fee 15%
+      const netAmount = amount * 0.85;
 
+      // Update user doc: pendingUSD and withdrawals array
       await updateDoc(doc(db, "users", user.uid), {
-        balanceUSD: userData.balanceUSD - amt,
-        pendingUSD: (userData.pendingUSD || 0) + amt,
+        pendingUSD: (data.pendingUSD || 0) + amount,
+        balanceUSD: (data.balanceUSD || 0) - amount,
+        withdrawals: arrayUnion({
+          amount: amount,
+          netAmount: netAmount.toFixed(2),
+          paypalEmail,
+          status: "pending",
+          createdAt: Timestamp.now(),
+        }),
       });
 
-      setShowWithdraw(false);
-      setAmount("");
+      setSuccess(`Withdrawal request of $${amount} submitted. Pending approval.`);
+      setWithdrawAmount("");
       setPaypalEmail("");
-      window.location.reload();
+
+      // Refresh data
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (snap.exists()) setData(snap.data());
     } catch (err) {
+      console.error(err);
       setError("Withdrawal failed. Try again.");
     }
-
-    setLoading(false);
   };
 
-  if (!userData) return <div className="wallet">Loading...</div>;
+  if (loading) return <div className="wallet loading">Loading Wallet...</div>;
+  if (!data) return <div className="wallet error">Failed to load wallet.</div>;
 
   return (
     <div className="wallet">
-      <header className="wallet-header">
-        <button onClick={() => navigate("/dashboard")}>← Back</button>
-        <h2>Wallet</h2>
-      </header>
+      <h2>My Wallet 💰</h2>
 
-      <div className="wallet-cards">
-        <div className="card">
-          <p>Available Balance</p>
-          <h1>${userData.balanceUSD.toFixed(2)}</h1>
-        </div>
+      {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
 
-        <div className="card">
-          <p>Pending Withdrawals</p>
-          <h1>${(userData.pendingUSD || 0).toFixed(2)}</h1>
-        </div>
+      <div className="wallet-balance">
+        <p>Available Balance:</p>
+        <h1>${(data.balanceUSD || 0).toFixed(2)}</h1>
+        <p>Pending: ${(data.pendingUSD || 0).toFixed(2)}</p>
       </div>
 
-      <button className="withdraw-btn" onClick={() => setShowWithdraw(true)}>
-        Withdraw via PayPal
-      </button>
+      <div className="withdraw-card">
+        <h3>Withdraw via PayPal</h3>
+        <input
+          type="email"
+          placeholder="Your PayPal Email"
+          value={paypalEmail}
+          onChange={(e) => setPaypalEmail(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Amount in USD"
+          value={withdrawAmount}
+          onChange={(e) => setWithdrawAmount(e.target.value)}
+        />
+        <button onClick={handleWithdraw}>Request Withdrawal</button>
+        <p className="info">
+          Minimum withdrawal $2. Fee 15%. Pending approval will be processed within 24 hrs.
+        </p>
+      </div>
 
-      {/* MODAL */}
-      {showWithdraw && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>PayPal Withdrawal</h3>
-
-            {error && <p className="error">{error}</p>}
-
-            <input
-              placeholder="PayPal Email"
-              value={paypalEmail}
-              onChange={e => setPaypalEmail(e.target.value)}
-            />
-
-            <input
-              type="number"
-              placeholder="Amount ($)"
-              value={amount}
-              onChange={e => setAmount(e.target.value)}
-            />
-
-            <p className="fee">
-              Fee (15%): ${(amount * FEE_RATE || 0).toFixed(2)} <br />
-              You receive: ${(amount - amount * FEE_RATE || 0).toFixed(2)}
-            </p>
-
-            <button onClick={handleWithdraw} disabled={loading}>
-              {loading ? "Processing..." : "Confirm Withdrawal"}
-            </button>
-
-            <button className="cancel" onClick={() => setShowWithdraw(false)}>
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
-      <section className="history">
+      <div className="withdraw-history">
         <h3>Withdrawal History</h3>
-
-        {withdrawals.length === 0 && <p>No withdrawals yet.</p>}
-
-        {withdrawals.map(w => (
-          <div key={w.id} className={`history-item ${w.status}`}>
-            <div>
-              <strong>${w.amount}</strong> → ${w.netAmount}
-            </div>
-            <span>{w.status.toUpperCase()}</span>
-          </div>
-        ))}
-      </section>
+        {data.withdrawals && data.withdrawals.length > 0 ? (
+          <ul>
+            {data.withdrawals
+              .slice()
+              .reverse()
+              .map((w, idx) => (
+                <li key={idx}>
+                  <p>
+                    <strong>Amount:</strong> ${w.amount} | <strong>Net:</strong> $
+                    {w.netAmount} | <strong>Email:</strong> {w.paypalEmail}
+                  </p>
+                  <p>
+                    <strong>Status:</strong>{" "}
+                    {w.status === "pending"
+                      ? "Pending"
+                      : w.status === "approved"
+                      ? "Approved"
+                      : "Paid"}
+                  </p>
+                  <p>
+                    <strong>Date:</strong>{" "}
+                    {w.createdAt.toDate
+                      ? w.createdAt.toDate().toLocaleString()
+                      : new Date(w.createdAt.seconds * 1000).toLocaleString()}
+                  </p>
+                </li>
+              ))}
+          </ul>
+        ) : (
+          <p>No withdrawals yet.</p>
+        )}
+      </div>
 
       <footer className="wallet-footer">
         © 2026 StuHustle · Powered by PECO Industries
