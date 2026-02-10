@@ -83,12 +83,10 @@ function Dashboard() {
           <button>Sponsored Campaigns</button>
         </section>
 
-        <section>
-          <h4>Wallet</h4>
-          {/* ✅ ADDED: single wallet button as requested */}
-          <button>Wallet</button>
-        </section>
-
+       <section>
+  <h4>Wallet</h4>
+  <button onClick={() => navigate("/wallet")}>Wallet</button>
+</section>
         <section>
           <h4>Account</h4>
           <button>Profile</button>

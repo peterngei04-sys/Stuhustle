@@ -1,0 +1,145 @@
+.wallet {
+  min-height: 100vh;
+  background: #0b0f1a;
+  color: #fff;
+  padding: 16px;
+}
+
+.wallet-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wallet-header button {
+  background: none;
+  border: none;
+  color: #7aa2ff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.wallet-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.card {
+  background: #12172a;
+  padding: 18px;
+  border-radius: 14px;
+}
+
+.card.pending {
+  background: #1a1f3c;
+}
+
+.withdraw-section {
+  margin-top: 26px;
+}
+
+.paypal-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #003087;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.paypal-btn img {
+  width: 22px;
+}
+
+.rules {
+  font-size: 13px;
+  color: #aaa;
+  margin-top: 6px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: #12172a;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 14px;
+}
+
+.modal input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+.calc {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.receive {
+  color: #00ffae;
+  font-weight: bold;
+}
+
+.confirm {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  background: linear-gradient(135deg, #5b7cfa, #8f6bff);
+  border: none;
+  border-radius: 8px;
+  color: white;
+}
+
+.cancel {
+  width: 100%;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: #aaa;
+}
+
+.history {
+  margin-top: 28px;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  background: #12172a;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.history-item .pending {
+  color: orange;
+}
+
+.history-item .paid {
+  color: #00ffae;
+}
+
+.wallet-footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 13px;
+  color: #777;
+}

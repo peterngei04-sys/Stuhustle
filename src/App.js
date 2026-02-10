@@ -3,6 +3,7 @@ import Splash from "./pages/Splash";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import Wallet from "./pages/Wallet"; // ✅ ADDED
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -23,6 +24,16 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ✅ Protected Wallet */}
+        <Route
+          path="/wallet"
+          element={
+            <ProtectedRoute>
+              <Wallet />
             </ProtectedRoute>
           }
         />
