@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { doc, getDoc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
+import { useNavigate } from "react-router-dom"; // ✅ ADDED
 import "../styles/wallet.css";
 
 function Wallet() {
   const user = auth.currentUser;
+  const navigate = useNavigate(); // ✅ ADDED
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [paypalEmail, setPaypalEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  // ✅ ADDED (menu state)
+  const [menuOpen, setMenuOpen] = useState(false);
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const closeMenu = () => setMenuOpen(false);
 
   useEffect(() => {
     if (!user) return;
@@ -44,15 +52,13 @@ function Wallet() {
       return setError("You don't have enough balance.");
 
     try {
-      // Fee 15%
       const netAmount = amount * 0.85;
 
-      // Update user doc: pendingUSD and withdrawals array
       await updateDoc(doc(db, "users", user.uid), {
         pendingUSD: (data.pendingUSD || 0) + amount,
         balanceUSD: (data.balanceUSD || 0) - amount,
         withdrawals: arrayUnion({
-          amount: amount,
+          amount,
           netAmount: netAmount.toFixed(2),
           paypalEmail,
           status: "pending",
@@ -64,7 +70,6 @@ function Wallet() {
       setWithdrawAmount("");
       setPaypalEmail("");
 
-      // Refresh data
       const snap = await getDoc(doc(db, "users", user.uid));
       if (snap.exists()) setData(snap.data());
     } catch (err) {
@@ -78,6 +83,48 @@ function Wallet() {
 
   return (
     <div className="wallet">
+
+      {/* ✅ ADDED: TOP BAR */}
+      <header className="topbar">
+        <button className="hamburger" onClick={toggleMenu}>☰</button>
+        <h2>StuHustle</h2>
+      </header>
+
+      {/* ✅ ADDED: OVERLAY */}
+      {menuOpen && <div className="menu-overlay" onClick={closeMenu} />}
+
+      {/* ✅ ADDED: SIDE MENU */}
+      <aside className={`menu ${menuOpen ? "open" : ""}`}>
+        <section>
+          <h4>Earning Methods</h4>
+          <button>Offerwalls</button>
+          <button>Paid Tasks</button>
+          <button>Micro Jobs</button>
+          <button>Affiliate Marketing</button>
+          <button>Referrals</button>
+          <button>Freelancing Hub</button>
+          <button>Skill Gigs</button>
+          <button>Surveys</button>
+          <button>Sponsored Campaigns</button>
+        </section>
+
+        <section>
+          <h4>Wallet</h4>
+          <button onClick={() => navigate("/wallet")}>Wallet</button>
+        </section>
+
+        <section>
+          <h4>Account</h4>
+          <button>Profile</button>
+          <button>Security</button>
+          <button>Support</button>
+          <button className="logout" onClick={() => navigate("/login")}>
+            Logout
+          </button>
+        </section>
+      </aside>
+
+      {/* ===== EXISTING CONTENT (UNCHANGED) ===== */}
       <h2>My Wallet 💰</h2>
 
       {error && <p className="error">{error}</p>}

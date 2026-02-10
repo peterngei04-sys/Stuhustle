@@ -1,60 +1,110 @@
+/* ===== WALLET PAGE ===== */
 .wallet {
+  min-height: 100vh;
   padding: 20px;
-  max-width: 600px;
-  margin: auto;
+  background: #0f2027;
+  color: white;
   font-family: Arial, sans-serif;
 }
 
+/* Title */
 .wallet h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  color: #00c6ff;
 }
 
+/* Alerts */
+.wallet .error {
+  background: rgba(255, 107, 107, 0.15);
+  border-left: 4px solid #ff6b6b;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.wallet .success {
+  background: rgba(0, 198, 255, 0.15);
+  border-left: 4px solid #00c6ff;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+/* Balance Card */
 .wallet-balance {
-  background: #f1f1f1;
-  padding: 15px;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  padding: 20px;
+  border-radius: 15px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+}
+
+.wallet-balance p {
+  font-size: 0.85rem;
+  opacity: 0.9;
 }
 
 .wallet-balance h1 {
-  font-size: 2rem;
-  margin: 5px 0;
+  font-size: 2.2rem;
+  margin: 10px 0;
 }
 
+/* Withdraw Card */
 .withdraw-card {
-  background: #fff3e0;
+  background: #08151c;
   padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  border-radius: 14px;
+  margin-bottom: 25px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+
+.withdraw-card h3 {
+  margin-bottom: 15px;
+  color: #00c6ff;
 }
 
 .withdraw-card input {
-  display: block;
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+  padding: 12px;
+  margin-bottom: 12px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: none;
+  background: #203a43;
+  color: white;
+  outline: none;
+}
+
+.withdraw-card input::placeholder {
+  color: #b5c6cf;
 }
 
 .withdraw-card button {
-  padding: 10px 20px;
-  background: #ff9900;
-  color: white;
+  width: 100%;
+  padding: 14px;
+  background: #00c6ff;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-weight: bold;
   cursor: pointer;
+  color: #000;
+  transition: background 0.2s ease;
 }
 
 .withdraw-card button:hover {
-  background: #e68a00;
+  background: #00b0e6;
 }
 
-.info {
-  font-size: 0.9rem;
-  color: #555;
+.withdraw-card .info {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+
+/* Withdrawal History */
+.withdraw-history h3 {
+  margin-bottom: 15px;
+  color: #e5e7eb;
 }
 
 .withdraw-history ul {
@@ -63,25 +113,94 @@
 }
 
 .withdraw-history li {
-  background: #f9f9f9;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
+  background: #08151c;
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border-left: 4px solid #00c6ff;
 }
 
-.error {
-  color: red;
-  text-align: center;
+.withdraw-history p {
+  font-size: 0.85rem;
+  margin: 4px 0;
+  color: #e5e7eb;
 }
 
-.success {
-  color: green;
-  text-align: center;
-}
-
+/* Footer */
 .wallet-footer {
+  margin-top: 40px;
   text-align: center;
-  margin-top: 30px;
-  font-size: 0.8rem;
-  color: #888;
+  font-size: 0.75rem;
+  color: #94a3b8;
 }
+/* ===== TOP BAR ===== */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #08151c;
+  color: white;
+}
+
+.hamburger {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* ===== OVERLAY ===== */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 90;
+}
+
+/* ===== SIDE MENU ===== */
+.menu {
+  position: fixed;
+  top: 0;
+  left: -270px;
+  width: 260px;
+  height: 100vh;
+  background: #0b1c26;
+  padding: 1rem;
+  overflow-y: auto;
+  z-index: 100;
+  transition: left 0.3s ease;
+}
+
+.menu.open {
+  left: 0;
+}
+
+.menu section h4 {
+  margin-bottom: 10px;
+  color: #00c6ff;
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #203a43;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu button:hover {
+  background: #00c6ff;
+  color: #000;
+}
+
+.logout {
+  background: #ff6b6b !important;
+}
+
