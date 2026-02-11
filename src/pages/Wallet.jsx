@@ -1,21 +1,31 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { doc, getDoc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
-import { useNavigate } from "react-router-dom"; // ✅ ADDED
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  Timestamp,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 import "../styles/wallet.css";
 
 function Wallet() {
   const user = auth.currentUser;
-  const navigate = useNavigate(); // ✅ ADDED
+  const navigate = useNavigate();
 
   const [data, setData] = useState(null);
+  const [withdrawals, setWithdrawals] = useState([]); // ✅ NEW
   const [loading, setLoading] = useState(true);
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [paypalEmail, setPaypalEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // ✅ ADDED (menu state)
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
@@ -25,10 +35,26 @@ function Wallet() {
 
     const loadUserData = async () => {
       try {
+        // Load user data
         const snap = await getDoc(doc(db, "users", user.uid));
         if (snap.exists()) {
           setData(snap.data());
         }
+
+        // ✅ Load withdrawals from collection
+        const q = query(
+          collection(db, "withdrawals"),
+          where("userId", "==", user.uid)
+        );
+
+        const withdrawSnap = await getDocs(q);
+        const withdrawList = withdrawSnap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setWithdrawals(withdrawList);
+
       } catch (err) {
         console.error("Failed to load wallet data", err);
       } finally {
@@ -54,24 +80,42 @@ function Wallet() {
     try {
       const netAmount = amount * 0.85;
 
+      // ✅ 1. Create withdrawal document
+      await addDoc(collection(db, "withdrawals"), {
+        userId: user.uid,
+        username: data.username,
+        amount,
+        netAmount: netAmount.toFixed(2),
+        paypalEmail,
+        status: "pending",
+        createdAt: Timestamp.now(),
+      });
+
+      // ✅ 2. Update user balances
       await updateDoc(doc(db, "users", user.uid), {
         pendingUSD: (data.pendingUSD || 0) + amount,
         balanceUSD: (data.balanceUSD || 0) - amount,
-        withdrawals: arrayUnion({
-          amount,
-          netAmount: netAmount.toFixed(2),
-          paypalEmail,
-          status: "pending",
-          createdAt: Timestamp.now(),
-        }),
       });
 
       setSuccess(`Withdrawal request of $${amount} submitted. Pending approval.`);
       setWithdrawAmount("");
       setPaypalEmail("");
 
+      // Refresh
       const snap = await getDoc(doc(db, "users", user.uid));
       if (snap.exists()) setData(snap.data());
+
+      const q = query(
+        collection(db, "withdrawals"),
+        where("userId", "==", user.uid)
+      );
+      const withdrawSnap = await getDocs(q);
+      const withdrawList = withdrawSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setWithdrawals(withdrawList);
+
     } catch (err) {
       console.error(err);
       setError("Withdrawal failed. Try again.");
@@ -84,16 +128,14 @@ function Wallet() {
   return (
     <div className="wallet">
 
-      {/* ✅ ADDED: TOP BAR */}
+      {/* TOP BAR */}
       <header className="topbar">
         <button className="hamburger" onClick={toggleMenu}>☰</button>
         <h2>StuHustle</h2>
       </header>
 
-      {/* ✅ ADDED: OVERLAY */}
       {menuOpen && <div className="menu-overlay" onClick={closeMenu} />}
 
-      {/* ✅ ADDED: SIDE MENU */}
       <aside className={`menu ${menuOpen ? "open" : ""}`}>
         <section>
           <h4>Earning Methods</h4>
@@ -124,7 +166,6 @@ function Wallet() {
         </section>
       </aside>
 
-      {/* ===== EXISTING CONTENT (UNCHANGED) ===== */}
       <h2>My Wallet 💰</h2>
 
       {error && <p className="error">{error}</p>}
@@ -152,36 +193,30 @@ function Wallet() {
         />
         <button onClick={handleWithdraw}>Request Withdrawal</button>
         <p className="info">
-          Minimum withdrawal $2. Fee 15%. Pending approval will be processed within 24 hrs.
+          Minimum withdrawal $2. Fee 15%. Pending approval within 24 hrs.
         </p>
       </div>
 
       <div className="withdraw-history">
         <h3>Withdrawal History</h3>
-        {data.withdrawals && data.withdrawals.length > 0 ? (
+        {withdrawals.length > 0 ? (
           <ul>
-            {data.withdrawals
+            {withdrawals
               .slice()
-              .reverse()
-              .map((w, idx) => (
-                <li key={idx}>
+              .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
+              .map((w) => (
+                <li key={w.id}>
                   <p>
-                    <strong>Amount:</strong> ${w.amount} | <strong>Net:</strong> $
-                    {w.netAmount} | <strong>Email:</strong> {w.paypalEmail}
+                    <strong>Amount:</strong> ${w.amount} | 
+                    <strong> Net:</strong> ${w.netAmount} | 
+                    <strong> Email:</strong> {w.paypalEmail}
                   </p>
                   <p>
-                    <strong>Status:</strong>{" "}
-                    {w.status === "pending"
-                      ? "Pending"
-                      : w.status === "approved"
-                      ? "Approved"
-                      : "Paid"}
+                    <strong>Status:</strong> {w.status}
                   </p>
                   <p>
                     <strong>Date:</strong>{" "}
-                    {w.createdAt.toDate
-                      ? w.createdAt.toDate().toLocaleString()
-                      : new Date(w.createdAt.seconds * 1000).toLocaleString()}
+                    {w.createdAt?.toDate().toLocaleString()}
                   </p>
                 </li>
               ))}
