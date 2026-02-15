@@ -161,7 +161,7 @@ function Wallet() {
   Profile
 </button>
           <button onClick={() => navigate("/security")}>Security</button>
-          <button>Support</button>
+          <button onClick={() => navigate("/support")}>Support</button>
           <button className="logout" onClick={() => navigate("/login")}>
             Logout
           </button>

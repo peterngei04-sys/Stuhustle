@@ -72,6 +72,7 @@ function Profile() {
         <section>
           <h4>Account</h4>
           <button onClick={() => navigate("/profile")}>Profile</button>
+          <button onClick={() => navigate("/support")}>Support</button>
           <button onClick={() => navigate("/security")}>Security</button>
           <button className="logout" onClick={handleLogout}>Logout</button>
         </section>

@@ -1,0 +1,87 @@
+.support {
+  min-height: 100vh;
+  background: #0f2027;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* Layout */
+.support-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  padding: 40px 20px;
+  justify-content: center;
+}
+
+/* Cards */
+.support-card {
+  background: #08151c;
+  padding: 30px;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+.support-card h3 {
+  margin-bottom: 15px;
+}
+
+/* Info card */
+.contact-box {
+  background: #203a43;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.contact-box span {
+  color: #94a3b8;
+}
+
+/* Form */
+.support-card label {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+
+.support-card input,
+.support-card textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: none;
+  background: #203a43;
+  color: white;
+}
+
+.support-card textarea {
+  resize: none;
+}
+
+.support-card button {
+  width: 100%;
+  padding: 14px;
+  background: #00c6ff;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  color: black;
+}
+
+.support-card button:hover {
+  background: #00b0e6;
+}
+
+.success {
+  background: rgba(0,255,170,0.15);
+  border-left: 4px solid #00ffaa;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 0.85rem;
+}
