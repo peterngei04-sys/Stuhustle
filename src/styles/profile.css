@@ -164,3 +164,25 @@
   font-size: 0.75rem;
   color: #94a3b8;
 }
+.account-badges {
+  margin: 10px 0 20px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  margin: 4px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.role {
+  background: rgba(0,198,255,0.2);
+  color: #00c6ff;
+}
+
+.status {
+  background: rgba(0,255,170,0.2);
+  color: #00ffaa;
+}

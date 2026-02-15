@@ -157,8 +157,10 @@ function Wallet() {
 
         <section>
           <h4>Account</h4>
-          <button>Profile</button>
-          <button>Security</button>
+          <button onClick={() => navigate("/profile")}>
+  Profile
+</button>
+          <button onClick={() => navigate("/security")}>Security</button>
           <button>Support</button>
           <button className="logout" onClick={() => navigate("/login")}>
             Logout

@@ -5,6 +5,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Wallet from "./pages/Wallet";
 import Profile from "./pages/Profile"; // ✅ ADDED
+import Security from "./pages/Security";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -20,7 +21,13 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
-
+<Route path="/security"
+  element={
+    <ProtectedRoute>
+      <Security />
+    </ProtectedRoute>
+  }
+/>
         {/* Protected Dashboard */}
         <Route
           path="/dashboard"

@@ -21,16 +21,11 @@ function Profile() {
     if (!user) return;
 
     const loadUser = async () => {
-      try {
-        const snap = await getDoc(doc(db, "users", user.uid));
-        if (snap.exists()) {
-          setData(snap.data());
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (snap.exists()) {
+        setData(snap.data());
       }
+      setLoading(false);
     };
 
     loadUser();
@@ -42,25 +37,21 @@ function Profile() {
   };
 
   const handleSave = async () => {
-    try {
-      await updateDoc(doc(db, "users", user.uid), {
-        username: data.username,
-      });
-      setSuccess("Profile updated successfully.");
-    } catch (err) {
-      console.error(err);
-    }
+    await updateDoc(doc(db, "users", user.uid), {
+      username: data.username,
+    });
+    setSuccess("Profile updated successfully.");
+    setTimeout(() => setSuccess(""), 3000);
   };
 
   if (loading) return <div className="profile loading">Loading...</div>;
   if (!data) return <div className="profile error">Failed to load profile.</div>;
 
-  const firstLetter = data.username
-    ? data.username.charAt(0).toUpperCase()
-    : "U";
+  const firstLetter = data.username?.charAt(0).toUpperCase() || "U";
 
   return (
     <div className="profile">
+
       {/* TOPBAR */}
       <header className="topbar">
         <button className="hamburger" onClick={toggleMenu}>☰</button>
@@ -71,38 +62,20 @@ function Profile() {
 
       {/* SIDE MENU */}
       <aside className={`menu ${menuOpen ? "open" : ""}`}>
-<section>
-  <h4>Dashboard</h4>
-  <button onClick={() => navigate("/dashboard")}>
-    Dashboard
-  </button>
-</section>
 
         <section>
-          <h4>Earning Methods</h4>
-          <button>Offerwalls</button>
-          <button>Paid Tasks</button>
-          <button>Micro Jobs</button>
-          <button>Affiliate Marketing</button>
-          <button>Referrals</button>
-          <button>Freelancing Hub</button>
-          <button>Skill Gigs</button>
-          <button>Surveys</button>
-          <button>Sponsored Campaigns</button>
-        </section>
-
-        <section>
-          <h4>Wallet</h4>
+          <h4>Main</h4>
+          <button onClick={() => navigate("/dashboard")}>Dashboard</button>
           <button onClick={() => navigate("/wallet")}>Wallet</button>
         </section>
 
         <section>
           <h4>Account</h4>
           <button onClick={() => navigate("/profile")}>Profile</button>
-          <button>Security</button>
-          <button>Support</button>
+          <button onClick={() => navigate("/security")}>Security</button>
           <button className="logout" onClick={handleLogout}>Logout</button>
         </section>
+
       </aside>
 
       {/* MAIN */}
@@ -110,13 +83,15 @@ function Profile() {
 
         <div className="profile-card">
 
-          {/* Avatar */}
-          <div className="avatar">
-            {firstLetter}
-          </div>
+          <div className="avatar">{firstLetter}</div>
 
           <h3>{data.username}</h3>
           <p className="email">{user.email}</p>
+
+          <div className="account-badges">
+            <span className="badge role">{data.role || "User"}</span>
+            <span className="badge status">{data.accountStatus || "Active"}</span>
+          </div>
 
           {success && <p className="success">{success}</p>}
 
@@ -133,10 +108,10 @@ function Profile() {
             <label>Email</label>
             <input type="email" value={user.email} disabled />
 
-            <label>Account Status</label>
+            <label>Account Created</label>
             <input
               type="text"
-              value={data.accountStatus || "active"}
+              value={data.createdAt?.toDate().toLocaleDateString() || "N/A"}
               disabled
             />
 
