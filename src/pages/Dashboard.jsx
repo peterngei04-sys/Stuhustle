@@ -87,10 +87,13 @@ function Dashboard() {
   <h4>Wallet</h4>
   <button onClick={() => navigate("/wallet")}>Wallet</button>
 </section>
+         
         <section>
           <h4>Account</h4>
-          <button>Profile</button>
-          <button>Security</button>
+<button onClick={() => navigate("/profile")}>
+  Profile
+</button>         
+ <button>Security</button>
           <button>Support</button>
           <button className="logout" onClick={handleLogout}>Logout</button>
         </section>

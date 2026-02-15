@@ -71,6 +71,13 @@ function Profile() {
 
       {/* SIDE MENU */}
       <aside className={`menu ${menuOpen ? "open" : ""}`}>
+<section>
+  <h4>Dashboard</h4>
+  <button onClick={() => navigate("/dashboard")}>
+    Dashboard
+  </button>
+</section>
+
         <section>
           <h4>Earning Methods</h4>
           <button>Offerwalls</button>
