@@ -3,7 +3,8 @@ import Splash from "./pages/Splash";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
-import Wallet from "./pages/Wallet"; // ✅ ADDED
+import Wallet from "./pages/Wallet";
+import Profile from "./pages/Profile"; // ✅ ADDED
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -12,6 +13,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* Public Routes */}
         <Route path="/" element={<Splash />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
@@ -28,7 +31,7 @@ function App() {
           }
         />
 
-        {/* ✅ Protected Wallet */}
+        {/* Protected Wallet */}
         <Route
           path="/wallet"
           element={
@@ -37,6 +40,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* ✅ Protected Profile */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   );

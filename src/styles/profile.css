@@ -1,0 +1,166 @@
+.profile {
+  min-height: 100vh;
+  background: #0f2027;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* TOPBAR reused style */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #08151c;
+}
+
+.hamburger {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* MENU (uniform with wallet & dashboard) */
+.menu {
+  position: fixed;
+  top: 0;
+  left: -270px;
+  width: 260px;
+  height: 100vh;
+  background: #0b1c26;
+  padding: 1rem;
+  overflow-y: auto;
+  z-index: 100;
+  transition: left 0.3s ease;
+}
+
+.menu.open {
+  left: 0;
+}
+
+.menu section h4 {
+  margin-bottom: 10px;
+  color: #00c6ff;
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #203a43;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu button:hover {
+  background: #00c6ff;
+  color: #000;
+}
+
+.logout {
+  background: #ff6b6b !important;
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+}
+
+/* MAIN CONTENT */
+.profile-content {
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-card {
+  background: #08151c;
+  padding: 30px;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+/* Avatar */
+.avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0 auto 15px;
+}
+
+.profile-card h3 {
+  margin-bottom: 5px;
+}
+
+.email {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  margin-bottom: 15px;
+}
+
+.success {
+  background: rgba(0,198,255,0.15);
+  border-left: 4px solid #00c6ff;
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+/* FORM */
+.profile-form {
+  text-align: left;
+  margin-top: 15px;
+}
+
+.profile-form label {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+
+.profile-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #203a43;
+  color: white;
+}
+
+.profile-form button {
+  width: 100%;
+  padding: 14px;
+  background: #00c6ff;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+}
+
+.profile-form button:hover {
+  background: #00b0e6;
+}
+
+.profile-footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
