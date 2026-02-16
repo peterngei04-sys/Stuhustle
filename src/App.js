@@ -3,6 +3,7 @@ import Splash from "./pages/Splash";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import Referral from "./pages/Referral";
 import Wallet from "./pages/Wallet";
 import Profile from "./pages/Profile"; // ✅ ADDED
 import Support from "./pages/Support";
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<Splash />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/referral" element={<Referral />} />
          <Route path="/privacy" element={<Privacy />} />
 <Route path="/support" element={
     <ProtectedRoute>

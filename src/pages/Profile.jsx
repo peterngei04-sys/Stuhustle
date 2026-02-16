@@ -70,6 +70,8 @@ function Profile() {
         </section>
 
         <section>
+          <h4>Earning Options<h4>
+          <button onClick={() => navigate("/referral")}>Referrals</button>
           <h4>Account</h4>
           <button onClick={() => navigate("/profile")}>Profile</button>
           <button onClick={() => navigate("/support")}>Support</button>

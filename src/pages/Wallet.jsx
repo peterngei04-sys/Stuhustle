@@ -143,7 +143,7 @@ function Wallet() {
           <button>Paid Tasks</button>
           <button>Micro Jobs</button>
           <button>Affiliate Marketing</button>
-          <button>Referrals</button>
+<button onClick={() => navigate("/referral")}>Referrals</button>
           <button>Freelancing Hub</button>
           <button>Skill Gigs</button>
           <button>Surveys</button>

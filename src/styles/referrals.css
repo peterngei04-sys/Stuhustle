@@ -1,0 +1,141 @@
+.referral {
+  min-height: 100vh;
+  background: #0f2027;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* TOPBAR */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #08151c;
+}
+
+.hamburger {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* MENU */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 90;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: -270px;
+  width: 260px;
+  height: 100vh;
+  background: #0b1c26;
+  padding: 1rem;
+  overflow-y: auto;
+  z-index: 100;
+  transition: left 0.3s ease;
+  visibility: hidden;
+}
+
+.menu.open {
+  left: 0;
+  visibility: visible;
+}
+
+.menu section h4 {
+  margin-bottom: 10px;
+  color: #00c6ff;
+}
+
+.menu button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #203a43;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu button:hover {
+  background: #00c6ff;
+  color: black;
+}
+
+.logout {
+  background: #ff6b6b !important;
+}
+
+/* MAIN CONTENT */
+.content {
+  padding: 20px;
+}
+
+/* REFERRAL CARD */
+.ref-card {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.ref-card h1 {
+  margin: 10px 0;
+}
+
+/* CLAIM CARD */
+.claim-card {
+  margin-top: 25px;
+  background: #08151c;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.claim-card form {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.claim-card input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+}
+
+.primary {
+  padding: 12px 18px;
+  background: #00c6ff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.primary:hover {
+  background: #0095cc;
+}
+
+.message {
+  margin-top: 15px;
+  color: #00ffcc;
+}
+
+/* FOOTER */
+.dashboard-footer {
+  text-align: center;
+  padding: 15px;
+  margin-top: 40px;
+  opacity: 0.7;
+}
