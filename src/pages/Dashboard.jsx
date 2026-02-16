@@ -74,6 +74,7 @@ function Dashboard() {
           <h4>Earning Methods</h4>
           <button>Offerwalls</button>
           <button>Paid Tasks</button>
+
           <button>Micro Jobs</button>
           <button>Affiliate Marketing</button>
          <button onClick={() => navigate("/referral")}>Referrals</button>

@@ -11,8 +11,8 @@ import {
 } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import "../styles/referral.css";
-
+import "../styles/referrals.css";
+                          
 function Referral() {
   const navigate = useNavigate();
   const user = auth.currentUser;
