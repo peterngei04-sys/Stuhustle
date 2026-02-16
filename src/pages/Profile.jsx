@@ -67,10 +67,10 @@ function Profile() {
           <h4>Main</h4>
           <button onClick={() => navigate("/dashboard")}>Dashboard</button>
           <button onClick={() => navigate("/wallet")}>Wallet</button>
-        </section>
-
+        </section> 
+                                        
         <section>
-          <h4>Earning Options<h4>
+          <h4>Earning Options</h4>
           <button onClick={() => navigate("/referral")}>Referrals</button>
           <h4>Account</h4>
           <button onClick={() => navigate("/profile")}>Profile</button>
