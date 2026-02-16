@@ -46,7 +46,7 @@ function Signup() {
     confirmPassword: "",
     country: "",
     gender: "",
-    referralInput: "", // ✅ ADDED
+    referralInput: "", // ✅ referral input
     agree: false
   });
 
@@ -86,7 +86,7 @@ function Signup() {
     }
   };
 
-  // ✅ ADDED: referral existence check
+  // ✅ referral check
   const checkReferralExists = async (code) => {
     if (!code) return null;
     const q = query(collection(db, "users"), where("referralCode", "==", code));
@@ -108,13 +108,20 @@ function Signup() {
     try {
       let referredByUid = null;
 
-      // ✅ ADDED: referral validation
       if (form.referralInput) {
         const refUser = await checkReferralExists(form.referralInput);
+
         if (!refUser) {
           setLoading(false);
           return setError("Referral code does not exist.");
         }
+
+        // Prevent self-referral
+        if (refUser.data().username === form.username) {
+          setLoading(false);
+          return setError("You cannot use your own referral code.");
+        }
+
         referredByUid = refUser.id;
       }
 
@@ -136,23 +143,23 @@ function Signup() {
         isBanned: false,
         banReason: null,
 
-        // 💰 Wallet
         balanceUSD: 0,
-        pendingUSD: 0, // ✅ ADDED
-        totalEarnedUSD: 0, // ✅ ADDED
+        pendingUSD: 0,
+        totalEarnedUSD: 0,
         totalWithdrawnUSD: 0,
 
-        // 🎯 Points
-        pointsPending: 0, // ✅ ADDED
-        pointsApproved: 0, // ✅ ADDED
+        pointsPending: 0,
+        pointsApproved: 0,
 
-        // 📊 Tracking
-        referrals: 0, // ✅ ADDED
-        tasksCompleted: 0, // ✅ ADDED
+        referrals: 0,
+        tasksCompleted: 0,
 
-        // 🔗 Referral system
+        // referral system
         referralCode: form.username + "_" + userCred.user.uid.slice(0, 6),
         referredBy: referredByUid,
+        referralVerified: false, // added
+        referralQualified: false, // added
+        referralRewardGiven: false, // added
 
         createdAt: new Date()
       });
@@ -197,7 +204,6 @@ function Signup() {
           <option value="Other">Other</option>
         </select>
 
-        {/* ✅ ADDED */}
         <input
           name="referralInput"
           placeholder="Referral code (optional)"
