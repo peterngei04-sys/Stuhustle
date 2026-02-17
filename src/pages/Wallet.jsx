@@ -36,8 +36,23 @@ function Wallet() {
         setWithdrawals(withdrawList);
 
         // Load referral rewards and pending points
-       const snap = await getDoc(doc(db, "users", user.uid));
-if (snap.exists()) setData(snap.data());
+      useEffect(() => {
+  const loadData = async () => {
+    if (!user) return;
+
+    try {
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+
+      if (userDoc.exists()) {
+        setData(userDoc.data());
+      }
+    } catch (error) {
+      console.error("Error loading wallet:", error);
+    }
+  };
+
+  loadData();
+}, [user]);
       } catch (err) {
         console.error("Failed to load wallet data", err);
       } finally {
