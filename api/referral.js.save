@@ -63,15 +63,26 @@ export default async function handler(req, res) {
     const referrerRef = referrerDoc.ref;
 
     await db.runTransaction(async (transaction) => {
-transaction.update(referrerRef, {
-  pointsApproved: admin.firestore.FieldValue.increment(10),
-  referrals: admin.firestore.FieldValue.increment(1),
-});
-transaction.update(userRef, {
-  pointsApproved: admin.firestore.FieldValue.increment(10),
-  referredBy: referrerRef.id,
-});
- });
+
+      transaction.update(referrerRef, {
+        points: admin.firestore.FieldValue.increment(10),
+        referralCount: admin.firestore.FieldValue.increment(1),
+        referralEarnings: admin.firestore.FieldValue.increment(10),
+      });
+
+      transaction.update(userRef, {
+        points: admin.firestore.FieldValue.increment(10),
+        referredBy: referrerRef.id,
+      });
+
+      const claimRef = db.collection("referralClaims").doc();
+      transaction.set(claimRef, {
+        referrerId: referrerRef.id,
+        referredUserId: userId,
+        reward: 10,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    });
 
     return res.status(200).json({ message: "Referral successful" });
   } catch (error) {
