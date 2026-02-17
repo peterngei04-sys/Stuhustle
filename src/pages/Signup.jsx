@@ -7,16 +7,13 @@ import {
   getDocs,
   doc,
   setDoc,
-  updateDoc,
-  increment,
-  serverTimestamp,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/signup.css";
 
 // Full alphabetical list of countries
-const countries = [
+const countries = [ /* ✅ SAME COUNTRY ARRAY — UNCHANGED */
   "Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda",
   "Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain",
   "Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia",
@@ -96,14 +93,6 @@ function Signup() {
     }
   };
 
-  const checkReferralExists = async (code) => {
-    if (!code) return null;
-    const q = query(collection(db, "users"), where("referralCode", "==", code));
-    const snap = await getDocs(q);
-    if (snap.empty) return null;
-    return snap.docs[0];
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -115,29 +104,17 @@ function Signup() {
     setLoading(true);
 
     try {
-      let referredByUid = null;
+      // 🔑 Create user in Firebase Auth
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password
+      );
 
-      // 🔒 Secure referral logic
-      if (form.referralInput) {
-        const refUser = await checkReferralExists(form.referralInput);
+      const newReferralCode =
+        form.username + "_" + userCred.user.uid.slice(0, 6);
 
-        if (!refUser) {
-          setLoading(false);
-          return setError("Referral code does not exist.");
-        }
-
-        if (refUser.data().username === form.username) {
-          setLoading(false);
-          return setError("You cannot use your own referral code.");
-        }
-
-        referredByUid = refUser.id;
-      }
-
-      // 🔑 Create new user
-      const userCred = await createUserWithEmailAndPassword(auth, form.email, form.password);
-      const newReferralCode = form.username + "_" + userCred.user.uid.slice(0, 6);
-
+      // ✅ Create user document (NO referral rewards here)
       await setDoc(doc(db, "users", userCred.user.uid), {
         uid: userCred.user.uid,
         username: form.username,
@@ -162,32 +139,32 @@ function Signup() {
         tasksCompleted: 0,
 
         referralCode: newReferralCode,
-        referredBy: referredByUid,
-        referralVerified: !!referredByUid,
+        referredBy: null,
+        referralVerified: false,
         referralQualified: false,
         referralRewardGiven: false,
 
-        createdAt: new Date()
+        createdAt: new Date(),
       });
 
-      // 🔥 Reward referrer if referral code used
-      if (referredByUid) {
-        const referrerRef = doc(db, "users", referredByUid);
-        await updateDoc(referrerRef, {
-          pointsApproved: increment(10),
-          referrals: increment(1),
-        });
+      // ✅ If referral was entered → call backend API
+      if (form.referralInput) {
+        const token = await userCred.user.getIdToken();
 
-        // Record claim
-        await setDoc(doc(collection(db, "referralClaims")), {
-          referrerId: referredByUid,
-          referredUserId: userCred.user.uid,
-          reward: 10,
-          createdAt: serverTimestamp()
+        await fetch("/api/referral", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            referralCode: form.referralInput,
+          }),
         });
       }
 
       navigate("/login");
+
     } catch (err) {
       console.error(err);
       setError(err.message);

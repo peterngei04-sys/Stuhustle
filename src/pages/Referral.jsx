@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 
-
-import { doc, getDoc, collection, query, where, getDocs, addDoc, updateDoc, Timestamp } from "firebase/firestore";
+import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -25,14 +24,21 @@ function Referral() {
 
     const loadUserData = async () => {
       try {
-        // Load current user
         const snap = await getDoc(doc(db, "users", user.uid));
         if (snap.exists()) setData(snap.data());
 
-        // Load users this user referred
-        const q = query(collection(db, "users"), where("referredBy", "==", snap.data().referralCode));
+        // ✅ FIXED: referredBy stores user.uid (not referralCode)
+        const q = query(
+          collection(db, "users"),
+          where("referredBy", "==", user.uid)
+        );
+
         const refSnap = await getDocs(q);
-        const list = refSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const list = refSnap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
         setReferralsList(list);
 
       } catch (err) {
@@ -58,6 +64,7 @@ function Referral() {
     setMessage("Referral code copied!");
   };
 
+  // ✅ FIXED: Now calls backend API instead of writing directly
   const handleClaimReferral = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -73,57 +80,58 @@ function Referral() {
     }
 
     try {
-      // Find the referrer
-      const q = query(collection(db, "users"), where("referralCode", "==", refCodeInput));
-      const refSnap = await getDocs(q);
+      const currentUser = auth.currentUser;
 
-      if (refSnap.empty) {
-        setMessage("Invalid referral code.");
+      if (!currentUser) {
+        setMessage("You must be logged in.");
         return;
       }
 
-      const referrerDoc = refSnap.docs[0];
-      const referrerData = referrerDoc.data();
+      const token = await currentUser.getIdToken();
 
-      if (data.referredBy) {
-        setMessage("You have already used a referral code.");
+      const response = await fetch("/api/referral", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          referralCode: refCodeInput,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setMessage(result.message || "Something went wrong.");
         return;
       }
 
-      // Update current user referredBy
-      await updateDoc(doc(db, "users", user.uid), {
-        referredBy: refCodeInput,
-        pointsApproved: (data.pointsApproved || 0) + 50 // reward points for using referral
-      });
-
-      // Update referrer points and referrals count
-      await updateDoc(doc(db, "users", referrerDoc.id), {
-        referrals: (referrerData.referrals || 0) + 1,
-        pointsApproved: (referrerData.pointsApproved || 0) + 50,
-      });
-
-      // Record the referral claim
-      await addDoc(collection(db, "referralClaims"), {
-        referrerId: referrerDoc.id,
-        referredId: user.uid,
-        reward: 50,
-        createdAt: Timestamp.now(),
-      });
-
-      // Refresh current user data
-      const updatedSnap = await getDoc(doc(db, "users", user.uid));
-      if (updatedSnap.exists()) setData(updatedSnap.data());
-      setRefCodeInput("");
       setMessage("Referral claimed successfully!");
+      setRefCodeInput("");
 
-      // Refresh referrals list
-      const q2 = query(collection(db, "users"), where("referredBy", "==", updatedSnap.data().referralCode));
+      // Reload user data
+      const updatedSnap = await getDoc(doc(db, "users", currentUser.uid));
+      if (updatedSnap.exists()) {
+        setData(updatedSnap.data());
+      }
+
+      // Reload referrals list
+      const q2 = query(
+        collection(db, "users"),
+        where("referredBy", "==", currentUser.uid)
+      );
+
       const newRefSnap = await getDocs(q2);
-      const list = newRefSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const list = newRefSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
       setReferralsList(list);
 
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       setMessage("Something went wrong. Try again.");
     }
   };
@@ -187,7 +195,11 @@ function Referral() {
               onChange={(e) => setRefCodeInput(e.target.value)}
               disabled={data.referredBy}
             />
-            <button type="submit" className="primary" disabled={data.referredBy}>
+            <button
+              type="submit"
+              className="primary"
+              disabled={data.referredBy}
+            >
               Submit
             </button>
           </form>
