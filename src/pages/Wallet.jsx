@@ -25,34 +25,21 @@ function Wallet() {
 
     const loadUserData = async () => {
       try {
-        // Load user data
-        const snap = await getDoc(doc(db, "users", user.uid));
-        if (snap.exists()) setData(snap.data());
+        // Load user data ONLY from users collection
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          setData(userDoc.data());
+        }
 
         // Load withdrawals
         const q = query(collection(db, "withdrawals"), where("userId", "==", user.uid));
         const withdrawSnap = await getDocs(q);
-        const withdrawList = withdrawSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const withdrawList = withdrawSnap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
         setWithdrawals(withdrawList);
 
-        // Load referral rewards and pending points
-      useEffect(() => {
-  const loadData = async () => {
-    if (!user) return;
-
-    try {
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-
-      if (userDoc.exists()) {
-        setData(userDoc.data());
-      }
-    } catch (error) {
-      console.error("Error loading wallet:", error);
-    }
-  };
-
-  loadData();
-}, [user]);
       } catch (err) {
         console.error("Failed to load wallet data", err);
       } finally {
@@ -95,13 +82,19 @@ function Wallet() {
       setWithdrawAmount("");
       setPaypalEmail("");
 
-      // Refresh data
-      const snap = await getDoc(doc(db, "users", user.uid));
-      if (snap.exists()) setData(snap.data());
+      // Refresh user data
+      const updatedUserDoc = await getDoc(doc(db, "users", user.uid));
+      if (updatedUserDoc.exists()) {
+        setData(updatedUserDoc.data());
+      }
 
+      // Refresh withdrawals
       const q = query(collection(db, "withdrawals"), where("userId", "==", user.uid));
       const withdrawSnap = await getDocs(q);
-      const withdrawList = withdrawSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const withdrawList = withdrawSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
       setWithdrawals(withdrawList);
 
     } catch (err) {
@@ -192,18 +185,24 @@ function Wallet() {
         <h3>Withdrawal History</h3>
         {withdrawals.length > 0 ? (
           <ul>
-            {withdrawals.slice().sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
+            {withdrawals
+              .slice()
+              .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
               .map((w) => (
                 <li key={w.id}>
                   <p>
-                    <strong>Amount:</strong> ${w.amount} | <strong>Net:</strong> ${w.netAmount} | <strong>Email:</strong> {w.paypalEmail}
+                    <strong>Amount:</strong> ${w.amount} |{" "}
+                    <strong>Net:</strong> ${w.netAmount} |{" "}
+                    <strong>Email:</strong> {w.paypalEmail}
                   </p>
                   <p><strong>Status:</strong> {w.status}</p>
                   <p><strong>Date:</strong> {w.createdAt?.toDate().toLocaleString()}</p>
                 </li>
               ))}
           </ul>
-        ) : <p>No withdrawals yet.</p>}
+        ) : (
+          <p>No withdrawals yet.</p>
+        )}
       </div>
 
       <footer className="wallet-footer">
