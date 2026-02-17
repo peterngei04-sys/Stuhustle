@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "../styles/dashboard.css";
@@ -21,9 +21,7 @@ function Dashboard() {
         const snap = await getDoc(doc(db, "users", user.uid));
         if (snap.exists()) {
           let userData = snap.data();
-
-          // Load referral stats
-      setData(userData);
+          setData(userData);
         }
       } catch (err) {
         console.error("Failed to load user data", err);
