@@ -1,16 +1,6 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  Timestamp,
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
+import { doc, getDoc, collection, query, where, getDocs, addDoc, updateDoc, Timestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import "../styles/wallet.css";
 

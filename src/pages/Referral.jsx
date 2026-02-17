@@ -1,16 +1,9 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import {
-  doc,
-  getDoc,
-  collection,
-  query,
-  where,
-  getDocs,
-  addDoc,
-  Timestamp,
-  updateDoc
-} from "firebase/firestore";
+
+
+import { doc, getDoc, collection, query, where, getDocs, addDoc, updateDoc, Timestamp } from "firebase/firestore";
+
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "../styles/referrals.css";
