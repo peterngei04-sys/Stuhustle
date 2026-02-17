@@ -19,7 +19,7 @@ function Wallet() {
   const navigate = useNavigate();
 
   const [data, setData] = useState(null);
-  const [withdrawals, setWithdrawals] = useState([]); // ✅ NEW
+  const [withdrawals, setWithdrawals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [paypalEmail, setPaypalEmail] = useState("");
@@ -37,23 +37,25 @@ function Wallet() {
       try {
         // Load user data
         const snap = await getDoc(doc(db, "users", user.uid));
-        if (snap.exists()) {
-          setData(snap.data());
-        }
+        if (snap.exists()) setData(snap.data());
 
-        // ✅ Load withdrawals from collection
-        const q = query(
-          collection(db, "withdrawals"),
-          where("userId", "==", user.uid)
-        );
-
+        // Load withdrawals
+        const q = query(collection(db, "withdrawals"), where("userId", "==", user.uid));
         const withdrawSnap = await getDocs(q);
-        const withdrawList = withdrawSnap.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
+        const withdrawList = withdrawSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setWithdrawals(withdrawList);
+
+        // Load referral rewards and pending points
+        const refSnap = await getDocs(query(
+          collection(db, "referralClaims"),
+          where("referrerId", "==", user.uid)
+        ));
+
+        const totalPoints = refSnap.docs.reduce((acc, doc) => acc + (doc.data().reward || 0), 0);
+        setData(prev => ({
+          ...prev,
+          pointsApproved: totalPoints,
+        }));
 
       } catch (err) {
         console.error("Failed to load wallet data", err);
@@ -72,15 +74,12 @@ function Wallet() {
     const amount = parseFloat(withdrawAmount);
 
     if (!paypalEmail) return setError("Please enter your PayPal email.");
-    if (isNaN(amount) || amount < 2)
-      return setError("Minimum withdrawal is $2.");
-    if (amount > data.balanceUSD)
-      return setError("You don't have enough balance.");
+    if (isNaN(amount) || amount < 2) return setError("Minimum withdrawal is $2.");
+    if (amount > data.balanceUSD) return setError("You don't have enough balance.");
 
     try {
       const netAmount = amount * 0.85;
 
-      // ✅ 1. Create withdrawal document
       await addDoc(collection(db, "withdrawals"), {
         userId: user.uid,
         username: data.username,
@@ -91,7 +90,6 @@ function Wallet() {
         createdAt: Timestamp.now(),
       });
 
-      // ✅ 2. Update user balances
       await updateDoc(doc(db, "users", user.uid), {
         pendingUSD: (data.pendingUSD || 0) + amount,
         balanceUSD: (data.balanceUSD || 0) - amount,
@@ -101,19 +99,13 @@ function Wallet() {
       setWithdrawAmount("");
       setPaypalEmail("");
 
-      // Refresh
+      // Refresh data
       const snap = await getDoc(doc(db, "users", user.uid));
       if (snap.exists()) setData(snap.data());
 
-      const q = query(
-        collection(db, "withdrawals"),
-        where("userId", "==", user.uid)
-      );
+      const q = query(collection(db, "withdrawals"), where("userId", "==", user.uid));
       const withdrawSnap = await getDocs(q);
-      const withdrawList = withdrawSnap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const withdrawList = withdrawSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setWithdrawals(withdrawList);
 
     } catch (err) {
@@ -127,8 +119,6 @@ function Wallet() {
 
   return (
     <div className="wallet">
-
-      {/* TOP BAR */}
       <header className="topbar">
         <button className="hamburger" onClick={toggleMenu}>☰</button>
         <h2>StuHustle</h2>
@@ -143,7 +133,7 @@ function Wallet() {
           <button>Paid Tasks</button>
           <button>Micro Jobs</button>
           <button>Affiliate Marketing</button>
-<button onClick={() => navigate("/referral")}>Referrals</button>
+          <button onClick={() => navigate("/referral")}>Referrals</button>
           <button>Freelancing Hub</button>
           <button>Skill Gigs</button>
           <button>Surveys</button>
@@ -157,14 +147,10 @@ function Wallet() {
 
         <section>
           <h4>Account</h4>
-          <button onClick={() => navigate("/profile")}>
-  Profile
-</button>
+          <button onClick={() => navigate("/profile")}>Profile</button>
           <button onClick={() => navigate("/security")}>Security</button>
           <button onClick={() => navigate("/support")}>Support</button>
-          <button className="logout" onClick={() => navigate("/login")}>
-            Logout
-          </button>
+          <button className="logout" onClick={() => navigate("/login")}>Logout</button>
         </section>
       </aside>
 
@@ -199,33 +185,29 @@ function Wallet() {
         </p>
       </div>
 
+      <div className="referral-info">
+        <h3>Your Referrals & Points</h3>
+        <p>Total Referrals: {data.referrals || 0}</p>
+        <p>Approved Points: {data.pointsApproved || 0}</p>
+        <p>Points Value: ${(data.pointsApproved || 0) / 1000}</p>
+      </div>
+
       <div className="withdraw-history">
         <h3>Withdrawal History</h3>
         {withdrawals.length > 0 ? (
           <ul>
-            {withdrawals
-              .slice()
-              .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
+            {withdrawals.slice().sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
               .map((w) => (
                 <li key={w.id}>
                   <p>
-                    <strong>Amount:</strong> ${w.amount} | 
-                    <strong> Net:</strong> ${w.netAmount} | 
-                    <strong> Email:</strong> {w.paypalEmail}
+                    <strong>Amount:</strong> ${w.amount} | <strong>Net:</strong> ${w.netAmount} | <strong>Email:</strong> {w.paypalEmail}
                   </p>
-                  <p>
-                    <strong>Status:</strong> {w.status}
-                  </p>
-                  <p>
-                    <strong>Date:</strong>{" "}
-                    {w.createdAt?.toDate().toLocaleString()}
-                  </p>
+                  <p><strong>Status:</strong> {w.status}</p>
+                  <p><strong>Date:</strong> {w.createdAt?.toDate().toLocaleString()}</p>
                 </li>
               ))}
           </ul>
-        ) : (
-          <p>No withdrawals yet.</p>
-        )}
+        ) : <p>No withdrawals yet.</p>}
       </div>
 
       <footer className="wallet-footer">

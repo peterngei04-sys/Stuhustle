@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, query, where, getDocs } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "../styles/dashboard.css";
@@ -20,7 +20,19 @@ function Dashboard() {
       try {
         const snap = await getDoc(doc(db, "users", user.uid));
         if (snap.exists()) {
-          setData(snap.data());
+          let userData = snap.data();
+
+          // Load referral stats
+          const refSnap = await getDocs(query(
+            collection(db, "referralClaims"),
+            where("referrerId", "==", user.uid)
+          ));
+          const totalPoints = refSnap.docs.reduce((acc, doc) => acc + (doc.data().reward || 0), 0);
+
+          setData({
+            ...userData,
+            pointsApproved: totalPoints,
+          });
         }
       } catch (err) {
         console.error("Failed to load user data", err);
@@ -37,74 +49,52 @@ function Dashboard() {
     navigate("/login");
   };
 
-  const toggleMenu = () => {
-    setMenuOpen(prev => !prev);
-  };
+  const toggleMenu = () => setMenuOpen(prev => !prev);
+  const closeMenu = () => setMenuOpen(false);
+  const handleStartEarning = () => setMenuOpen(true);
 
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
-
-  const handleStartEarning = () => {
-    setMenuOpen(true);
-  };
-
-  if (loading) {
-    return <div className="dashboard loading">Loading dashboard...</div>;
-  }
-
-  if (!data) {
-    return <div className="dashboard error">Failed to load data.</div>;
-  }
+  if (loading) return <div className="dashboard loading">Loading dashboard...</div>;
+  if (!data) return <div className="dashboard error">Failed to load data.</div>;
 
   return (
     <div className="dashboard">
-      {/* TOP BAR */}
       <header className="topbar">
         <button className="hamburger" onClick={toggleMenu}>☰</button>
         <h2>StuHustle</h2>
       </header>
 
-      {/* OVERLAY */}
       {menuOpen && <div className="menu-overlay" onClick={closeMenu} />}
 
-      {/* SIDE MENU */}
       <aside className={`menu ${menuOpen ? "open" : ""}`}>
         <section>
           <h4>Earning Methods</h4>
           <button>Offerwalls</button>
           <button>Paid Tasks</button>
-
           <button>Micro Jobs</button>
           <button>Affiliate Marketing</button>
-         <button onClick={() => navigate("/referral")}>Referrals</button>
+          <button onClick={() => navigate("/referral")}>Referrals</button>
           <button>Freelancing Hub</button>
           <button>Skill Gigs</button>
           <button>Surveys</button>
           <button>Sponsored Campaigns</button>
         </section>
 
-       <section>
-  <h4>Wallet</h4>
-  <button onClick={() => navigate("/wallet")}>Wallet</button>
-</section>
-         
+        <section>
+          <h4>Wallet</h4>
+          <button onClick={() => navigate("/wallet")}>Wallet</button>
+        </section>
+
         <section>
           <h4>Account</h4>
-<button onClick={() => navigate("/profile")}>
-  Profile
-</button>         
-       <button onClick={() => navigate("/security")}>Security</button>
-         <button onClick={() => navigate("/support")}>Support</button>
+          <button onClick={() => navigate("/profile")}>Profile</button>
+          <button onClick={() => navigate("/security")}>Security</button>
+          <button onClick={() => navigate("/support")}>Support</button>
           <button className="logout" onClick={handleLogout}>Logout</button>
         </section>
       </aside>
 
-      {/* MAIN CONTENT */}
       <main className="content">
-        <h3>
-          Welcome back, <span>{data.username}</span> 👋
-        </h3>
+        <h3>Welcome back, <span>{data.username}</span> 👋</h3>
 
         <div className="balance-card">
           <p>Available Balance</p>
@@ -135,7 +125,6 @@ function Dashboard() {
             </p>
           </div>
 
-          {/* ✅ ADDED POINTS */}
           <div className="stat">
             <h4>Pending Points</h4>
             <p>{data.pointsPending || 0}</p>
@@ -153,9 +142,7 @@ function Dashboard() {
         </div>
 
         <div className="quick-actions">
-          <button className="primary" onClick={handleStartEarning}>
-            Start Earning
-          </button>
+          <button className="primary" onClick={handleStartEarning}>Start Earning</button>
           <button className="secondary">Withdraw Funds</button>
         </div>
 

@@ -1,6 +1,16 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  setDoc,
+  updateDoc,
+  increment,
+  serverTimestamp,
+} from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/signup.css";
@@ -46,8 +56,8 @@ function Signup() {
     confirmPassword: "",
     country: "",
     gender: "",
-    referralInput: "", // ✅ referral input
-    agree: false
+    referralInput: "",
+    agree: false,
   });
 
   const [loading, setLoading] = useState(false);
@@ -86,7 +96,6 @@ function Signup() {
     }
   };
 
-  // ✅ referral check
   const checkReferralExists = async (code) => {
     if (!code) return null;
     const q = query(collection(db, "users"), where("referralCode", "==", code));
@@ -108,6 +117,7 @@ function Signup() {
     try {
       let referredByUid = null;
 
+      // 🔒 Secure referral logic
       if (form.referralInput) {
         const refUser = await checkReferralExists(form.referralInput);
 
@@ -116,7 +126,6 @@ function Signup() {
           return setError("Referral code does not exist.");
         }
 
-        // Prevent self-referral
         if (refUser.data().username === form.username) {
           setLoading(false);
           return setError("You cannot use your own referral code.");
@@ -125,11 +134,9 @@ function Signup() {
         referredByUid = refUser.id;
       }
 
-      const userCred = await createUserWithEmailAndPassword(
-        auth,
-        form.email,
-        form.password
-      );
+      // 🔑 Create new user
+      const userCred = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      const newReferralCode = form.username + "_" + userCred.user.uid.slice(0, 6);
 
       await setDoc(doc(db, "users", userCred.user.uid), {
         uid: userCred.user.uid,
@@ -154,18 +161,35 @@ function Signup() {
         referrals: 0,
         tasksCompleted: 0,
 
-        // referral system
-        referralCode: form.username + "_" + userCred.user.uid.slice(0, 6),
+        referralCode: newReferralCode,
         referredBy: referredByUid,
-        referralVerified: false, // added
-        referralQualified: false, // added
-        referralRewardGiven: false, // added
+        referralVerified: !!referredByUid,
+        referralQualified: false,
+        referralRewardGiven: false,
 
         createdAt: new Date()
       });
 
+      // 🔥 Reward referrer if referral code used
+      if (referredByUid) {
+        const referrerRef = doc(db, "users", referredByUid);
+        await updateDoc(referrerRef, {
+          pointsApproved: increment(10),
+          referrals: increment(1),
+        });
+
+        // Record claim
+        await setDoc(doc(collection(db, "referralClaims")), {
+          referrerId: referredByUid,
+          referredUserId: userCred.user.uid,
+          reward: 10,
+          createdAt: serverTimestamp()
+        });
+      }
+
       navigate("/login");
     } catch (err) {
+      console.error(err);
       setError(err.message);
     }
 
@@ -178,23 +202,49 @@ function Signup() {
       {error && <p className="error">{error}</p>}
 
       <form onSubmit={handleSubmit}>
-        <input name="username" placeholder="Username" value={form.username}
-          onChange={handleChange} onBlur={handleUsernameBlur} required />
+        <input
+          name="username"
+          placeholder="Username"
+          value={form.username}
+          onChange={handleChange}
+          onBlur={handleUsernameBlur}
+          required
+        />
         {errorUsername && <p className="inline-error">{errorUsername}</p>}
 
-        <input type="email" name="email" placeholder="Email"
-          value={form.email} onChange={handleChange} required />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
 
-        <input type="password" name="password" placeholder="Password"
-          value={form.password} onChange={handleChange} required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={handleChange}
+          required
+        />
 
-        <input type="password" name="confirmPassword" placeholder="Confirm Password"
-          value={form.confirmPassword} onChange={handleChange} required />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={form.confirmPassword}
+          onChange={handleChange}
+          required
+        />
         {errorConfirm && <p className="inline-error">{errorConfirm}</p>}
 
         <select name="country" value={form.country} onChange={handleChange} required>
           <option value="">Select Country</option>
-          {countries.map(c => <option key={c} value={c}>{c}</option>)}
+          {countries.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
         </select>
 
         <select name="gender" value={form.gender} onChange={handleChange} required>
@@ -212,8 +262,12 @@ function Signup() {
         />
 
         <label className="checkbox">
-          <input type="checkbox" name="agree"
-            checked={form.agree} onChange={handleChange} />
+          <input
+            type="checkbox"
+            name="agree"
+            checked={form.agree}
+            onChange={handleChange}
+          />
           I agree to <Link to="/privacy">Privacy Policy</Link> &{" "}
           <Link to="/terms">Terms</Link>
         </label>

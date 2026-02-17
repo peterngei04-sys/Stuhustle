@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  Timestamp,
+  updateDoc
+} from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "../styles/referrals.css";
@@ -14,17 +24,32 @@ function Referral() {
   const [refCodeInput, setRefCodeInput] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [referralsList, setReferralsList] = useState([]);
 
+  // Load user data and referrals
   useEffect(() => {
     if (!user) return;
 
-    const loadUser = async () => {
-      const snap = await getDoc(doc(db, "users", user.uid));
-      if (snap.exists()) setData(snap.data());
-      setLoading(false);
+    const loadUserData = async () => {
+      try {
+        // Load current user
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) setData(snap.data());
+
+        // Load users this user referred
+        const q = query(collection(db, "users"), where("referredBy", "==", snap.data().referralCode));
+        const refSnap = await getDocs(q);
+        const list = refSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setReferralsList(list);
+
+      } catch (err) {
+        console.error("Failed to load referral data", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    loadUser();
+    loadUserData();
   }, [user]);
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
@@ -49,28 +74,63 @@ function Referral() {
       return;
     }
 
-    try {
-      const token = await user.getIdToken();
+    if (refCodeInput === data.referralCode) {
+      setMessage("You cannot use your own referral code.");
+      return;
+    }
 
-      const res = await fetch("/api/referral", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ referralCode: refCodeInput }),
+    try {
+      // Find the referrer
+      const q = query(collection(db, "users"), where("referralCode", "==", refCodeInput));
+      const refSnap = await getDocs(q);
+
+      if (refSnap.empty) {
+        setMessage("Invalid referral code.");
+        return;
+      }
+
+      const referrerDoc = refSnap.docs[0];
+      const referrerData = referrerDoc.data();
+
+      if (data.referredBy) {
+        setMessage("You have already used a referral code.");
+        return;
+      }
+
+      // Update current user referredBy
+      await updateDoc(doc(db, "users", user.uid), {
+        referredBy: refCodeInput,
+        pointsApproved: (data.pointsApproved || 0) + 50 // reward points for using referral
       });
 
-      const resData = await res.json();
-      setMessage(resData.message);
+      // Update referrer points and referrals count
+      await updateDoc(doc(db, "users", referrerDoc.id), {
+        referrals: (referrerData.referrals || 0) + 1,
+        pointsApproved: (referrerData.pointsApproved || 0) + 50,
+      });
 
-      if (res.ok) {
-        const updatedSnap = await getDoc(doc(db, "users", user.uid));
-        if (updatedSnap.exists()) setData(updatedSnap.data());
-        setRefCodeInput("");
-      }
-    } catch (error) {
-      console.error(error);
+      // Record the referral claim
+      await addDoc(collection(db, "referralClaims"), {
+        referrerId: referrerDoc.id,
+        referredId: user.uid,
+        reward: 50,
+        createdAt: Timestamp.now(),
+      });
+
+      // Refresh current user data
+      const updatedSnap = await getDoc(doc(db, "users", user.uid));
+      if (updatedSnap.exists()) setData(updatedSnap.data());
+      setRefCodeInput("");
+      setMessage("Referral claimed successfully!");
+
+      // Refresh referrals list
+      const q2 = query(collection(db, "users"), where("referredBy", "==", updatedSnap.data().referralCode));
+      const newRefSnap = await getDocs(q2);
+      const list = newRefSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setReferralsList(list);
+
+    } catch (err) {
+      console.error(err);
       setMessage("Something went wrong. Try again.");
     }
   };
@@ -82,9 +142,7 @@ function Referral() {
     <div className="referral">
       {/* TOPBAR */}
       <header className="topbar">
-        <button className="hamburger" onClick={toggleMenu}>
-          ☰
-        </button>
+        <button className="hamburger" onClick={toggleMenu}>☰</button>
         <h2>StuHustle</h2>
       </header>
 
@@ -101,9 +159,7 @@ function Referral() {
           <h4>Account</h4>
           <button onClick={() => navigate("/profile")}>Profile</button>
           <button onClick={() => navigate("/support")}>Support</button>
-          <button className="logout" onClick={handleLogout}>
-            Logout
-          </button>
+          <button className="logout" onClick={handleLogout}>Logout</button>
         </section>
       </aside>
 
@@ -114,19 +170,18 @@ function Referral() {
         <div className="ref-card">
           <p>Your Referral Code</p>
           <h1>{data.referralCode}</h1>
-          <button className="primary" onClick={copyCode}>
-            Copy Code
-          </button>
+          <button className="primary" onClick={copyCode}>Copy Code</button>
         </div>
 
         <div className="ref-card">
           <p>Total Referrals</p>
-          <h1>{data.referralCount || 0}</h1>
+          <h1>{data.referrals || 0}</h1>
         </div>
 
         <div className="ref-card">
-          <p>Total Referral Earnings</p>
-          <h1>{data.referralEarnings || 0} pts</h1>
+          <p>Total Referral Points</p>
+          <h1>{data.pointsApproved || 0} pts</h1>
+          <p>Points Value: ${(data.pointsApproved || 0) / 1000}</p>
         </div>
 
         <div className="claim-card">
@@ -146,6 +201,21 @@ function Referral() {
         </div>
 
         {message && <p className="message">{message}</p>}
+
+        <div className="referrals-list">
+          <h4>Users You Referred</h4>
+          {referralsList.length > 0 ? (
+            <ul>
+              {referralsList.map(ref => (
+                <li key={ref.id}>
+                  <strong>{ref.username || ref.email}</strong> - {ref.pointsApproved || 0} pts
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No referrals yet.</p>
+          )}
+        </div>
       </main>
 
       <footer className="dashboard-footer">
