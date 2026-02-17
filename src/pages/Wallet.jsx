@@ -36,17 +36,8 @@ function Wallet() {
         setWithdrawals(withdrawList);
 
         // Load referral rewards and pending points
-        const refSnap = await getDocs(query(
-          collection(db, "referralClaims"),
-          where("referrerId", "==", user.uid)
-        ));
-
-        const totalPoints = refSnap.docs.reduce((acc, doc) => acc + (doc.data().reward || 0), 0);
-        setData(prev => ({
-          ...prev,
-          pointsApproved: totalPoints,
-        }));
-
+       const snap = await getDoc(doc(db, "users", user.uid));
+if (snap.exists()) setData(snap.data());
       } catch (err) {
         console.error("Failed to load wallet data", err);
       } finally {

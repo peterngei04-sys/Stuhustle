@@ -23,16 +23,7 @@ function Dashboard() {
           let userData = snap.data();
 
           // Load referral stats
-          const refSnap = await getDocs(query(
-            collection(db, "referralClaims"),
-            where("referrerId", "==", user.uid)
-          ));
-          const totalPoints = refSnap.docs.reduce((acc, doc) => acc + (doc.data().reward || 0), 0);
-
-          setData({
-            ...userData,
-            pointsApproved: totalPoints,
-          });
+      setData(userData);
         }
       } catch (err) {
         console.error("Failed to load user data", err);
