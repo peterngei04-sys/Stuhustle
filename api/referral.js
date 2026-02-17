@@ -1,4 +1,4 @@
-const admin = require("firebase-admin");
+import admin from "firebase-admin";
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -12,7 +12,7 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -84,9 +84,8 @@ module.exports = async (req, res) => {
     });
 
     return res.status(200).json({ message: "Referral successful" });
-
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
   }
-};
+}
