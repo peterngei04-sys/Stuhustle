@@ -1,6 +1,5 @@
 import admin from "firebase-admin";
 
-// Initialize Firebase Admin SDK if not already initialized
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
@@ -25,29 +24,32 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing parameters" });
     }
 
-    // Fetch task details
     const taskRef = db.collection("tasks").doc(taskId);
     const taskSnap = await taskRef.get();
-    if (!taskSnap.exists) return res.status(404).json({ error: "Task not found" });
+
+    if (!taskSnap.exists) {
+      return res.status(404).json({ error: "Task not found" });
+    }
 
     const task = taskSnap.data();
 
-    // Check user's existing submissions for this task
     const submissionsRef = db.collection("submissions");
-    const userSubmissionsSnap = await submissionsRef
+
+    const existing = await submissionsRef
       .where("userId", "==", userId)
       .where("taskId", "==", taskId)
       .get();
 
-    if (userSubmissionsSnap.size >= (task.maxSubmissionsPerUser || 1)) {
+    if (existing.size >= (task.maxSubmissionsPerUser || 1)) {
       return res.status(400).json({ error: "Submission limit reached" });
     }
 
-    // Determine submission status
-    let status = "pending"; // Default pending for manual review
-    if (task.autoApprove && !task.requiresProof) status = "approved";
+    let status = "pending";
 
-    // Record submission
+    if (task.autoApprove && !task.requiresProof) {
+      status = "approved";
+    }
+
     const submissionRef = await submissionsRef.add({
       userId,
       taskId,
@@ -56,27 +58,27 @@ export default async function handler(req, res) {
       createdAt: admin.firestore.Timestamp.now(),
     });
 
-    // Automatically update user balance if approved
+    // If auto-approved → update immediately
     if (status === "approved") {
       const userRef = db.collection("users").doc(userId);
 
       await db.runTransaction(async (transaction) => {
-        const userSnap = await transaction.get(userRef);
-        if (!userSnap.exists) throw new Error("User not found");
-
-        const currentData = userSnap.data();
-
         transaction.update(userRef, {
-          balanceUSD: (currentData.balanceUSD || 0) + task.reward,
-          totalEarnedUSD: (currentData.totalEarnedUSD || 0) + task.reward,
-          tasksCompleted: (currentData.tasksCompleted || 0) + 1,
+          balanceUSD: admin.firestore.FieldValue.increment(task.reward),
+          totalEarnedUSD: admin.firestore.FieldValue.increment(task.reward),
+          tasksCompleted: admin.firestore.FieldValue.increment(1),
         });
       });
     }
 
-    return res.status(200).json({ message: "Submission recorded", status });
+    return res.status(200).json({
+      message: "Submission recorded",
+      status,
+      submissionId: submissionRef.id,
+    });
+
   } catch (error) {
     console.error("Submit Task Error:", error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: error.message });
   }
 }
