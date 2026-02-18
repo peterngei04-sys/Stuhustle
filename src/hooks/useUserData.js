@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { auth, db } from "../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function useUserData() {
+  const [user, setUser] = useState(null);
   const [data, setData] = useState({
     username: "",
     balanceUSD: 0,
@@ -17,10 +19,15 @@ export default function useUserData() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (!user) return;
+    const unsubscribeAuth = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+    });
 
-    setLoading(true); // in case user changes
+    return () => unsubscribeAuth();
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
 
     const userRef = doc(db, "users", user.uid);
 
@@ -43,7 +50,7 @@ export default function useUserData() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [user]);
 
-  return { data, loading };
+  return { data, loading, user };
 }

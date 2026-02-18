@@ -6,8 +6,8 @@ import useUserData from "../hooks/useUserData";
 import "../styles/dashboard.css";
 
 function Dashboard() {
-  const { data, loading } = useUserData();
   const navigate = useNavigate();
+  const { data, loading } = useUserData();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);

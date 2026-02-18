@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { auth, db } from "../firebase";
-import { doc, addDoc, collection, updateDoc, Timestamp } from "firebase/firestore";
+import { doc, collection, query, where, addDoc, updateDoc, Timestamp, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import useUserData from "../hooks/useUserData";
-import useWithdrawals from "../hooks/useWithdrawals";
 import "../styles/wallet.css";
 
 function Wallet() {
-  const { data, loading: userLoading } = useUserData();
-  const { withdrawals, loading: withdrawalsLoading } = useWithdrawals();
   const navigate = useNavigate();
-  const user = auth.currentUser;
+  const { data, loading } = useUserData();
 
+  const [withdrawals, setWithdrawals] = useState([]);
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [paypalEmail, setPaypalEmail] = useState("");
   const [error, setError] = useState("");
@@ -21,20 +19,34 @@ function Wallet() {
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
 
+  // Real-time withdrawals
+  useState(() => {
+    if (!data.username) return;
+    const withdrawalsQuery = query(
+      collection(db, "withdrawals"),
+      where("userId", "==", auth.currentUser.uid)
+    );
+    const unsubscribe = onSnapshot(withdrawalsQuery, (snapshot) => {
+      const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setWithdrawals(list);
+    });
+    return () => unsubscribe();
+  }, [data.username]);
+
   const handleWithdraw = async () => {
     setError("");
     setSuccess("");
-
     const amount = parseFloat(withdrawAmount);
+
     if (!paypalEmail) return setError("Please enter your PayPal email.");
     if (isNaN(amount) || amount < 2) return setError("Minimum withdrawal is $2.");
-    if (amount > (data.balanceUSD || 0)) return setError("You don't have enough balance.");
+    if (amount > data.balanceUSD) return setError("You don't have enough balance.");
 
     try {
       const netAmount = (amount * 0.85).toFixed(2);
 
       await addDoc(collection(db, "withdrawals"), {
-        userId: user.uid,
+        userId: auth.currentUser.uid,
         username: data.username,
         amount,
         netAmount,
@@ -43,7 +55,7 @@ function Wallet() {
         createdAt: Timestamp.now(),
       });
 
-      await updateDoc(doc(db, "users", user.uid), {
+      await updateDoc(doc(db, "users", auth.currentUser.uid), {
         pendingUSD: (data.pendingUSD || 0) + amount,
         balanceUSD: (data.balanceUSD || 0) - amount,
       });
@@ -51,13 +63,14 @@ function Wallet() {
       setSuccess(`Withdrawal request of $${amount} submitted. Pending approval.`);
       setWithdrawAmount("");
       setPaypalEmail("");
+
     } catch (err) {
       console.error(err);
       setError("Withdrawal failed. Try again.");
     }
   };
 
-  if (userLoading || withdrawalsLoading) return <div className="wallet loading">Loading Wallet...</div>;
+  if (loading) return <div className="wallet loading">Loading Wallet...</div>;
 
   return (
     <div className="wallet">
