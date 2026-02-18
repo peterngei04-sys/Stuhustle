@@ -83,16 +83,18 @@ function Wallet() {
 
       <aside className={`menu ${menuOpen ? "open" : ""}`}>
         <section>
-          <h4>Earning Methods</h4>
-          <button>Offerwalls</button>
+
+          <button onClick={() => navigate("/dashboard")}>Dashboard</button>
+           <h4>Earning Methods</h4>
+          <button onClick={() => navigate("/offerwalls")}>Offerwalls</button>
           <button>Paid Tasks</button>
           <button>Micro Jobs</button>
           <button>Affiliate Marketing</button>
           <button onClick={() => navigate("/referral")}>Referrals</button>
-          <button>Freelancing Hub</button>
-          <button>Skill Gigs</button>
+          <button>Freelancing Hub</button>                                                        <button>Skill Gigs</button>
           <button>Surveys</button>
           <button>Sponsored Campaigns</button>
+          <button onClick={() => navigate("/referral")}>Referrals</button>
         </section>
 
         <section>

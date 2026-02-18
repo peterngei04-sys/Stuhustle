@@ -30,11 +30,11 @@ function Dashboard() {
       </header>
 
       {menuOpen && <div className="menu-overlay" onClick={closeMenu} />}
-
       <aside className={`menu ${menuOpen ? "open" : ""}`}>
         <section>
-          <h4>Earning Methods</h4>
-          <button>Offerwalls</button>
+
+         <h4>Earning Methods</h4>
+          <button onClick={() => navigate("/offerwalls")}>Offerwalls</button>  
           <button>Paid Tasks</button>
           <button>Micro Jobs</button>
           <button>Affiliate Marketing</button>

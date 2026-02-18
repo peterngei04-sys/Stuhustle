@@ -1,0 +1,167 @@
+/* Base Page */
+.offerwalls-page {
+  min-height: 100vh;
+  background: #0f2027;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* Topbar */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #08151c;
+}
+
+.hamburger {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Hamburger Menu */
+.menu {
+  position: fixed;
+  top: 0;
+  left: -270px;
+  width: 260px;
+  height: 100vh;
+  background: #0b1c26;
+  padding: 1rem;
+  overflow-y: auto;
+  z-index: 100;
+  transition: left 0.3s ease, visibility 0.3s ease;
+  visibility: hidden;
+}
+
+.menu.open {
+  left: 0;
+  visibility: visible;
+}
+
+.menu section h4 {
+  margin-bottom: 10px;
+  color: #00c6ff;
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #203a43;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu button:hover,
+.menu button.active {
+  background: #00c6ff;
+  color: #000;
+}
+
+.logout {
+  background: #ff6b6b !important;
+}
+
+/* Overlay */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 90;
+}
+
+/* Content */
+.content {
+  padding: 20px;
+}
+
+/* Balance Card */
+.balance-card {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.balance-card p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.balance-card h1 {
+  font-size: 2rem;
+  margin: 10px 0;
+}
+
+.balance-card span {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* Offerwall Tabs */
+.offerwall-tabs {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.offerwall-tabs button {
+  padding: 0.6rem 1rem;
+  border: 1px solid #888;
+  border-radius: 5px;
+  cursor: pointer;
+  background: #203a43;
+  color: white;
+  transition: 0.2s all;
+}
+
+.offerwall-tabs button.active,
+.offerwall-tabs button:hover {
+  background: #00c6ff;
+  color: #000;
+  border-color: #00c6ff;
+}
+
+/* Offerwall Content */
+.offerwall-content {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  min-height: 500px;
+  background: #08151c;
+}
+
+.wall-container {
+  display: none;
+}
+
+.wall-container.visible {
+  display: block;
+}
+
+.offerwall-iframe {
+  width: 100%;
+  height: 600px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 0.5rem;
+}
+
+/* Footer */
+.dashboard-footer {
+  padding: 15px;
+  text-align: center;
+  background: #08151c;
+  margin-top: 2rem;
+  color: #888;
+}
