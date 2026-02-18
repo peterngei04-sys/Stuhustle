@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "../styles/dashboard.css";
@@ -16,21 +16,17 @@ function Dashboard() {
   useEffect(() => {
     if (!user) return;
 
-    const loadUserData = async () => {
-      try {
-        const snap = await getDoc(doc(db, "users", user.uid));
-        if (snap.exists()) {
-          let userData = snap.data();
-          setData(userData);
-        }
-      } catch (err) {
-        console.error("Failed to load user data", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const userRef = doc(db, "users", user.uid);
 
-    loadUserData();
+    // Real-time listener for user data
+    const unsubscribe = onSnapshot(userRef, (snap) => {
+      if (snap.exists()) {
+        setData(snap.data());
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, [user]);
 
   const handleLogout = async () => {

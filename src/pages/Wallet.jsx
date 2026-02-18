@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { doc, getDoc, collection, query, where, getDocs, addDoc, updateDoc, Timestamp } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  query,
+  where,
+  addDoc,
+  updateDoc,
+  Timestamp,
+  onSnapshot,
+} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import "../styles/wallet.css";
 
@@ -23,31 +32,29 @@ function Wallet() {
   useEffect(() => {
     if (!user) return;
 
-    const loadUserData = async () => {
-      try {
-        // Load user data ONLY from users collection
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          setData(userDoc.data());
-        }
-
-        // Load withdrawals
-        const q = query(collection(db, "withdrawals"), where("userId", "==", user.uid));
-        const withdrawSnap = await getDocs(q);
-        const withdrawList = withdrawSnap.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setWithdrawals(withdrawList);
-
-      } catch (err) {
-        console.error("Failed to load wallet data", err);
-      } finally {
-        setLoading(false);
+    // Real-time listener for user data
+    const userRef = doc(db, "users", user.uid);
+    const unsubscribeUser = onSnapshot(userRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setData(docSnap.data());
       }
-    };
+      setLoading(false);
+    });
 
-    loadUserData();
+    // Real-time listener for withdrawals
+    const withdrawalsQuery = query(
+      collection(db, "withdrawals"),
+      where("userId", "==", user.uid)
+    );
+    const unsubscribeWithdrawals = onSnapshot(withdrawalsQuery, (snapshot) => {
+      const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setWithdrawals(list);
+    });
+
+    return () => {
+      unsubscribeUser();
+      unsubscribeWithdrawals();
+    };
   }, [user]);
 
   const handleWithdraw = async () => {
@@ -58,7 +65,8 @@ function Wallet() {
 
     if (!paypalEmail) return setError("Please enter your PayPal email.");
     if (isNaN(amount) || amount < 2) return setError("Minimum withdrawal is $2.");
-    if (amount > data.balanceUSD) return setError("You don't have enough balance.");
+    if (amount > (data?.balanceUSD || 0))
+      return setError("You don't have enough balance.");
 
     try {
       const netAmount = amount * 0.85;
@@ -82,20 +90,7 @@ function Wallet() {
       setWithdrawAmount("");
       setPaypalEmail("");
 
-      // Refresh user data
-      const updatedUserDoc = await getDoc(doc(db, "users", user.uid));
-      if (updatedUserDoc.exists()) {
-        setData(updatedUserDoc.data());
-      }
-
-      // Refresh withdrawals
-      const q = query(collection(db, "withdrawals"), where("userId", "==", user.uid));
-      const withdrawSnap = await getDocs(q);
-      const withdrawList = withdrawSnap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setWithdrawals(withdrawList);
+      // No need to manually refresh; real-time listeners handle it
 
     } catch (err) {
       console.error(err);
