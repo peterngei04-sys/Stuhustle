@@ -1,81 +1,43 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { auth, db } from "../firebase";
-import {
-  doc,
-  collection,
-  query,
-  where,
-  addDoc,
-  updateDoc,
-  Timestamp,
-  onSnapshot,
-} from "firebase/firestore";
+import { doc, addDoc, collection, updateDoc, Timestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import useUserData from "../hooks/useUserData";
+import useWithdrawals from "../hooks/useWithdrawals";
 import "../styles/wallet.css";
 
 function Wallet() {
-  const user = auth.currentUser;
+  const { data, loading: userLoading } = useUserData();
+  const { withdrawals, loading: withdrawalsLoading } = useWithdrawals();
   const navigate = useNavigate();
+  const user = auth.currentUser;
 
-  const [data, setData] = useState(null);
-  const [withdrawals, setWithdrawals] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [paypalEmail, setPaypalEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
   const [menuOpen, setMenuOpen] = useState(false);
+
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
-
-  useEffect(() => {
-    if (!user) return;
-
-    // Real-time listener for user data
-    const userRef = doc(db, "users", user.uid);
-    const unsubscribeUser = onSnapshot(userRef, (docSnap) => {
-      if (docSnap.exists()) {
-        setData(docSnap.data());
-      }
-      setLoading(false);
-    });
-
-    // Real-time listener for withdrawals
-    const withdrawalsQuery = query(
-      collection(db, "withdrawals"),
-      where("userId", "==", user.uid)
-    );
-    const unsubscribeWithdrawals = onSnapshot(withdrawalsQuery, (snapshot) => {
-      const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      setWithdrawals(list);
-    });
-
-    return () => {
-      unsubscribeUser();
-      unsubscribeWithdrawals();
-    };
-  }, [user]);
 
   const handleWithdraw = async () => {
     setError("");
     setSuccess("");
 
     const amount = parseFloat(withdrawAmount);
-
     if (!paypalEmail) return setError("Please enter your PayPal email.");
     if (isNaN(amount) || amount < 2) return setError("Minimum withdrawal is $2.");
-    if (amount > (data?.balanceUSD || 0))
-      return setError("You don't have enough balance.");
+    if (amount > (data.balanceUSD || 0)) return setError("You don't have enough balance.");
 
     try {
-      const netAmount = amount * 0.85;
+      const netAmount = (amount * 0.85).toFixed(2);
 
       await addDoc(collection(db, "withdrawals"), {
         userId: user.uid,
         username: data.username,
         amount,
-        netAmount: netAmount.toFixed(2),
+        netAmount,
         paypalEmail,
         status: "pending",
         createdAt: Timestamp.now(),
@@ -89,17 +51,13 @@ function Wallet() {
       setSuccess(`Withdrawal request of $${amount} submitted. Pending approval.`);
       setWithdrawAmount("");
       setPaypalEmail("");
-
-      // No need to manually refresh; real-time listeners handle it
-
     } catch (err) {
       console.error(err);
       setError("Withdrawal failed. Try again.");
     }
   };
 
-  if (loading) return <div className="wallet loading">Loading Wallet...</div>;
-  if (!data) return <div className="wallet error">Failed to load wallet.</div>;
+  if (userLoading || withdrawalsLoading) return <div className="wallet loading">Loading Wallet...</div>;
 
   return (
     <div className="wallet">
@@ -145,8 +103,8 @@ function Wallet() {
 
       <div className="wallet-balance">
         <p>Available Balance:</p>
-        <h1>${(data.balanceUSD || 0).toFixed(2)}</h1>
-        <p>Pending: ${(data.pendingUSD || 0).toFixed(2)}</p>
+        <h1>${data.balanceUSD.toFixed(2)}</h1>
+        <p>Pending: ${data.pendingUSD.toFixed(2)}</p>
       </div>
 
       <div className="withdraw-card">
@@ -171,9 +129,9 @@ function Wallet() {
 
       <div className="referral-info">
         <h3>Your Referrals & Points</h3>
-        <p>Total Referrals: {data.referrals || 0}</p>
-        <p>Approved Points: {data.pointsApproved || 0}</p>
-        <p>Points Value: ${(data.pointsApproved || 0) / 1000}</p>
+        <p>Total Referrals: {data.referrals}</p>
+        <p>Approved Points: {data.pointsApproved}</p>
+        <p>Points Value: ${(data.pointsApproved / 1000).toFixed(2)}</p>
       </div>
 
       <div className="withdraw-history">

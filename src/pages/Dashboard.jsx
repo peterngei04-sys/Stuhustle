@@ -1,45 +1,26 @@
-import { useEffect, useState } from "react";
-import { auth, db } from "../firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import { useState } from "react";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
+import useUserData from "../hooks/useUserData";
 import "../styles/dashboard.css";
 
 function Dashboard() {
+  const { data, loading } = useUserData();
   const navigate = useNavigate();
-  const user = auth.currentUser;
-
-  const [data, setData] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!user) return;
-
-    const userRef = doc(db, "users", user.uid);
-
-    // Real-time listener for user data
-    const unsubscribe = onSnapshot(userRef, (snap) => {
-      if (snap.exists()) {
-        setData(snap.data());
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, [user]);
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+  const closeMenu = () => setMenuOpen(false);
 
   const handleLogout = async () => {
     await signOut(auth);
     navigate("/login");
   };
 
-  const toggleMenu = () => setMenuOpen(prev => !prev);
-  const closeMenu = () => setMenuOpen(false);
   const handleStartEarning = () => setMenuOpen(true);
 
   if (loading) return <div className="dashboard loading">Loading dashboard...</div>;
-  if (!data) return <div className="dashboard error">Failed to load data.</div>;
 
   return (
     <div className="dashboard">
@@ -83,46 +64,46 @@ function Dashboard() {
 
         <div className="balance-card">
           <p>Available Balance</p>
-          <h1>${(data.balanceUSD || 0).toFixed(2)}</h1>
-          <span>Pending: ${(data.pendingUSD || 0).toFixed(2)}</span>
+          <h1>${data.balanceUSD.toFixed(2)}</h1>
+          <span>Pending: ${data.pendingUSD.toFixed(2)}</span>
         </div>
 
         <div className="stats">
           <div className="stat">
             <h4>Total Earned</h4>
-            <p>${(data.totalEarnedUSD || 0).toFixed(2)}</p>
+            <p>${data.totalEarnedUSD.toFixed(2)}</p>
           </div>
 
           <div className="stat">
             <h4>Referrals</h4>
-            <p>{data.referrals || 0}</p>
+            <p>{data.referrals}</p>
           </div>
 
           <div className="stat">
             <h4>Tasks Completed</h4>
-            <p>{data.tasksCompleted || 0}</p>
+            <p>{data.tasksCompleted}</p>
           </div>
 
           <div className="stat">
             <h4>Account Status</h4>
             <p className={data.accountStatus === "active" ? "active" : "danger"}>
-              {data.accountStatus || "active"}
+              {data.accountStatus}
             </p>
           </div>
 
           <div className="stat">
             <h4>Pending Points</h4>
-            <p>{data.pointsPending || 0}</p>
+            <p>{data.pointsPending}</p>
           </div>
 
           <div className="stat">
             <h4>Approved Points</h4>
-            <p>{data.pointsApproved || 0}</p>
+            <p>{data.pointsApproved}</p>
           </div>
 
           <div className="stat">
             <h4>Points Value</h4>
-            <p>${((data.pointsApproved || 0) / 1000).toFixed(2)}</p>
+            <p>${(data.pointsApproved / 1000).toFixed(2)}</p>
           </div>
         </div>
 
