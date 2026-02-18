@@ -74,6 +74,7 @@ export default async function handler(req, res) {
         referrals: admin.firestore.FieldValue.increment(1),
         balanceUSD: admin.firestore.FieldValue.increment(USD_VALUE),
         totalEarnedUSD: admin.firestore.FieldValue.increment(USD_VALUE),
+        tasksCompleted: admin.firestore.FieldValue.increment(1), // ✅ increment tasksCompleted
       });
 
       // Update new user
@@ -82,6 +83,7 @@ export default async function handler(req, res) {
         balanceUSD: admin.firestore.FieldValue.increment(USD_VALUE),
         totalEarnedUSD: admin.firestore.FieldValue.increment(USD_VALUE),
         referredBy: referrerRef.id,
+        tasksCompleted: admin.firestore.FieldValue.increment(1), // ✅ increment tasksCompleted
       });
 
     });
