@@ -90,7 +90,9 @@ const [isLoadingWall, setIsLoadingWall] = useState(true);
           <h1>${data.balanceUSD?.toFixed(2)}</h1>
           <span>Pending: ${data.pendingUSD?.toFixed(2)}</span>
         </div>
-
+        <p style={{ fontSize: "12px", wordBreak: "break-all" }}>
+  Debug URL: https://offerwall.ayet.io/offers?adSlot=25729&externalIdentifier={data.uid}
+</p>
     {/* Premium Offerwall Cards */}
 <div className="offerwall-selector">
   {offerwalls.map((wall, index) => (
