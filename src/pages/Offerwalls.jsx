@@ -23,7 +23,7 @@ const [isLoadingWall, setIsLoadingWall] = useState(true);
       id: "bitlabs",
       name: "BitLabs",
       logo: bitlabsLogo,
-      url: `https://api.bitlabs.ai/v1/wall?token=YOUR_BITLABS_TOKEN&user_id=${data.uid}`,
+      url: `https://api.bitlabs.ai/v1/surveys?app_id=389f5cfd-331f-4640-a81e-f4230f5923ea&user_id=${data.uid}`,
       description: "Complete surveys and offers to earn instantly.",
     },
     {
