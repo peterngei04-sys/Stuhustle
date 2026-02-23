@@ -10,7 +10,8 @@ function Offerwalls() {
   const { data, loading } = useUserData();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeWall, setActiveWall] = useState("bitlabs");
-
+const [isWallOpen, setIsWallOpen] = useState(false);
+const [isLoadingWall, setIsLoadingWall] = useState(true);
   if (loading) return <div className="offerwalls loading">Loading...</div>;
   if (!data) return <div className="offerwalls">User not found</div>;
 
@@ -90,17 +91,22 @@ function Offerwalls() {
           <span>Pending: ${data.pendingUSD?.toFixed(2)}</span>
         </div>
 
-        {/* Tabs */}
-{/* Offerwall Selection Cards */}
+    {/* Premium Offerwall Cards */}
 <div className="offerwall-selector">
-  {offerwalls.map((wall) => (
+  {offerwalls.map((wall, index) => (
     <div
       key={wall.id}
       className={`offerwall-card ${
         activeWall === wall.id ? "active" : ""
       }`}
-      onClick={() => setActiveWall(wall.id)}
+      onClick={() => {
+        setActiveWall(wall.id);
+        setIsWallOpen(true);
+        setIsLoadingWall(true);
+      }}
     >
+      {index === 0 && <span className="recommended-badge">Recommended</span>}
+
       <div className="card-header">
         <img src={wall.logo} alt={wall.name} />
         <h4>{wall.name}</h4>
@@ -108,13 +114,36 @@ function Offerwalls() {
 
       <p>{wall.description}</p>
 
-      <button className="launch-btn">
-        {activeWall === wall.id ? "Active" : "Launch Wall"}
-      </button>
+      <div className="earn-rate">High Conversion • Instant Credit</div>
+
+      <button className="launch-btn">Start Earning</button>
     </div>
   ))}
 </div>
+  {/* Fullscreen Offerwall Modal */}
+{isWallOpen && (
+  <div className="wall-modal">
+    <div className="wall-modal-header">
+      <h3>{offerwalls.find(w => w.id === activeWall)?.name}</h3>
+      <button onClick={() => setIsWallOpen(false)}>✕</button>
+    </div>
 
+    {isLoadingWall && (
+      <div className="wall-loader">
+        <div className="spinner"></div>
+        <p>Loading offers...</p>
+      </div>
+    )}
+
+    <iframe
+      src={offerwalls.find(w => w.id === activeWall)?.url}
+      title="Offerwall"
+      className="offerwall-iframe"
+      onLoad={() => setIsLoadingWall(false)}
+      sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+    ></iframe>
+  </div>
+)}
 
       </main>
 
