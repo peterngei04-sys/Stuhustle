@@ -91,34 +91,31 @@ function Offerwalls() {
         </div>
 
         {/* Tabs */}
-        <div className="offerwall-tabs">
-          {offerwalls.map((wall) => (
-            <button
-              key={wall.id}
-              className={activeWall === wall.id ? "active" : ""}
-              onClick={() => setActiveWall(wall.id)}
-            >
-              <img src={wall.logo} alt={wall.name} className="wall-logo" />
-              {wall.name}
-            </button>
-          ))}
-        </div>
+{/* Offerwall Selection Cards */}
+<div className="offerwall-selector">
+  {offerwalls.map((wall) => (
+    <div
+      key={wall.id}
+      className={`offerwall-card ${
+        activeWall === wall.id ? "active" : ""
+      }`}
+      onClick={() => setActiveWall(wall.id)}
+    >
+      <div className="card-header">
+        <img src={wall.logo} alt={wall.name} />
+        <h4>{wall.name}</h4>
+      </div>
 
-        {/* Iframe */}
-        {offerwalls.map((wall) =>
-          activeWall === wall.id ? (
-            <div key={wall.id} className="wall-container">
-              <h4>{wall.name}</h4>
-              <p>{wall.description}</p>
-              <iframe
-                src={wall.url}
-                title={wall.name}
-                className="offerwall-iframe"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-              ></iframe>
-            </div>
-          ) : null
-        )}
+      <p>{wall.description}</p>
+
+      <button className="launch-btn">
+        {activeWall === wall.id ? "Active" : "Launch Wall"}
+      </button>
+    </div>
+  ))}
+</div>
+
+
       </main>
 
       <footer className="dashboard-footer">
