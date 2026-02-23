@@ -17,7 +17,7 @@ const [isLoadingWall, setIsLoadingWall] = useState(true);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
-
+                            
   const offerwalls = [
     {
       id: "bitlabs",
@@ -30,7 +30,7 @@ const [isLoadingWall, setIsLoadingWall] = useState(true);
       id: "ayet",
       name: "ayeT Studios",
       logo: ayetLogo,
-      url: `https://www.ayetstudios.com/offers/web_offerwall/YOUR_PUBLISHER_ID?external_identifier=${data.uid}`,
+      url: `https://offerwall.ayet.io/offers?adSlot=25729&externalIdentifier=${data.uid}`,
       description: "High paying app installs and CPA offers.",
     },
   ];
