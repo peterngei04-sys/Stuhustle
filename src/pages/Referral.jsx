@@ -10,7 +10,6 @@ import "../styles/referrals.css";
 function Referral() {
   const navigate = useNavigate();
   const user = auth.currentUser;
-
   const [data, setData] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [refCodeInput, setRefCodeInput] = useState("");
@@ -165,7 +164,6 @@ function Referral() {
           <button onClick={() => navigate("/featured")}>Featured Opportunities</button>
           <button onClick={() => navigate("/freelancing")}>Freelancing Hub</button>
         </section>
-
         <section>
           <h4>Wallet</h4>
           <button onClick={() => navigate("/wallet")}>Wallet</button>

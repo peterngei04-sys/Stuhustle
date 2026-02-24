@@ -8,14 +8,12 @@ import "../styles/wallet.css";
 function Wallet() {
   const navigate = useNavigate();
   const { data, loading } = useUserData();
-
   const [withdrawals, setWithdrawals] = useState([]);
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [paypalEmail, setPaypalEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
 

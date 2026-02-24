@@ -17,9 +17,7 @@ function Dashboard() {
     await signOut(auth);
     navigate("/login");
   };
-
   const handleStartEarning = () => setMenuOpen(true);
-
   if (loading) return <div className="dashboard loading">Loading dashboard...</div>;
 
   return (
