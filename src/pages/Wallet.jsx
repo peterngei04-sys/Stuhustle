@@ -76,14 +76,13 @@ function Wallet() {
         <button className="hamburger" onClick={toggleMenu}>☰</button>
         <h2>StuHustle</h2>
       </header>
-
+        </div>
       {menuOpen && <div className="menu-overlay" onClick={closeMenu} />}
 
         <section>
           <h4>Dashboard</h4>
           <button onClick={() => navigate("/dashboard")}>Dashboard</button>
         </section>
-            vvv
         <section>
           <h4>Earning Methods</h4>
           <button onClick={() => navigate("/offerwalls")}>Offerwalls</button>  
@@ -108,6 +107,7 @@ function Wallet() {
           </button>
         </section>
       </aside>
+</div>
       <h2>My Wallet 💰</h2>
 
       {error && <p className="error">{error}</p>}
