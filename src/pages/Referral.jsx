@@ -174,9 +174,9 @@ function Referral() {
           <button onClick={() => navigate("/profile")}>Profile</button>
           <button onClick={() => navigate("/security")}>Security</button>
           <button onClick={() => navigate("/support")}>Support</button>
-          <button className="logout" onClick={() => navigate("/logout")}>
-            Logout
-          </button>
+             <button className="logout" onClick={handleLogout}>
+  Logout
+</button>
         </section>
       </aside>
       {/* MAIN CONTENT */}
