@@ -61,35 +61,36 @@ function Profile() {
       {menuOpen && <div className="menu-overlay" onClick={closeMenu} />}
 
       {/* SIDE MENU */}
-      <aside className={`menu ${menuOpen ? "open" : ""}`}>
-
+        <aside className={`menu ${menuOpen ? "open" : ""}`}>
         <section>
-          <h4>Main</h4>
+          <h4>Dashboard</h4>
           <button onClick={() => navigate("/dashboard")}>Dashboard</button>
-          <button onClick={() => navigate("/wallet")}>Wallet</button>
-        </section> 
-                                        
+        </section>
+                                               
         <section>
-
-          <h4>Earning Options</h4>
-          <button onClick={() => navigate("/offerwalls")}>Offerwalls</button>
-          <button>Paid Tasks</button>
-          <button>Micro Jobs</button>
-          <button>Affiliate Marketing</button>
+          <h4>Earning Methods</h4>
+           <button onClick={() => navigate("/offerwalls")}>Offerwalls</button>  
+          <button onClick={() => navigate("/microtasks")}>Micro Tasks</button>
           <button onClick={() => navigate("/referral")}>Referrals</button>
-          <button>Freelancing Hub</button>                                                        <button>Skill Gigs</button>
-          <button>Surveys</button>
-          <button>Sponsored Campaigns</button>
-          <button onClick={() => navigate("/referral")}>Referrals</button>
-          <h4>Account</h4>
-          <button onClick={() => navigate("/profile")}>Profile</button>
-          <button onClick={() => navigate("/support")}>Support</button>
-          <button onClick={() => navigate("/security")}>Security</button>
-          <button className="logout" onClick={handleLogout}>Logout</button>
+          <button onClick={() => navigate("/featured")}>Featured Opportunities</button>
+          <button onClick={() => navigate("/freelancing")}>Freelancing Hub</button>
         </section>
 
-      </aside>
+        <section>
+          <h4>Wallet</h4>
+          <button onClick={() => navigate("/wallet")}>Wallet</button>
+        </section>
 
+        <section>
+          <h4>Account</h4>
+          <button onClick={() => navigate("/profile")}>Profile</button>
+          <button onClick={() => navigate("/security")}>Security</button>
+          <button onClick={() => navigate("/support")}>Support</button>
+          <button className="logout" onClick={() => navigate("/logout")}>
+            Logout
+          </button>
+        </section>
+      </aside>
       {/* MAIN */}
       <main className="profile-content">
 
