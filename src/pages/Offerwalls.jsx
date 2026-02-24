@@ -2,35 +2,36 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useUserData from "../hooks/useUserData";
 import "../styles/offerwalls.css";
-import bitlabsLogo from "../assets/bitlabs.png";
 import ayetLogo from "../assets/ayet.png";
+import appsprizeLogo from "../assets/appsprize.png";
 
 function Offerwalls() {
   const navigate = useNavigate();
   const { data, loading } = useUserData();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeWall, setActiveWall] = useState("bitlabs");
-const [isWallOpen, setIsWallOpen] = useState(false);
-const [isLoadingWall, setIsLoadingWall] = useState(true);
+  const [activeWall, setActiveWall] = useState("appsprize");
+  const [isWallOpen, setIsWallOpen] = useState(false);
+  const [isLoadingWall, setIsLoadingWall] = useState(true);
+
   if (loading) return <div className="offerwalls loading">Loading...</div>;
   if (!data) return <div className="offerwalls">User not found</div>;
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
-                            
+
   const offerwalls = [
     {
-      id: "bitlabs",
-      name: "BitLabs",
-      logo: bitlabsLogo,
-      url: `https://api.bitlabs.ai/v1/surveys?app_id=389f5cfd-331f-4640-a81e-f4230f5923ea&user_id=${data.uid}`,
-      description: "Complete surveys and offers to earn instantly.",
+      id: "appsprize",
+      name: "AppsPrize",
+      logo: appsprizeLogo,
+     url: `https://rd.appsprize.com/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidW5kbGVfaWQiOiJjb20uc3R1aHVzdGxlLmFwcCIsImlkIjoxMTgwLCJ1c2VyX2lkIjoxMjE2fQ.49LTx9TlkG0tRtMVdhaLod3T1qqhGQwK65O4pGDfsvg&user_id=${data.uid}`,
+      description: "Complete offers, apps & surveys worldwide.",
     },
     {
       id: "ayet",
       name: "ayeT Studios",
       logo: ayetLogo,
-      url: `https://offerwall.ayet.io/offers?adSlot=25729&externalIdentifier=${data.uid}`,
+          url: `https://offerwall.ayet.io/offers?adSlot=25729&externalIdentifier=${data.uid}`,
       description: "High paying app installs and CPA offers.",
     },
   ];
@@ -44,10 +45,8 @@ const [isLoadingWall, setIsLoadingWall] = useState(true);
         <h2>StuHustle</h2>
       </header>
 
-      {/* Overlay */}
       {menuOpen && <div className="menu-overlay" onClick={closeMenu}></div>}
 
-      {/* Sidebar */}
       <aside className={`menu ${menuOpen ? "open" : ""}`}>
         <section>
           <h4>Dashboard</h4>
@@ -79,7 +78,6 @@ const [isLoadingWall, setIsLoadingWall] = useState(true);
         </section>
       </aside>
 
-      {/* Main */}
       <main className="content">
         <h3>
           Welcome back, <span>{data.username}</span> 👋
@@ -90,63 +88,65 @@ const [isLoadingWall, setIsLoadingWall] = useState(true);
           <h1>${data.balanceUSD?.toFixed(2)}</h1>
           <span>Pending: ${data.pendingUSD?.toFixed(2)}</span>
         </div>
-        <p style={{ fontSize: "12px", wordBreak: "break-all" }}>
-  Debug URL: https://offerwall.ayet.io/offers?adSlot=25729&externalIdentifier={data.uid}
-</p>
-    {/* Premium Offerwall Cards */}
-<div className="offerwall-selector">
-  {offerwalls.map((wall, index) => (
-    <div
-      key={wall.id}
-      className={`offerwall-card ${
-        activeWall === wall.id ? "active" : ""
-      }`}
-      onClick={() => {
-        setActiveWall(wall.id);
-        setIsWallOpen(true);
-        setIsLoadingWall(true);
-      }}
-    >
-      {index === 0 && <span className="recommended-badge">Recommended</span>}
 
-      <div className="card-header">
-        <img src={wall.logo} alt={wall.name} />
-        <h4>{wall.name}</h4>
-      </div>
+        {/* Offerwall Cards */}
+        <div className="offerwall-selector">
+          {offerwalls.map((wall, index) => (
+            <div
+              key={wall.id}
+              className={`offerwall-card ${
+                activeWall === wall.id ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveWall(wall.id);
+                setIsWallOpen(true);
+                setIsLoadingWall(true);
+              }}
+            >
+              {index === 0 && (
+                <span className="recommended-badge">Recommended</span>
+              )}
 
-      <p>{wall.description}</p>
+              <div className="card-header">
+                <img src={wall.logo} alt={wall.name} />
+                <h4>{wall.name}</h4>
+              </div>
 
-      <div className="earn-rate">High Conversion • Instant Credit</div>
+              <p>{wall.description}</p>
 
-      <button className="launch-btn">Start Earning</button>
-    </div>
-  ))}
-</div>
-  {/* Fullscreen Offerwall Modal */}
-{isWallOpen && (
-  <div className="wall-modal">
-    <div className="wall-modal-header">
-      <h3>{offerwalls.find(w => w.id === activeWall)?.name}</h3>
-      <button onClick={() => setIsWallOpen(false)}>✕</button>
-    </div>
+              <div className="earn-rate">
+                Secure • Instant Tracking • Global Offers
+              </div>
 
-    {isLoadingWall && (
-      <div className="wall-loader">
-        <div className="spinner"></div>
-        <p>Loading offers...</p>
-      </div>
-    )}
+              <button className="launch-btn">Start Earning</button>
+            </div>
+          ))}
+        </div>
 
-    <iframe
-      src={offerwalls.find(w => w.id === activeWall)?.url}
-      title="Offerwall"
-      className="offerwall-iframe"
-      onLoad={() => setIsLoadingWall(false)}
-      sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-    ></iframe>
-  </div>
-)}
+        {/* Modal */}
+        {isWallOpen && (
+          <div className="wall-modal">
+            <div className="wall-modal-header">
+              <h3>{offerwalls.find(w => w.id === activeWall)?.name}</h3>
+              <button onClick={() => setIsWallOpen(false)}>✕</button>
+            </div>
 
+            {isLoadingWall && (
+              <div className="wall-loader">
+                <div className="spinner"></div>
+                <p>Loading offers...</p>
+              </div>
+            )}
+
+            <iframe
+              src={offerwalls.find(w => w.id === activeWall)?.url}
+              title="Offerwall"
+              className="offerwall-iframe"
+              onLoad={() => setIsLoadingWall(false)}
+              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+            ></iframe>
+          </div>
+        )}
       </main>
 
       <footer className="dashboard-footer">
